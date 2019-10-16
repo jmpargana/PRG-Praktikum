@@ -1,0 +1,4 @@
+* Game of Life
+
+This folder contains our project's code and documentation.
+

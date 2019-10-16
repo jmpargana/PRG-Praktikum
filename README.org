@@ -1,1 +1,44 @@
 * PRG-Praktikum
+
+This repository contains three projects that will be realized over the course
+of the winter semester of 2019/20 within the scope of a programming 
+practical course.
+
+Documents regarding the projects with their explanations can be found in the
+/Pleanartermine/ folder and inside the /Milestones/ folder can be found
+both more information regarding each project and their corresponding
+code. 
+
+** Here is a link to each respectively:
+- [[file:./Milestones/Milestone1/README.org][Game of Life]]
+- [[file:./Milestones/Milestone2/README.org][Encryption]]
+- [[file:./Milestones/Milestone3/README.org][CNN]]
+
+
+** References
+
+The entire project will be programmed in C++ and using Qt as the graphical
+user interface framework. The following links consist of usefull resources
+to learn both language and framework.
+
+*** C++
+- [[https://www.amazon.de/Programming-Principles-Practice-Using-C/dp/0321992784][Programming: Principles and Practice Using C++]]
+- [[https://de.wikibooks.org/wiki/C%2B%2B-Programmierung/_Einf%C3%BChrung_in_C%2B%2B][C++ Introduction]]
+- [[http://www.cplusplus.com/doc/tutorial/][C++ Tutorial]]
+- [[https://www.tutorialspoint.com/cplusplus/index.htm][Tutorials Point]]
+- [[https://www.amazon.de/C-Programming-Language-Bjarne-Stroustrup/dp/0321563840/ref=sr_1_1?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&keywords=c%2B%2B+programming+language&qid=1571241649&s=books&sr=1-1][C++ Programming Language]]
+ 
+
+*** Qt
+- [[https://de.wikipedia.org/wiki/Qt_(Bibliothek)][Wikipedia article]]
+- [[https://de.wikibooks.org/wiki/Qt_f%C3%BCr_C%2B%2B-Anf%C3%A4nger][WikiBooks]]
+- [[https://www.qt.io/][Official Website
+]]
+
+
+*** Aditional information regarding cellular automatons
+- [[https://www.amazon.de/Das-digitale-Universum-Zellul%C3%A4re-Automaten/dp/3528066776][Das digitale Universum: Zelluläre Automaten als Modelle der Natur (Facetten)]]
+- [[https://www.springer.com/de/book/9783642451300][Pixelspiele Modellieren und Simulieren mit zellulären Automaten]]
+- [[https://de.wikipedia.org/wiki/Zellul%C3%A4rer_Automat][Cellular Automaton - Wikipedia]]
+- [[https://de.wikipedia.org/wiki/Conways_Spiel_des_Lebens][Game of Life - Wikipedia]]
+- [[http://mathworld.wolfram.com/CellularAutomaton.html][Cellular Automaton - WolframAlpha]]
