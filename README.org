@@ -11,8 +11,8 @@ code.
 
 ** Here is a link to each respectively:
 - [[file:./Milestones/Milestone1/README.org][Game of Life]]
-- [[file:./Milestones/Milestone2/README.org][Encryption]]
-- [[file:./Milestones/Milestone3/README.org][CNN]]
+- [[file:./Milestones/Milestone2/README.org][Visual encryption]]
+- [[file:./Milestones/Milestone3/README.org][Convolutional Neural Network]]
 
 
 ** General recommendations
@@ -20,7 +20,7 @@ code.
 Each project will be layed out according to some general recommendations
 previously settled.
 
-1. Folder structure
+*** Folder structure
 
 The first folder layout is already defined inside the Game of life /code/ 
 folder and it consists of a /bin/ folder containing all compiled binaries,
@@ -30,20 +30,25 @@ the projects header files, /lib/ for third party programs, /src/ with all
 cpp extension files and /test/ for the tests, as well as a /README.org/
 and /Makefile/ to compile the entire project.
 
-2. Compiler of choice
+*** Compiler of choice
 
 TODO:
 
-3. Follow C++ standards 
+*** Follow C++ standards 
 
 Since C++ has multiple tools available to perform the same task, in order to
 preserve an easy connection to its parent C, one needs to choose which 
 types and functions to use very carefull. 
 We will use exclusively C++ standards and avoid actively any C type.
 
-4. Testing
+*** Testing
 
 TODO:
+
+*** Optimize
+
+Keeps performance optimizations like extra flags in the compilation file
+for the last step, to be performed after the testing
 
 
 ** References
@@ -63,8 +68,7 @@ to learn both language and framework.
 *** Qt
 - [[https://de.wikipedia.org/wiki/Qt_(Bibliothek)][Wikipedia article]]
 - [[https://de.wikibooks.org/wiki/Qt_f%C3%BCr_C%2B%2B-Anf%C3%A4nger][WikiBooks]]
-- [[https://www.qt.io/][Official Website
-]]
+- [[https://www.qt.io/][Official Website]]
 
 
 *** Aditional information regarding cellular automatons

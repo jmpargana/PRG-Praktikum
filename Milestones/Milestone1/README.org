@@ -2,3 +2,28 @@
 
 This folder contains our project's code and documentation.
 
+Conway's game of life is a cellular automaton, where evolution can be observed
+according to 4 rules.
+
+1. Any live cell with fewer than two live neighbours dies, as if by underpopulation.
+2. Any live cell with two or three live neighbours lives on to the next generation.
+3. Any live cell with more than three live neighbours dies, as if by overpopulation.
+4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+
+So a matrix needs to be created and represented using the Qt framework, 
+where each entry represents a cell and given a time span, the evolution
+can be observed. 
+The matrix should be like a finite field (modulo operation).
+
+** Our Model
+
+TODO:
+
+** References
+
+- [[https://www.amazon.de/Das-digitale-Universum-Zellul%C3%A4re-Automaten/dp/3528066776][Das digitale Universum: Zelluläre Automaten als Modelle der Natur (Facetten)]]
+- [[https://www.springer.com/de/book/9783642451300][Pixelspiele Modellieren und Simulieren mit zellulären Automaten]]
+- [[https://de.wikipedia.org/wiki/Zellul%C3%A4rer_Automat][Cellular Automaton - Wikipedia]]
+- [[https://de.wikipedia.org/wiki/Conways_Spiel_des_Lebens][Game of Life - Wikipedia]]
+- [[http://mathworld.wolfram.com/CellularAutomaton.html][Cellular Automaton - WolframAlpha]]
+
