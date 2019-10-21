@@ -60,6 +60,7 @@ public:
 
     // time lapse with operator++ overloading 
     CellularAutomaton& operator++();
+    CellularAutomaton& operator+=(int);
 
     // subscript operator for user
     Proxy operator[](int index) { return Proxy(current[index]); }

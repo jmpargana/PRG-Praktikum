@@ -17,6 +17,7 @@
 
 template<typename T>
 std::ostream& operator<<(std::ostream& os, const CellularAutomaton<T>& ca)
+// output file stream operator overload
 {
     for (unsigned int rol=0; rol<ca.get_size(); ++rol) {
 	for (unsigned int col=0; col<ca.get_size(); ++col) {
@@ -33,6 +34,7 @@ std::ostream& operator<<(std::ostream& os, const CellularAutomaton<T>& ca)
 
 template<typename T>
 std::istream& operator>>(std::istream& is, CellularAutomaton<T>& ca)
+// input stream operator overload
 {
     T temp;			// save input character in this variable
     for (int row; row<ca.get_size(); ++row) {
@@ -50,6 +52,7 @@ std::istream& operator>>(std::istream& is, CellularAutomaton<T>& ca)
 
 template<typename T>
 std::ofstream& operator<<(std::ofstream& os, const CellularAutomaton<T>& ca)
+// output file stream operator overload
 {
     
     return os;
@@ -61,6 +64,7 @@ std::ofstream& operator<<(std::ofstream& os, const CellularAutomaton<T>& ca)
 
 template<typename T>
 std::ifstream& operator>>(std::ifstream& is, CellularAutomaton<T>& ca)
+// input file stream operator overload
 {
     
     return is;
@@ -98,6 +102,7 @@ void CellularAutomaton<T>::update_cell(int row, int col)
 
 template<typename T>
 CellularAutomaton<T>& CellularAutomaton<T>::operator++()
+// update cell in for next phase
 {
     for (int row=0; row<this->get_size(); ++row) {
 	for (int col=0; col<this->get_size(); ++col) {
@@ -105,7 +110,25 @@ CellularAutomaton<T>& CellularAutomaton<T>::operator++()
 	    this->update_cell(row, col);
 	}
     }
+    this->current = this->next;	// update matrices
+    this->next = new T[this->size()][this->size()];
+    
     // set timeout function for visualization
     std::this_thread::sleep_for(std::chrono::milliseconds(this->timer));
+    return *this;
+}
+
+
+//------------------------------------------------------------------------------
+
+
+template<typename T>
+CellularAutomaton<T>& CellularAutomaton<T>::operator+=(int phases)
+// update n or "physes" steps
+{
+    if (phases <= 0) return *this; // avoid invalid input
+    for (;phases; phases--) {
+	this++;
+    }
     return *this;
 }
