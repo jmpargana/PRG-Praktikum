@@ -11,6 +11,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <future>
+#include <chrono>
+#include <thread>
 
 
 //------------------------------------------------------------------------------
@@ -32,9 +35,13 @@ public:
     
     // constructors
     CellularAutomaton()		// default constructor
-	: current{new T[30][30]}, next{new T[30][30]}, size{30} { } 
+	: current{new T[30][30]}, next{new T[30][30]}, size{30}, timer{1} { } 
     CellularAutomaton(const int _size)
-	: current{new T[_size][size]}, next{new T[_size][size]}, size{_size} { }
+	: current{new T[_size][size]}, next{new T[_size][size]},
+	  size{_size}, timer{1} { }
+    CellularAutomaton(const int _size, int timer)
+	: current{new T[_size][size]}, next{new T[_size][size]},
+	  size{_size}, timer{timer} { }
 
     // copy constructor
     CellularAutomaton(CellularAutomaton&);
@@ -57,14 +64,15 @@ public:
     // subscript operator for user
     Proxy operator[](int index) { return Proxy(current[index]); }
     
-    // getter functions with module
-    
+    int get_size() { return this->size; }
+    void update_cell(int, int);	// check surrounding cells
     
     
 private:
     T** current;
     T** next;
     int size;
+    int timer;
     
 };
 
