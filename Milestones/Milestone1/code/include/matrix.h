@@ -21,8 +21,14 @@ class Matrix {
     Matrix(unsigned);		// square matrix
     Matrix(unsigned, unsigned);	// regular matrix
 
+    // constructor with all elements
+    Matrix(std::vector<std::vector<T> >&);
+    Matrix(std::vector<std::vector<T> >&&); // move with elements
+
     // copy and assignment constructors
     Matrix(Matrix&);		      // copy constructor
+    Matrix(Matrix&&);
+    
     Matrix& operator=(const Matrix&); // assignment operator
 
     // move constructor and move operator
@@ -42,6 +48,10 @@ class Matrix {
     Matrix operator-(double);
     Matrix operator*(double);
     Matrix operator/(double);
+
+    // extras
+    Matrix power(double);
+    
 
     // getter for vector
     std::vector<T>& operator[](int);
