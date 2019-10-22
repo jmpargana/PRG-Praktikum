@@ -1,3 +1,12 @@
+/**
+ * PRG-Praktikum
+ * Author: Joao Pargana 6807391
+ *
+ * Matrix class implementation will be needed throughout the project
+ *
+ */
+
+
 #include "../include/matrix.h"
 
 
@@ -13,11 +22,9 @@ Matrix<T>::Matrix() { };	// empty initialization
 
 template<typename T>
 Matrix<T>::Matrix(unsigned n)    
-    :row_size{n}, col_size{n}, matrix{matrix.resize(n)}
+    :row_size{n}, col_size{n},
+     matrix{std::vector<std::vector<T> >(n, std::vector<T>(n))} { }
      // matrix construct to build n-square matrix of any type
-{
-    for (unsigned i=0; i<matrix.size(); i++) matrix[i].resize(n);
-}
 
 
 //------------------------------------------------------------------------------
@@ -25,11 +32,27 @@ Matrix<T>::Matrix(unsigned n)
 
 template<typename T>
 Matrix<T>::Matrix(unsigned n, unsigned m)
-    :row_size{n}, col_size{n}, matrix{matrix.resize(n)}
+    :row_size{n}, col_size{n},
+     matrix{std::vector<std::vector<T> >(n, std::vector<T>(m))} { }
      // matrix construct to build n*m matrix of any type
-{
-    for (unsigned i=0; i<matrix.size(); i++) matrix[i].resize(m);
-}
+
+
+//------------------------------------------------------------------------------
+
+
+template<typename T>
+Matrix<T>::Matrix(std::vector<std::vector<T> >& elements)
+    : matrix{elements} { }
+// create matrix with given elements
+
+
+//------------------------------------------------------------------------------
+
+
+template<typename T>
+Matrix<T>::Matrix(std::vector<std::vector<T> >&& elements)
+    : matrix{std::move(elements)} { }
+// move elements and initialize matrix with them
 
 
 //------------------------------------------------------------------------------
@@ -37,10 +60,16 @@ Matrix<T>::Matrix(unsigned n, unsigned m)
 
 template<typename T>
 Matrix<T>::Matrix(Matrix& to_copy)
+    : matrix{to_copy.matrix} { }
 // matrix construct to copy matrix of any type
-{
-    
-}
+
+
+//------------------------------------------------------------------------------
+
+
+template<typename T>
+Matrix<T>::Matrix(Matrix&& to_copy)
+    : matrix{std::move(to_copy.matrix)} { }
 
 
 //------------------------------------------------------------------------------
@@ -50,8 +79,8 @@ template<typename T>
 Matrix<T>& Matrix<T>::operator=(const Matrix<T>& to_assign)
 // matrix assignment operation overload template
 {
-    
-
+    matrix = to_assign.matrix;
+    return *this;
 }
 
 
@@ -62,7 +91,8 @@ template<typename T>
 Matrix<T>& Matrix<T>::operator=(Matrix<T>&& to_move) noexcept
 // matrix move operation overload assignment template
 {
-    
+    matrix = std::move(to_move.matrix);
+    return *this;
 }
 
 
@@ -129,6 +159,7 @@ Matrix<T> Matrix<T>::operator-(Matrix<T>& second)
 //------------------------------------------------------------------------------
 
 
+// TODO: wrong implementation
 template<typename T>
 Matrix<T> Matrix<T>::operator*(Matrix<T>& second)
 // matrix product template
@@ -253,6 +284,20 @@ Matrix<T> Matrix<T>::operator/(double scalar)
 
 
 template<typename T>
+Matrix<T> Matrix<T>::power(double value)
+{
+    if (value<1) throw std::runtime_error("invalid operation");
+    if (value==1) return *this;
+
+    // TODO: continue implementation
+    
+}
+
+
+//------------------------------------------------------------------------------
+
+
+template<typename T>
 std::vector<T>& Matrix<T>::operator[](int index)
 // subscription operation overload
 {
@@ -294,11 +339,9 @@ std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix)
 // ... \n
 // matrix[i][0] ... \n
 {
-    for (auto start_row=matrix.begin();
-	 start_row!=matrix.end(); start_row=start_row.next()) {
-	for (auto start_col=start_row->begin();
-	     start_col!=start_row->end(); start_col=start_col->next()) {
-	    os << *start_col;
+    for (auto& row : matrix.matrix) {
+	for (auto& elem: row) {
+	    os << elem;
 	}
 	os << std::endl;
     }
