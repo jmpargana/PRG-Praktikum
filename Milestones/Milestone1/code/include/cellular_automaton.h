@@ -9,8 +9,7 @@
  */
 
 
-#include <iostream>
-#include <fstream>
+#include "../include/matrix.h"
 #include <future>
 #include <chrono>
 #include <thread>
@@ -19,29 +18,13 @@
 //------------------------------------------------------------------------------
 
 
-template<typename T>
 class CellularAutomaton {
 public:
-
-    class Proxy {
-    public:
-	Proxy(T* _array) : array{_array} { }
-	T& operator[](int index) { return array[index]; }
-	
-    private:
-	T* array;
-    };
-
-    
     // constructors
-    CellularAutomaton()		// default constructor
-	: current{new T[30][30]}, next{new T[30][30]}, size{30}, timer{1} { } 
-    CellularAutomaton(const int _size)
-	: current{new T[_size][size]}, next{new T[_size][size]},
-	  size{_size}, timer{1} { }
-    CellularAutomaton(const int _size, int timer)
-	: current{new T[_size][size]}, next{new T[_size][size]},
-	  size{_size}, timer{timer} { }
+    CellularAutomaton();		// default constructor
+    CellularAutomaton(const int);
+    CellularAutomaton(const int, const int);
+    CellularAutomaton(const int, const int, const int);
 
     // copy constructor
     CellularAutomaton(CellularAutomaton&);
@@ -56,23 +39,22 @@ public:
     CellularAutomaton& operator=(CellularAutomaton&&) noexcept;
 
     // destructors
-    ~CellularAutomaton() { delete[] next; delete[] current; }
+    ~CellularAutomaton() { }
+
+    // subscript operation overload
+    std::vector<bool> operator[](int index);
 
     // time lapse with operator++ overloading 
     CellularAutomaton& operator++();
     CellularAutomaton& operator+=(int);
 
-    // subscript operator for user
-    Proxy operator[](int index) { return Proxy(current[index]); }
-    
-    int get_size() { return this->size; }
+    int get_rows();
+    int get_cols();
     void update_cell(int, int);	// check surrounding cells
     
     
 private:
-    T** current;
-    T** next;
-    int size;
+    Matrix<bool> current, next;
     int timer;
     
 };
@@ -82,18 +64,14 @@ private:
 
 
 // output stream
-template<typename T>
-std::ostream& operator<<(std::ostream&, const CellularAutomaton<T>&);
+std::ostream& operator<<(std::ostream&, const CellularAutomaton&);
 
 // input stream
-template<typename T>
-std::istream& operator>>(std::istream&, CellularAutomaton<T>&);
+std::istream& operator>>(std::istream&, CellularAutomaton&);
 
 
 // output file stream
-template<typename T>
-std::ofstream& operator<<(std::ostream&, const CellularAutomaton<T>&);
+std::ofstream& operator<<(std::ofstream&, const CellularAutomaton&);
 
 // input file stream
-template<typename T>
-std::ifstream& operator>>(std::ifstream&, CellularAutomaton<T>&);
+std::ifstream& operator>>(std::ifstream&, CellularAutomaton&);

@@ -10,17 +10,73 @@
 
 
 #include "../include/cellular_automaton.h"
+#include "../include/matrix.h"
+
+
+//------------------------------------------------------------------------------
+
+
+CellularAutomaton::CellularAutomaton()
+    : current{Matrix<bool>(30, 30)}, next{Matrix<bool>(30, 30)}, timer{1} { }
+// default constructor with size 30 square matrix
+
+
+//------------------------------------------------------------------------------
+
+
+CellularAutomaton::CellularAutomaton(const int size)
+    : current{Matrix<bool>(size, size)}, next{Matrix<bool>(size, size)},
+      timer{1} { }
+// square matrix constructor with a given size
+
+
+//------------------------------------------------------------------------------
+
+
+CellularAutomaton::CellularAutomaton(const int rows, const int cols)
+    :current{Matrix<bool>(rows, cols)}, next{Matrix<bool>(rows, cols)},
+     timer{1} { }
+// constructor with given dimensions
+
+
+//------------------------------------------------------------------------------
+
+
+CellularAutomaton::CellularAutomaton(const int rows,
+				     const int cols,
+				     const int timer)
+    : current{Matrix<bool>(rows, cols)},
+      next{Matrix<bool>(rows, cols)},
+      timer{timer} { }
+// constructor with all variables given
+
+
+//------------------------------------------------------------------------------
+
+
+std::vector<bool> CellularAutomaton::operator[](int index)
+{
+    return this->current[index];
+}
+
+
+//------------------------------------------------------------------------------
+
+
+// getter functions
+int CellularAutomaton::get_rows() { return this->current.get_row_size(); }
+int CellularAutomaton::get_cols() { return this->current.get_col_size(); }
 
 
 //------------------------------------------------------------------------------
 
 
 template<typename T>
-std::ostream& operator<<(std::ostream& os, const CellularAutomaton<T>& ca)
+std::ostream& operator<<(std::ostream& os, CellularAutomaton& ca)
 // output file stream operator overload
 {
-    for (unsigned int rol=0; rol<ca.get_size(); ++rol) {
-	for (unsigned int col=0; col<ca.get_size(); ++col) {
+    for (int rol=0; rol<ca.get_rows(); ++rol) {
+	for (int col=0; col<ca.get_cols(); ++col) {
 	    os << ca[rol][col];
 	}
 	os << std::endl;
@@ -33,12 +89,12 @@ std::ostream& operator<<(std::ostream& os, const CellularAutomaton<T>& ca)
 
 
 template<typename T>
-std::istream& operator>>(std::istream& is, CellularAutomaton<T>& ca)
+std::istream& operator>>(std::istream& is, CellularAutomaton& ca)
 // input stream operator overload
 {
     T temp;			// save input character in this variable
-    for (int row; row<ca.get_size(); ++row) {
-	for (int col; col<ca.get_size(); ++col) {
+    for (int row; row<ca.get_rows(); ++row) {
+	for (int col; col<ca.get_cols(); ++col) {
 	    is >> temp;			  // input to variable
 	    ca[row][col] = (temp == "*"); // save via ternary
 	}
@@ -51,7 +107,7 @@ std::istream& operator>>(std::istream& is, CellularAutomaton<T>& ca)
 
 
 template<typename T>
-std::ofstream& operator<<(std::ofstream& os, const CellularAutomaton<T>& ca)
+std::ofstream& operator<<(std::ofstream& os, const CellularAutomaton& ca)
 // output file stream operator overload
 {
     
@@ -63,7 +119,7 @@ std::ofstream& operator<<(std::ofstream& os, const CellularAutomaton<T>& ca)
 
 
 template<typename T>
-std::ifstream& operator>>(std::ifstream& is, CellularAutomaton<T>& ca)
+std::ifstream& operator>>(std::ifstream& is, CellularAutomaton& ca)
 // input file stream operator overload
 {
     
@@ -74,20 +130,19 @@ std::ifstream& operator>>(std::ifstream& is, CellularAutomaton<T>& ca)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-void CellularAutomaton<T>::update_cell(int row, int col)
+void CellularAutomaton::update_cell(int row, int col)
 // update next cell state in "next" matrix
 {
     int total_living_cells = 0;
     // surr_r stands for surrounding row and surr_c for column
-    for (unsigned int surr_r=row-1; surr_r<row+2; ++surr_r) {
-	for (unsigned int surr_c=col-1; surr_c<col+2; ++surr_c) {	    
+    for (int surr_r=row-1; surr_r<row+2; ++surr_r) {
+	for (int surr_c=col-1; surr_c<col+2; ++surr_c) {	    
 	    // deal with negative numbers
-	    if (surr_r < 0) surr_r+=this->get_size();
-	    if (surr_c < 0) surr_r+=this->get_size();
+	    if (surr_r < 0) surr_r+=this->get_rows();
+	    if (surr_c < 0) surr_r+=this->get_cols();
 	    else {		// deal with modulo limits
-		surr_r %= this->get_size();
-		surr_c %= this->get_size();
+		surr_r %= this->get_rows();
+		surr_c %= this->get_cols();
 	    }
 	    // increment if living cell was found
 	    if (this->current[surr_r][surr_c]) ++total_living_cells;
@@ -100,18 +155,17 @@ void CellularAutomaton<T>::update_cell(int row, int col)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-CellularAutomaton<T>& CellularAutomaton<T>::operator++()
+CellularAutomaton& CellularAutomaton::operator++()
 // update cell in for next phase
 {
-    for (int row=0; row<this->get_size(); ++row) {
-	for (int col=0; col<this->get_size(); ++col) {
+    for (int row=0; row<this->get_rows(); ++row) {
+	for (int col=0; col<this->get_cols(); ++col) {
 	    // check cells surrounding it in modulo "size"
 	    this->update_cell(row, col);
 	}
     }
     this->current = this->next;	// update matrices
-    this->next = new T[this->size()][this->size()];
+    this->next = Matrix<bool>(this->get_rows(), this->get_cols());
     
     // set timeout function for visualization
     std::this_thread::sleep_for(std::chrono::milliseconds(this->timer));
@@ -122,8 +176,7 @@ CellularAutomaton<T>& CellularAutomaton<T>::operator++()
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-CellularAutomaton<T>& CellularAutomaton<T>::operator+=(int phases)
+CellularAutomaton& CellularAutomaton::operator+=(int phases)
 // update n or "physes" steps
 {
     if (phases <= 0) return *this; // avoid invalid input
