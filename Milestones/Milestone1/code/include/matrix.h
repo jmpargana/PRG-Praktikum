@@ -16,6 +16,7 @@
 template <typename T>
 class Matrix {
 
+public:    
     // all constructors
     Matrix();
     Matrix(unsigned);		// square matrix
