@@ -10,7 +10,6 @@
 
 
 #include "../include/cellular_automaton.h"
-#include "../include/matrix.h"
 
 
 //------------------------------------------------------------------------------
@@ -49,6 +48,24 @@ CellularAutomaton::CellularAutomaton(const int rows,
       next{Matrix<bool>(rows, cols)},
       timer{timer} { }
 // constructor with all variables given
+
+
+//------------------------------------------------------------------------------
+
+
+CellularAutomaton::CellularAutomaton(CellularAutomaton& ca)
+{
+    
+}
+
+
+//------------------------------------------------------------------------------
+
+
+CellularAutomaton::CellularAutomaton(CellularAutomaton&& ca)
+{
+    
+}
 
 
 //------------------------------------------------------------------------------

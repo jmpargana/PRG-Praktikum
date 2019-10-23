@@ -26,11 +26,15 @@ public:
     CellularAutomaton(const int, const int);
     CellularAutomaton(const int, const int, const int);
 
+    // constructor with elements
+    CellularAutomaton(std::vector<std::vector<bool> >&);
+    CellularAutomaton(std::vector<std::vector<bool> >&&);
+
     // copy constructor
     CellularAutomaton(CellularAutomaton&);
 
     // move constructor
-    
+    CellularAutomaton(CellularAutomaton&&);
 
     // assignment operator
     CellularAutomaton& operator=(const CellularAutomaton&);
