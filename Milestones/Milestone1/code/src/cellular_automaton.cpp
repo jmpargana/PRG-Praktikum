@@ -181,7 +181,8 @@ CellularAutomaton& CellularAutomaton::operator+=(int phases)
 {
     if (phases <= 0) return *this; // avoid invalid input
     for (;phases; phases--) {
-	this++;
+	++(*this);
     }
     return *this;
 }
+
