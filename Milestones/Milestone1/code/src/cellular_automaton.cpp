@@ -54,17 +54,40 @@ CellularAutomaton::CellularAutomaton(const int rows,
 
 
 CellularAutomaton::CellularAutomaton(CellularAutomaton& ca)
-{
-    
-}
+    : current{ca.current}, next{ca.next}, timer{ca.timer} { }
+// copy constructor
 
 
 //------------------------------------------------------------------------------
 
 
 CellularAutomaton::CellularAutomaton(CellularAutomaton&& ca)
+    : current{std::move(ca.current)}, next{std::move(ca.next)}, timer{std::move(ca.timer)} { }
+
+
+//------------------------------------------------------------------------------
+
+
+CellularAutomaton& CellularAutomaton::operator=(const CellularAutomaton& ca)
+// assignment operation overload
 {
-    
+    current = ca.current;
+    next = ca.next;
+    timer = ca.timer;
+    return *this;
+}
+
+
+//------------------------------------------------------------------------------
+
+
+CellularAutomaton& CellularAutomaton::operator=(CellularAutomaton&& ca) noexcept
+// move operation overload assignment
+{
+    current = std::move(ca.current);
+    next = std::move(ca.next);
+    timer = std::move(ca.timer);
+    return *this;
 }
 
 
@@ -72,6 +95,7 @@ CellularAutomaton::CellularAutomaton(CellularAutomaton&& ca)
 
 
 std::vector<bool> CellularAutomaton::operator[](int index)
+// subscript operation overload
 {
     return this->current[index];
 }
@@ -88,16 +112,16 @@ int CellularAutomaton::get_cols() { return this->current.get_col_size(); }
 //------------------------------------------------------------------------------
 
 
-template<typename T>
+Matrix<bool> CellularAutomaton::get_matrix() { return this->current; }
+
+
+//------------------------------------------------------------------------------
+
+
 std::ostream& operator<<(std::ostream& os, CellularAutomaton& ca)
 // output file stream operator overload
 {
-    for (int rol=0; rol<ca.get_rows(); ++rol) {
-	for (int col=0; col<ca.get_cols(); ++col) {
-	    os << ca[rol][col];
-	}
-	os << std::endl;
-    }
+    os << ca.get_matrix();
     return os;
 }
 
@@ -123,7 +147,6 @@ std::istream& operator>>(std::istream& is, CellularAutomaton& ca)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
 std::ofstream& operator<<(std::ofstream& os, const CellularAutomaton& ca)
 // output file stream operator overload
 {
@@ -135,7 +158,6 @@ std::ofstream& operator<<(std::ofstream& os, const CellularAutomaton& ca)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
 std::ifstream& operator>>(std::ifstream& is, CellularAutomaton& ca)
 // input file stream operator overload
 {

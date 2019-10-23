@@ -54,6 +54,7 @@ public:
 
     int get_rows();
     int get_cols();
+    Matrix<bool> get_matrix();
     void update_cell(int, int);	// check surrounding cells
     
     
