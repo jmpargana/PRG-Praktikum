@@ -9,7 +9,7 @@
  */
 
 
-#include "../include/cellular_automaton.h"
+#include "../include/cellular_automaton.hpp"
 
 
 //------------------------------------------------------------------------------
@@ -175,7 +175,10 @@ void CellularAutomaton::update_cell(int row, int col)
     int total_living_cells = 0;
     // surr_r stands for surrounding row and surr_c for column
     for (int surr_r=row-1; surr_r<row+2; ++surr_r) {
-	for (int surr_c=col-1; surr_c<col+2; ++surr_c) {	    
+	for (int surr_c=col-1; surr_c<col+2; ++surr_c) {
+	    // ignore counting current cell
+	    if (surr_r==row && surr_r==surr_c) continue;
+	    
 	    // deal with negative numbers
 	    if (surr_r < 0) surr_r+=this->get_rows();
 	    if (surr_c < 0) surr_r+=this->get_cols();
@@ -187,7 +190,7 @@ void CellularAutomaton::update_cell(int row, int col)
 	    if (this->current[surr_r][surr_c]) ++total_living_cells;
 	}
     }
-    this->next[row][col] = (total_living_cells > 3 || total_living_cells < 2);
+    this->next[row][col] = (total_living_cells <= 3 || total_living_cells >= 2);
 }
 
 
