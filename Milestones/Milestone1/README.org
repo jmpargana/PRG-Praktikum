@@ -1,4 +1,4 @@
-* Game of Life
+* Game of Life & Visual Encryption
 
 This folder contains our project's code and documentation.
 
@@ -17,7 +17,56 @@ The matrix should be like a finite field (modulo operation).
 
 ** Our Model
 
+We first developed a basic Matrix class to be inherited for both main
+exercises, since a grid of such a type is needed. We implemented this class
+containing all important methods a matrix needs, including both mathematical
+ones, as well as input/output ones and all needed constructers
+(default, copy, assignment, move, destructor, etc.).
+
+The Matrix class is build on top of the c++ standard vector which contains
+a better and more flexibel version of a CType array, which will be much
+clean to perform all operations needed in the program.
+
+
+
+** Usage
+
+Both parts of this project contain a console variant and graphical version
+programmed with the Qt framework.
+
+The following paragraphs contain details on how to compile and run the 
+console variants of the programs.
+
+*** Preperation Task
+
+The first exercise (Aufgabe 1 a und b) is a preperation for the game of life
+and its short program can be found in the /src/Aufgabe1ab directory. 
+To compile and run it, simply type *make* in the console and */aufgabe1ab* 
+to run the program.
+
+*** Game of Life
+
+The game of consist of both a terminal version, as well as a graphical
+one, but both contain the same features. 
+
+One can import a predefined cellular automaton matrix from a file
+or give a long string containing it to be read and initialized by the program.
+
+Both speed (timer) and dimensions of the automaton are variable and can
+be changed at anytime during the runtime of the program.
+
+Another important feature, is that the user can alterate the living status
+of any given cell by selection, alternating the "biological" process.
+
+And finally the result of any phase can be saved in an external text file
+in the same format as the ones use to import a matrix.
+
+
+
+*** Encryption
+
 TODO:
+
 
 ** References
 

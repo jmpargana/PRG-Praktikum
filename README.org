@@ -11,7 +11,7 @@ code.
 
 ** Here is a link to each respectively:
 - [[file:./Milestones/Milestone1/README.org][Game of Life]]
-- [[file:./Milestones/Milestone2/README.org][Visual encryption]]
+- [[file:./Milestones/Milestone1/README.org][Visual encryption]]
 - [[file:./Milestones/Milestone3/README.org][Convolutional Neural Network]]
 
 
@@ -32,7 +32,10 @@ and /Makefile/ to compile the entire project.
 
 *** Compiler of choice
 
-TODO:
+The chosen compiler for console programs in pure c++ is the g++ to allow
+the usage of features from the c++17 standard library, since the GNU
+compiler contains optimizations for the newest and most innovative features
+of the programming language
 
 *** Follow C++ standards 
 
@@ -43,7 +46,8 @@ We will use exclusively C++ standards and avoid actively any C type.
 
 *** Testing
 
-TODO:
+Testing is done using the /catch2/ library. For more details read [[https://github.com/catchorg/Catch2][this]].
+All tests are found inside the /test folder.
 
 *** Optimize
 
