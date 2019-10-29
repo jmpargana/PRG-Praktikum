@@ -9,7 +9,7 @@
  */
 
 
-#include "../include/matrix.h"
+#include "../include/matrix.hpp"
 #include <future>
 #include <chrono>
 #include <thread>

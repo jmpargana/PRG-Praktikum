@@ -11,16 +11,19 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <array>
 
 
 //------------------------------------------------------------------------------
 
 
-int** aufgabe1a1(unsigned size)
+std::array<std::array<int, 30>, 30> aufgabe1a1(unsigned size)
 // function to create a two-dimensional array initialized with random ints
 {
-    int** matrix = nullptr;
-    matrix = new int*[size];
+    // int** matrix = nullptr;
+    // matrix = new int*[size];
+
+    std::array<std::array<int, 30>, 30> matrix;
 
     for (unsigned rol=0; rol<size; ++rol) {
 	for (unsigned col=0; col<size; ++col) {
@@ -35,7 +38,8 @@ int** aufgabe1a1(unsigned size)
 //------------------------------------------------------------------------------
 
 
-const char* aufgabe1a2(int** data, unsigned int size)
+const char* aufgabe1a2(std::array<std::array<int, 30>, 30> data,
+		       unsigned int size)
 // copy data from two-dimensional static array to one-dimensional dynamic array
 // of chars to simplify printing process
 {
@@ -72,7 +76,7 @@ int main(int argc, const char *argv[])
  try
  {
      unsigned int size = 30;
-     int** matrix = aufgabe1a1(size);
+     std::array<std::array<int, 30>, 30> matrix = aufgabe1a1(size);
      const char* matrix_verbose = aufgabe1a2(matrix, size);
      aufgabe1a3(matrix_verbose, size);
      return 0;

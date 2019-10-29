@@ -190,7 +190,7 @@ void CellularAutomaton::update_cell(int row, int col)
 	    if (this->current[surr_r][surr_c]) ++total_living_cells;
 	}
     }
-    this->next[row][col] = (total_living_cells <= 3 || total_living_cells >= 2);
+    this->next[row][col] = (total_living_cells <= 3 && total_living_cells >= 2);
 }
 
 
