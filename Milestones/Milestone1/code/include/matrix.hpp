@@ -55,7 +55,7 @@ public:
     
 
     // getter for vector
-    std::vector<T>& operator[](int);
+    std::vector<T>& operator[](unsigned);
 
     // main mathods
     unsigned get_row_size();	// getter functions
@@ -65,8 +65,8 @@ public:
 
     
 private:
-    std::vector<std::vector<T> > matrix;
     unsigned row_size, col_size;
+    std::vector<std::vector<T> > matrix;
     
 };
 

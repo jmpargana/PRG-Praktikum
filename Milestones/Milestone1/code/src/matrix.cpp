@@ -23,7 +23,7 @@ Matrix<T>::Matrix() { };	// empty initialization
 template<typename T>
 Matrix<T>::Matrix(unsigned n)    
     :row_size{n}, col_size{n},
-     matrix{std::vector<std::vector<T> >(n, std::vector<T>(n))} { }
+     matrix{n, std::vector<T>(n)} { }
      // matrix construct to build n-square matrix of any type
 
 
@@ -32,8 +32,8 @@ Matrix<T>::Matrix(unsigned n)
 
 template<typename T>
 Matrix<T>::Matrix(unsigned n, unsigned m)
-    :row_size{n}, col_size{n},
-     matrix{std::vector<std::vector<T> >(n, std::vector<T>(m))} { }
+    :row_size{n}, col_size{m},
+     matrix{n, std::vector<T>(m)} { }
      // matrix construct to build n*m matrix of any type
 
 
@@ -290,7 +290,8 @@ Matrix<T> Matrix<T>::power(double value)
     if (value==1) return *this;
 
     // TODO: continue implementation
-    
+
+    return *this;
 }
 
 
@@ -298,12 +299,12 @@ Matrix<T> Matrix<T>::power(double value)
 
 
 template<typename T>
-std::vector<T>& Matrix<T>::operator[](int index)
+std::vector<T>& Matrix<T>::operator[](unsigned index)
 // subscription operation overload
 {
     // error detection
-    if (index>this->row_size || index<this->row_size)
-	throw std::runtime_error("Out of range");
+    if (index>this->row_size || index<0)
+    	throw std::runtime_error("Out of range");
 
     return this->matrix[index];	// second subscription should work as expected
 }
@@ -380,6 +381,10 @@ template<typename T>
 std::ifstream& operator>>(std::ifstream& is, Matrix<T>& matrix)
 // overload input file stream operator to read files
 {
-
+    
     return is;
 }
+
+
+// template class Matrix<int>;
+template class Matrix<int>;
