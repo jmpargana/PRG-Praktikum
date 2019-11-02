@@ -386,5 +386,5 @@ std::ifstream& operator>>(std::ifstream& is, Matrix<T>& matrix)
 }
 
 
+template class Matrix<float>;
 // template class Matrix<int>;
-template class Matrix<int>;
