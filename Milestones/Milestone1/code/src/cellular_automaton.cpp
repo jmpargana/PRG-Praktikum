@@ -158,10 +158,23 @@ std::ofstream& operator<<(std::ofstream& os, const CellularAutomaton& ca)
 //------------------------------------------------------------------------------
 
 
+template<typename T>
 std::ifstream& operator>>(std::ifstream& is, CellularAutomaton& ca)
 // input file stream operator overload
 {
-    
+    unsigned rows, cols;	// integer values to change size of cellular automaton
+    is >> rows >> cols;		// read first two lines into variables
+    T temp_variable;
+
+    CellularAutomaton temp(rows, cols);
+
+    for (int row=0; row<rows; ++row) {
+	for (int col=0; col<cols; ++col) {
+	    is >> temp_variable;
+	    ca[row][col] = (temp_variable == '*');
+	}
+    }
+    ca = temp;    		// replace cellular automaton with new one
     return is;
 }
 
