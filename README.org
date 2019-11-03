@@ -10,8 +10,8 @@ both more information regarding each project and their corresponding
 code. 
 
 ** Here is a link to each respectively:
-- [[file:./Milestones/Milestone1/README.org][Game of Life]]
-- [[file:./Milestones/Milestone1/README.org][Visual encryption]]
+- [[file:./Milestones/Milestone1/][Game of Life]]
+- [[file:./Milestones/Milestone1/][Visual encryption]]
 - [[file:./Milestones/Milestone3/README.org][Convolutional Neural Network]]
 
 
