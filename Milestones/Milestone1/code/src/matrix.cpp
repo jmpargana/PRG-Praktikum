@@ -340,7 +340,7 @@ std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix)
 // ... \n
 // matrix[i][0] ... \n
 {
-    for (auto& row : matrix.matrix) {
+    for (auto& row : matrix.get_matrix()) {
 	for (auto& elem: row) {
 	    os << elem;
 	}

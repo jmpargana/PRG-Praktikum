@@ -121,7 +121,14 @@ Matrix<bool> CellularAutomaton::get_matrix() { return this->current; }
 std::ostream& operator<<(std::ostream& os, CellularAutomaton& ca)
 // output file stream operator overload
 {
-    os << ca.get_matrix();
+    char temp;			// save result from boolean
+    for (int row=0; row<ca.get_rows(); ++row) {
+	for (int col=0; col<ca.get_cols(); ++col) {
+	    temp = (ca[row][col]) ? '*' : '0';
+	    os << temp;
+	}
+	os << '\n';
+    }
     return os;
 }
 
