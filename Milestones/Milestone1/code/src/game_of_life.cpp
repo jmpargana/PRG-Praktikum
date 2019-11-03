@@ -8,6 +8,8 @@
 
 
 #include "../include/cellular_automaton.hpp"
+#include <random>
+#include <functional>
 
 
 //------------------------------------------------------------------------------
@@ -115,9 +117,13 @@ void change_cell()
 void random_start()
 // initiate or override cellular automaton with random true or false values
 {
+    // generator function for random boolean
+    auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
+    
     for (int row=0; row<ca.get_rows(); ++row) {
 	for (int col=0; col<ca.get_cols(); ++col) {
-	    ca[row][col] = random();
+	    bool temp = gen();	 // generate random boolean 
+	    ca[row][col] = temp; // store in cell
 	}
     }
     std::cout << ca << std::endl;
