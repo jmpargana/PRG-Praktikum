@@ -4,6 +4,10 @@
  * 
  */
 
+#ifndef MATRIX_HPP
+#define MATRIX_HPP
+
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -84,3 +88,6 @@ std::ofstream& operator<<(std::ofstream&, const Matrix<T>&);
 
 template<typename T>
 std::ifstream& operator>>(std::ifstream&, Matrix<T>&);
+
+
+#endif

@@ -8,6 +8,9 @@
  *
  */
 
+#ifndef CELLULAR_AUTOMATON_HPP
+#define CELLULAR_AUTOMATON_HPP
+
 
 #include "../include/matrix.hpp"
 #include <future>
@@ -80,3 +83,6 @@ std::ofstream& operator<<(std::ofstream&, CellularAutomaton&);
 
 // input file stream
 std::ifstream& operator>>(std::ifstream&, CellularAutomaton&);
+
+
+#endif
