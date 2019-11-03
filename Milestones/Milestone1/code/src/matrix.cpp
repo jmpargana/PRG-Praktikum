@@ -113,71 +113,71 @@ Matrix<T>::~Matrix()
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T> Matrix<T>::operator+(Matrix<T>& second)
-// sum of matrix template
-{
-    // error detection
-    if (this->row_size != second.get_row_size() ||
-	this->col_size != second.get_col_size())
-	throw std::runtime_error("Matrix sizes don't match");
+// template<typename T>
+// Matrix<T> Matrix<T>::operator+(Matrix<T>& second)
+// // sum of matrix template
+// {
+//     // error detection
+//     if (this->row_size != second.get_row_size() ||
+// 	this->col_size != second.get_col_size())
+// 	throw std::runtime_error("Matrix sizes don't match");
 
-    // iteration without iterators for easy subscription
-    Matrix<T> sum(this->row_size, this->col_size);
-    for (unsigned i=0; i<this->row_size; i++) {
-	for (unsigned j=0; j<this->col_size; j++) {
-	    sum[i][j] = this->matrix[i][j] + second[i][j];
-	}
-    }
-    return sum;
-}
+//     // iteration without iterators for easy subscription
+//     Matrix<T> sum(this->row_size, this->col_size);
+//     for (unsigned i=0; i<this->row_size; i++) {
+// 	for (unsigned j=0; j<this->col_size; j++) {
+// 	    sum[i][j] = this->matrix[i][j] + second[i][j];
+// 	}
+//     }
+//     return sum;
+// }
 
 
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T> Matrix<T>::operator-(Matrix<T>& second)
-// matrix difference template
-{
-    // error detection
-    if (this->row_size != second.get_row_size() ||
-	this->col_size != second.get_col_size())
-	throw std::runtime_error("Matrix sizes don't match");
+// template<typename T>
+// Matrix<T> Matrix<T>::operator-(Matrix<T>& second)
+// // matrix difference template
+// {
+//     // error detection
+//     if (this->row_size != second.get_row_size() ||
+// 	this->col_size != second.get_col_size())
+// 	throw std::runtime_error("Matrix sizes don't match");
 
-    // iteration without iterators for easy subscription
-    Matrix<T> difference(this->row_size, this->col_size);
-    for (unsigned i=0; i<this->row_size; i++) {
-	for (unsigned j=0; j<this->col_size; j++) {
-	    difference[i][j] = this->matrix[i][j] - second[i][j];
-	}
-    }
-    return difference;
-}
+//     // iteration without iterators for easy subscription
+//     Matrix<T> difference(this->row_size, this->col_size);
+//     for (unsigned i=0; i<this->row_size; i++) {
+// 	for (unsigned j=0; j<this->col_size; j++) {
+// 	    difference[i][j] = this->matrix[i][j] - second[i][j];
+// 	}
+//     }
+//     return difference;
+// }
 
 
 //------------------------------------------------------------------------------
 
 
 // TODO: wrong implementation
-template<typename T>
-Matrix<T> Matrix<T>::operator*(Matrix<T>& second)
-// matrix product template
-{
-    // error detection
-    if (this->row_size != second.get_row_size() ||
-	this->col_size != second.get_col_size())
-	throw std::runtime_error("Matrix sizes don't match");
+// template<typename T>
+// Matrix<T> Matrix<T>::operator*(Matrix<T>& second)
+// // matrix product template
+// {
+//     // error detection
+//     if (this->row_size != second.get_row_size() ||
+// 	this->col_size != second.get_col_size())
+// 	throw std::runtime_error("Matrix sizes don't match");
 
-    // loop without iterators for easy subscription
-    Matrix<T> product(this->row_size, this->col_size);
-    for (unsigned i=0; i<this->row_size; i++) {
-	for (unsigned j=0; j<this->col_size; j++) {
-	    product[i][j] = this->matrix[i][j] * second[i][j];
-	}
-    }
-    return product;
-}
+//     // loop without iterators for easy subscription
+//     Matrix<T> product(this->row_size, this->col_size);
+//     for (unsigned i=0; i<this->row_size; i++) {
+// 	for (unsigned j=0; j<this->col_size; j++) {
+// 	    product[i][j] = this->matrix[i][j] * second[i][j];
+// 	}
+//     }
+//     return product;
+// }
 
 
 //------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ Matrix<T> Matrix<T>::transpose()
     // get inverted values
     for (unsigned i=0; i<this->row_size; i++) {
 	for (unsigned j=0; j<this->col_size; j++) {
-	    transposed_matrix = this->matrix[j][i];
+	    transposed_matrix[i][j] = this->matrix[j][i];
 	}
     }
     return transposed_matrix;
@@ -202,97 +202,97 @@ Matrix<T> Matrix<T>::transpose()
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T> Matrix<T>::operator+(double scalar)
-// matrix scalar product sum
-{
-    // error detection
-    if (typeid(T) != typeid(scalar)) std::runtime_error("Impossible!\nDifferent types");
+// template<typename T>
+// Matrix<T> Matrix<T>::operator+(double scalar)
+// // matrix scalar product sum
+// {
+//     // error detection
+//     if (typeid(T) != typeid(scalar)) std::runtime_error("Impossible!\nDifferent types");
 
-    Matrix<T> sum(this->row_size, this->col_size);
-    for (unsigned i=0; i<this->row_size; i++) {
-	for (unsigned j=0; j<this->col_size; j++) {
-	    sum[i][j] = this->matrix[i][j] + scalar;
-	}
-    }
-    return sum;
-}
-
-
-//------------------------------------------------------------------------------
-
-
-template<typename T>
-Matrix<T> Matrix<T>::operator-(double scalar)
-// matrix scalar difference
-{
-    // error detection
-    if (typeid(T) != typeid(scalar)) std::runtime_error("Impossible!\nDifferent types");
-
-    Matrix<T> difference(this->row_size, this->col_size);
-    for (unsigned i=0; i<this->row_size; i++) {
-	for (unsigned j=0; j<this->col_size; j++) {
-	    difference[i][j] = this->matrix[i][j] - scalar;
-	}
-    }
-    return difference;
-}
+//     Matrix<T> sum(this->row_size, this->col_size);
+//     for (unsigned i=0; i<this->row_size; i++) {
+// 	for (unsigned j=0; j<this->col_size; j++) {
+// 	    sum[i][j] = this->matrix[i][j] + scalar;
+// 	}
+//     }
+//     return sum;
+// }
 
 
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T> Matrix<T>::operator*(double scalar)
-// matrix scalar product
-{
-    // error detection
-    if (typeid(T) != typeid(scalar)) std::runtime_error("Impossible!\nDifferent types");
+// template<typename T>
+// Matrix<T> Matrix<T>::operator-(double scalar)
+// // matrix scalar difference
+// {
+//     // error detection
+//     if (typeid(T) != typeid(scalar)) std::runtime_error("Impossible!\nDifferent types");
 
-    Matrix<T> product(this->row_size, this->col_size);
-    for (unsigned i=0; i<this->row_size; i++) {
-	for (unsigned j=0; j<this->col_size; j++) {
-	    product[i][j] = this->matrix[i][j] * scalar;
-	}
-    }
-    return product;
-}
+//     Matrix<T> difference(this->row_size, this->col_size);
+//     for (unsigned i=0; i<this->row_size; i++) {
+// 	for (unsigned j=0; j<this->col_size; j++) {
+// 	    difference[i][j] = this->matrix[i][j] - scalar;
+// 	}
+//     }
+//     return difference;
+// }
+
+
+//------------------------------------------------------------------------------
+
+
+// template<typename T>
+// Matrix<T> Matrix<T>::operator*(double scalar)
+// // matrix scalar product
+// {
+//     // error detection
+//     if (typeid(T) != typeid(scalar)) std::runtime_error("Impossible!\nDifferent types");
+
+//     Matrix<T> product(this->row_size, this->col_size);
+//     for (unsigned i=0; i<this->row_size; i++) {
+// 	for (unsigned j=0; j<this->col_size; j++) {
+// 	    product[i][j] = this->matrix[i][j] * scalar;
+// 	}
+//     }
+//     return product;
+// }
 
 
 //------------------------------------------------------------------------------
 
 
 
-template<typename T>
-Matrix<T> Matrix<T>::operator/(double scalar)
-// matrix scalar division
-{
-    // error detection
-    if (typeid(T) != typeid(scalar)) std::runtime_error("Impossible!\nDifferent types");
+// template<typename T>
+// Matrix<T> Matrix<T>::operator/(double scalar)
+// // matrix scalar division
+// {
+//     // error detection
+//     if (typeid(T) != typeid(scalar)) std::runtime_error("Impossible!\nDifferent types");
 
-    Matrix<T> division(this->row_size, this->col_size);
-    for (unsigned i=0; i<this->row_size; i++) {
-	for (unsigned j=0; j<this->col_size; j++) {
-	    division[i][j] = this->matrix[i][j] / scalar;
-	}
-    }
-    return division;
-}
+//     Matrix<T> division(this->row_size, this->col_size);
+//     for (unsigned i=0; i<this->row_size; i++) {
+// 	for (unsigned j=0; j<this->col_size; j++) {
+// 	    division[i][j] = this->matrix[i][j] / scalar;
+// 	}
+//     }
+//     return division;
+// }
 
 
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T> Matrix<T>::power(double value)
-{
-    if (value<1) throw std::runtime_error("invalid operation");
-    if (value==1) return *this;
+// template<typename T>
+// Matrix<T> Matrix<T>::power(double value)
+// {
+//     if (value<1) throw std::runtime_error("invalid operation");
+//     if (value==1) return *this;
 
-    // TODO: continue implementation
+//     // TODO: continue implementation
 
-    return *this;
-}
+//     return *this;
+// }
 
 
 //------------------------------------------------------------------------------
@@ -357,7 +357,13 @@ template<typename T>
 std::istream& operator>>(std::istream& is, Matrix<T>& matrix)
 // overload input stream operator
 {
-    
+    T temp;			// save temporary variables
+    for (unsigned row=0; row<matrix.get_row_size(); ++row) {
+	for (unsigned col=0; col<matrix.get_col_size(); ++col) {
+	    is >> temp;
+	    matrix[row][col] = temp;
+	}
+    }	
     return is;
 }
 
@@ -369,7 +375,7 @@ template<typename T>
 std::ofstream& operator<<(std::ofstream& os, const Matrix<T>& matrix)
 // overload output file stream operator to write in files
 {
-
+    // TODO: 
     return os;
 }
 
@@ -381,10 +387,11 @@ template<typename T>
 std::ifstream& operator>>(std::ifstream& is, Matrix<T>& matrix)
 // overload input file stream operator to read files
 {
-    
+    // TODO:
     return is;
 }
 
 
-template class Matrix<float>;
+// template class Matrix<float>;
 // template class Matrix<int>;
+template class Matrix<bool>;	// only boolean class is needed for this project
