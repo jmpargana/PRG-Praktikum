@@ -129,15 +129,14 @@ std::ostream& operator<<(std::ostream& os, CellularAutomaton& ca)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
 std::istream& operator>>(std::istream& is, CellularAutomaton& ca)
 // input stream operator overload
 {
-    T temp;			// save input character in this variable
-    for (int row; row<ca.get_rows(); ++row) {
-	for (int col; col<ca.get_cols(); ++col) {
+    char temp;			// save input character in this variable
+    for (int row=0; row<ca.get_rows(); ++row) {
+	for (int col=0; col<ca.get_cols(); ++col) {
 	    is >> temp;			  // input to variable
-	    ca[row][col] = (temp == "*"); // save via ternary
+	    ca[row][col] = (temp == '*'); // save via ternary
 	}
     }
     return is;
@@ -147,10 +146,19 @@ std::istream& operator>>(std::istream& is, CellularAutomaton& ca)
 //------------------------------------------------------------------------------
 
 
-std::ofstream& operator<<(std::ofstream& os, const CellularAutomaton& ca)
+std::ofstream& operator<<(std::ofstream& os, CellularAutomaton& ca)
 // output file stream operator overload
 {
-    
+    char temp;
+    os << ca.get_rows() << '\n' << ca.get_cols() << '\n'; // output dimensions of cellular automaton
+
+    for (int row=0; row<ca.get_rows(); ++row) {
+	for (int col=0; col<ca.get_cols(); ++col) {
+	    temp = (ca[row][col]) ? '*' : '0';
+	    os << temp;
+	}
+	os << '\n';
+    }
     return os;
 }
 
@@ -158,18 +166,17 @@ std::ofstream& operator<<(std::ofstream& os, const CellularAutomaton& ca)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
 std::ifstream& operator>>(std::ifstream& is, CellularAutomaton& ca)
 // input file stream operator overload
 {
     unsigned rows, cols;	// integer values to change size of cellular automaton
     is >> rows >> cols;		// read first two lines into variables
-    T temp_variable;
+    char temp_variable;
 
     CellularAutomaton temp(rows, cols);
 
-    for (int row=0; row<rows; ++row) {
-	for (int col=0; col<cols; ++col) {
+    for (unsigned row=0; row<rows; ++row) {
+	for (unsigned col=0; col<cols; ++col) {
 	    is >> temp_variable;
 	    ca[row][col] = (temp_variable == '*');
 	}
