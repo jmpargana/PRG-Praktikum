@@ -1,37 +1,43 @@
-# modelled for clang and mac os system
-# needs to be updated
+# MakeFile For this project
+# run "make" in current library to compile
 
 CC := g++ # This is the main compiler
 
 SRCDIR := src
 BUILDDIR := build
-TARGET := bin/runner
+
+GAMEOFLIFE := bin/GameOfLife
+# VISUALENCRYPTION := bin/VisualEncryption
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 CFLAGS := -g # -Wall
-LIB := -pthread -lmongoclient -L lib -lboost_thread-mt -lboost_filesystem-mt -lboost_system-mt
 INC := -I include
 
-$(TARGET): $(OBJECTS)
-  @echo " Linking..."
-  @echo " $(CC) $^ -o $(TARGET) $(LIB)"; $(CC) $^ -o $(TARGET) $(LIB)
+
+# main rule to generate both programs
+all: $(GAMEOFLIFE) # $(VISUALENCRYPTION)
+
+
+$(GAMEOFLIFE): $(OBJECTS)
+	@echo "Creating GameOfLife binary..."
+	$(CC) $^ -o $(GAMEOFLIFE)
+
+
+# $(VISUALENCRYPTION): $(OBJECTS)
+#	@echo "Creating VisualEncryption binary..."
+# 	$(CC) $^ -o $(VISUALENCRYPTION)
+
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
-  @mkdir -p $(BUILDDIR)
-  @echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	@echo "Creating object file..."
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 clean:
-  @echo " Cleaning..."; 
-  @echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
+	@echo "Cleaning build directory and binaries..."
+	$(RM) -r $(BUILDDIR) $(TARGET)
 
-# Tests
 tester:
-  $(CC) $(CFLAGS) test/tester.cpp $(INC) $(LIB) -o bin/tester
-
-# Spikes
-ticket:
-  $(CC) $(CFLAGS) spikes/ticket.cpp $(INC) $(LIB) -o bin/ticket
-
-.PHONY: clean
+	@echo "Creating tests..."
+	$(CC) $(CFLAGS) test/tester.cpp $(INC) -o bin/tester
