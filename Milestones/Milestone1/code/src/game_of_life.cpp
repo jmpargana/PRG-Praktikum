@@ -74,10 +74,10 @@ void export_file()
 void read_cell()
 // after testing user's input read value in given cell
 {
-    unsigned row = 30000, col = 30000;		// initialize with impossible value
+    int row = 30000, col = 30000;		// initialize with impossible value
 
     // avoid invalid input
-    while (row >= ca.get_rows() || col >= ca.get_cols()) {
+    while (row >= ca.get_rows() || col >= ca.get_cols() || row<0 || col<0) {
 	std::cout << "Give a row and column value:" << std::endl;
 	std::cin >> row >> col;
     }

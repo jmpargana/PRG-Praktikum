@@ -95,7 +95,17 @@ CellularAutomaton& CellularAutomaton::operator=(CellularAutomaton&& ca) noexcept
 
 
 std::vector<bool> CellularAutomaton::operator[](int index)
-// subscript operation overload
+// subscript operator for assinment
+{
+    return this->current[index];
+}
+
+
+//------------------------------------------------------------------------------
+
+
+const std::vector<bool> CellularAutomaton::operator[](int index) const
+// subscript operation overload for const reading
 {
     return this->current[index];
 }
@@ -105,8 +115,8 @@ std::vector<bool> CellularAutomaton::operator[](int index)
 
 
 // getter functions
-int CellularAutomaton::get_rows() { return this->current.get_row_size(); }
-int CellularAutomaton::get_cols() { return this->current.get_col_size(); }
+int CellularAutomaton::get_rows() const { return this->current.get_row_size(); }
+int CellularAutomaton::get_cols() const { return this->current.get_col_size(); }
 
 
 //------------------------------------------------------------------------------
@@ -118,16 +128,16 @@ Matrix<bool> CellularAutomaton::get_matrix() { return this->current; }
 //------------------------------------------------------------------------------
 
 
-std::ostream& operator<<(std::ostream& os, CellularAutomaton& ca)
+std::ostream& operator<<(std::ostream& os, CellularAutomaton const& ca)
 // output file stream operator overload
 {
     char temp;			// save result from boolean
     for (int row=0; row<ca.get_rows(); ++row) {
-	for (int col=0; col<ca.get_cols(); ++col) {
-	    temp = (ca[row][col]) ? '*' : '0';
-	    os << temp;
-	}
-	os << '\n';
+    	for (int col=0; col<ca.get_cols(); ++col) {
+    	    temp = (ca[row][col]) ? '*' : '0';
+    	    os << temp;
+    	}
+    	os << '\n';
     }
     return os;
 }

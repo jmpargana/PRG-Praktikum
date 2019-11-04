@@ -300,6 +300,19 @@ Matrix<T> Matrix<T>::transpose()
 
 template<typename T>
 std::vector<T>& Matrix<T>::operator[](unsigned index)
+{
+    if (index>this->row_size || index<0)
+	throw std::runtime_error("Out of range");
+
+    return this->matrix[index];
+}
+
+
+//------------------------------------------------------------------------------
+
+
+template<typename T>
+const std::vector<T>& Matrix<T>::operator[](unsigned index) const
 // subscription operation overload
 {
     // error detection
@@ -315,10 +328,10 @@ std::vector<T>& Matrix<T>::operator[](unsigned index)
 
 // usefull public functions to access outside class
 template<typename T>
-unsigned Matrix<T>::get_row_size() { return row_size; }
+unsigned Matrix<T>::get_row_size() const { return row_size; }
 
 template<typename T>
-unsigned Matrix<T>::get_col_size() { return col_size; }
+unsigned Matrix<T>::get_col_size() const { return col_size; }
 
 
 //------------------------------------------------------------------------------

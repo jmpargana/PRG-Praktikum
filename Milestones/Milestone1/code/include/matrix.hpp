@@ -60,10 +60,11 @@ public:
 
     // getter for vector
     std::vector<T>& operator[](unsigned);
+    const std::vector<T>& operator[](unsigned) const;
 
     // main mathods
-    unsigned get_row_size();	// getter functions
-    unsigned get_col_size();	// for matrix size
+    unsigned get_row_size() const;	// getter functions
+    unsigned get_col_size() const;	// for matrix size
 
     bool square();		// square checker
 

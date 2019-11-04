@@ -49,14 +49,15 @@ public:
     ~CellularAutomaton() { }
 
     // subscript operation overload
-    std::vector<bool> operator[](int index);
+    std::vector<bool> operator[](int);
+    const std::vector<bool> operator[](int) const;
 
     // time lapse with operator++ overloading 
     CellularAutomaton& operator++();
     CellularAutomaton& operator+=(int);
 
-    int get_rows();
-    int get_cols();
+    int get_rows() const;
+    int get_cols() const;
     Matrix<bool> get_matrix();
     void update_cell(int, int);	// check surrounding cells
     
@@ -72,7 +73,7 @@ private:
 
 
 // output stream
-std::ostream& operator<<(std::ostream&, const CellularAutomaton&);
+std::ostream& operator<<(std::ostream&, CellularAutomaton const&);
 
 // input stream
 std::istream& operator>>(std::istream&, CellularAutomaton&);
