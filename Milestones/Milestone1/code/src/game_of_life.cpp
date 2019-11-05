@@ -20,10 +20,11 @@ std::string menu =		// menu to be shown to user
 Menu:\n\
 \t1 -> \tImport from file\n\
 \t2 -> \tExport to file\n\
-\t3 -> \tNext Life\n\
-\t4 -> \tRead cell\n\
-\t5 -> \tChange cell\n\
-\t6 -> \tRandom start\n\
+\t3 -> \tPrint Cellular Automaton\n\
+\t4 -> \tNext Life\n\
+\t5 -> \tRead cell\n\
+\t6 -> \tChange cell\n\
+\t7 -> \tRandom start\n\
 \t0 -> \tExit Game\n\
 ";
 
@@ -38,10 +39,11 @@ void import_file()
 // read cellular automaton matrix from given file name as input
 {
     std::string file_name;
-    std::cout << "Enter input file name:" << std::endl;
-    std::cin >> file_name;
+    // std::cout << "Enter input file name:" << std::endl;
+    // std::cin >> file_name;
 
-    std::ifstream ist {file_name}; // instatiate input file stream with fiven string
+    // std::ifstream ist {file_name}; // instatiate input file stream with fiven string
+    std::ifstream ist {"../../materials/beispieldatei_cellularautomaton.txt"};
     if (!ist) throw std::runtime_error("File not found"); // test if file can be opened
 
     ist >> ca; 			// input file to cellular automaton
@@ -52,19 +54,19 @@ void import_file()
 //------------------------------------------------------------------------------
 
 
-// void export_file()
-// // save current state of cellular automaton to given file name
-// {
-//     std::string file_name;
-//     std::cout << "Enter output file name:" << std::endl;
-//     std::cin >> file_name;
+void export_file()
+// save current state of cellular automaton to given file name
+{
+    std::string file_name;
+    std::cout << "Enter output file name:" << std::endl;
+    std::cin >> file_name;
 
-//     std::ofstream ost {file_name}; // check if output file stream can be opened
-//     if (!ost) throw std::runtime_error("Couldn't open file"); // error detection
+    // std::ofstream ost {file_name}; // check if output file stream can be opened
+    // if (!ost) throw std::runtime_error("Couldn't open file"); // error detection
 
-//     ost << ca;
-//     std::cout << "Successfully wrote to file \"" << file_name << '\"' << std::endl;
-// }
+    // ost << ca;
+    std::cout << "Successfully wrote to file \"" << file_name << '\"' << std::endl;
+}
 
 
 
@@ -148,11 +150,12 @@ try
 	
 	switch (key) {
 	case '1': import_file(); break;
-	// case '2': export_file(); break;
-	case '3': ++ca; std::cout << ca << std::endl; break;
-	case '4': read_cell(); break;
-	case '5': change_cell(); break;
-	case '6': random_start(); break;
+	case '2': export_file(); break;
+	case '3': std::cout << ca << std::endl; break;
+	case '4': ++ca; std::cout << ca << std::endl; break;
+	case '5': read_cell(); break;
+	case '6': change_cell(); break;
+	case '7': random_start(); break;
 	case '0': exit(0); break;
 	default: continue;	// ignore invalid input
 	}
