@@ -134,7 +134,7 @@ std::ostream& operator<<(std::ostream& os, CellularAutomaton const& ca)
     char temp;			// save result from boolean
     for (int row=0; row<ca.get_rows(); ++row) {
     	for (int col=0; col<ca.get_cols(); ++col) {
-    	    temp = (ca[row][col]) ? '*' : '0';
+    	    temp = (ca[row][col]) ? '*' : 'o';
     	    os << temp;
     	}
     	os << '\n';
@@ -171,7 +171,7 @@ std::istream& operator>>(std::istream& is, CellularAutomaton& ca)
 
 //     for (int row=0; row<ca.get_rows(); ++row) {
 // 	for (int col=0; col<ca.get_cols(); ++col) {
-// 	    temp = (ca[row][col]) ? '*' : '0';
+// 	    temp = (ca[row][col]) ? '*' : 'o';
 // 	    os << temp;
 // 	}
 // 	os << '\n';
@@ -193,10 +193,10 @@ std::ifstream& operator>>(std::ifstream& is, CellularAutomaton& ca)
     CellularAutomaton temp(rows, cols);
 
     for (unsigned row=0; row<rows; ++row) {
-	for (unsigned col=0; col<cols; ++col) {
-	    is >> temp_variable;
-	    ca[row][col] = (temp_variable == '*');
-	}
+    	for (unsigned col=0; col<cols; ++col) {
+    	    is >> temp_variable;
+    	    temp[row][col] = (temp_variable == '*');
+    	}
     }
     ca = temp;    		// replace cellular automaton with new one
     return is;
@@ -211,20 +211,17 @@ void CellularAutomaton::update_cell(int row, int col)
 {
     int total_living_cells = 0;
     // surr_r stands for surrounding row and surr_c for column
-    for (int surr_r=row-1; surr_r<row+1; ++surr_r) {
-	for (int surr_c=col-1; surr_c<col+1; ++surr_c) {
+    for (int surr_r=row-1; surr_r<row+2; ++surr_r) {
+	for (int surr_c=col-1; surr_c<col+2; ++surr_c) {
 	    // ignore counting current cell
 	    if (surr_r==row && surr_r==surr_c) continue;
 	    
-	    // deal with negative numbers
-	    if (surr_r < 0) surr_r+=this->get_rows();
-	    if (surr_c < 0) surr_r+=this->get_cols();
-	    else {		// deal with modulo limits
-		surr_r %= this->get_rows();
-		surr_c %= this->get_cols();
-	    }
+	    // deal with negative numbers and modulo
 	    // increment if living cell was found
-	    if (this->current[surr_r][surr_c]) ++total_living_cells;
+	    if (this->current
+		[(surr_r + this->get_rows()) % this->get_rows()]
+		[(surr_c + this->get_cols()) % this->get_cols()])
+		++total_living_cells;
 	}
     }
     this->next[row][col] = (total_living_cells <= 3 && total_living_cells >= 2);
