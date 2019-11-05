@@ -49,8 +49,8 @@ public:
     ~CellularAutomaton() { }
 
     // subscript operation overload
-    std::vector<bool> operator[](int);
-    const std::vector<bool> operator[](int) const;
+    std::vector<bool>& operator[](int);
+    const std::vector<bool>& operator[](int) const;
 
     // time lapse with operator++ overloading 
     CellularAutomaton& operator++();
@@ -58,12 +58,12 @@ public:
 
     int get_rows() const;
     int get_cols() const;
-    Matrix<bool> get_matrix();
+    Matrix get_matrix();
     void update_cell(int, int);	// check surrounding cells
     
     
 private:
-    Matrix<bool> current, next;
+    Matrix current, next;
     int timer;
     
 };

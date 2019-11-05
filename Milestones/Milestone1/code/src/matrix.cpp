@@ -13,35 +13,35 @@
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T>::Matrix() { };	// empty initialization
+// template<typename T>
+Matrix::Matrix() { };	// empty initialization
 
 
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T>::Matrix(unsigned n)    
+// template<typename T>
+Matrix::Matrix(unsigned n)    
     :row_size{n}, col_size{n},
-     matrix{n, std::vector<T>(n)} { }
+     matrix{n, std::vector<bool>(n)} { }
      // matrix construct to build n-square matrix of any type
 
 
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T>::Matrix(unsigned n, unsigned m)
+// template<typename T>
+Matrix::Matrix(unsigned n, unsigned m)
     :row_size{n}, col_size{m},
-     matrix{n, std::vector<T>(m)} { }
+     matrix{n, std::vector<bool>(m)} { }
      // matrix construct to build n*m matrix of any type
 
 
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T>::Matrix(std::vector<std::vector<T> >& elements)
+// template<typename T>
+Matrix::Matrix(std::vector<std::vector<bool> >& elements)
     : matrix{elements} { }
 // create matrix with given elements
 
@@ -49,8 +49,8 @@ Matrix<T>::Matrix(std::vector<std::vector<T> >& elements)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T>::Matrix(std::vector<std::vector<T> >&& elements)
+// template<typename T>
+Matrix::Matrix(std::vector<std::vector<bool> >&& elements)
     : matrix{std::move(elements)} { }
 // move elements and initialize matrix with them
 
@@ -58,8 +58,8 @@ Matrix<T>::Matrix(std::vector<std::vector<T> >&& elements)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T>::Matrix(Matrix& to_copy)
+// template<typename T>
+Matrix::Matrix(Matrix& to_copy)
     : matrix{to_copy.matrix} { }
 // matrix construct to copy matrix of any type
 
@@ -67,16 +67,16 @@ Matrix<T>::Matrix(Matrix& to_copy)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T>::Matrix(Matrix&& to_copy)
+// template<typename T>
+Matrix::Matrix(Matrix&& to_copy)
     : matrix{std::move(to_copy.matrix)} { }
 
 
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T>& Matrix<T>::operator=(const Matrix<T>& to_assign)
+// template<typename T>
+Matrix& Matrix::operator=(const Matrix& to_assign)
 // matrix assignment operation overload template
 {
     matrix = to_assign.matrix;
@@ -87,8 +87,8 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& to_assign)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T>& Matrix<T>::operator=(Matrix<T>&& to_move) noexcept
+// template<typename T>
+Matrix& Matrix::operator=(Matrix&& to_move) noexcept
 // matrix move operation overload assignment template
 {
     matrix = std::move(to_move.matrix);
@@ -99,8 +99,8 @@ Matrix<T>& Matrix<T>::operator=(Matrix<T>&& to_move) noexcept
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T>::~Matrix()
+// template<typename T>
+Matrix::~Matrix()
 // matrix default destructor template
 // its not needed, since vectors already and unsigned integers
 // already have destructors by themselves which get called
@@ -183,11 +183,11 @@ Matrix<T>::~Matrix()
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-Matrix<T> Matrix<T>::transpose()
+// template<typename T>
+Matrix Matrix::transpose()
 // matrix transpose operation template
 {
-    Matrix<T> transposed_matrix(this->col_size, this->row_size);
+    Matrix transposed_matrix(this->col_size, this->row_size);
 
     // get inverted values
     for (unsigned i=0; i<this->row_size; i++) {
@@ -298,8 +298,8 @@ Matrix<T> Matrix<T>::transpose()
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-std::vector<T>& Matrix<T>::operator[](unsigned index)
+// template<typename T>
+std::vector<bool>& Matrix::operator[](unsigned index)
 {
     if (index>this->row_size || index<0)
 	throw std::runtime_error("Out of range");
@@ -311,8 +311,8 @@ std::vector<T>& Matrix<T>::operator[](unsigned index)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-const std::vector<T>& Matrix<T>::operator[](unsigned index) const
+// template<typename T>
+const std::vector<bool>& Matrix::operator[](unsigned index) const
 // subscription operation overload
 {
     // error detection
@@ -327,35 +327,35 @@ const std::vector<T>& Matrix<T>::operator[](unsigned index) const
 
 
 // usefull public functions to access outside class
-template<typename T>
-unsigned Matrix<T>::get_row_size() const { return row_size; }
+// template<typename T>
+unsigned Matrix::get_row_size() const { return row_size; }
 
-template<typename T>
-unsigned Matrix<T>::get_col_size() const { return col_size; }
+// template<typename T>
+unsigned Matrix::get_col_size() const { return col_size; }
 
 
 //------------------------------------------------------------------------------
 
 
 // might be usefull in future
-template<typename T>
-bool Matrix<T>::square() { return (row_size == col_size); }
+// template<typename T>
+bool Matrix::square() { return (row_size == col_size); }
 
 
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix)
+// template<typename T>
+std::ostream& operator<<(std::ostream& os, const Matrix& matrix)
 // overload output stream to print matrix in form of:
 // matrix[0][0] matrix[o][1] ... matrix[o][j] \n (newline)
 // matrix[1][0] ... \n
 // ... \n
 // matrix[i][0] ... \n
 {
-    for (auto& row : matrix.get_matrix()) {
-	for (auto& elem: row) {
-	    os << elem;
+    for (unsigned row=0; row<matrix.get_row_size(); ++row) {
+	for (unsigned col=0; col<matrix.get_col_size(); ++col) {
+	    os << matrix[row][col];
 	}
 	os << std::endl;
     }
@@ -366,11 +366,11 @@ std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-std::istream& operator>>(std::istream& is, Matrix<T>& matrix)
+// template<typename T>
+std::istream& operator>>(std::istream& is, Matrix& matrix)
 // overload input stream operator
 {
-    T temp;			// save temporary variables
+    bool temp;			// save temporary variables
     for (unsigned row=0; row<matrix.get_row_size(); ++row) {
 	for (unsigned col=0; col<matrix.get_col_size(); ++col) {
 	    is >> temp;
@@ -384,8 +384,8 @@ std::istream& operator>>(std::istream& is, Matrix<T>& matrix)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-std::ofstream& operator<<(std::ofstream& os, const Matrix<T>& matrix)
+// template<typename T>
+std::ofstream& operator<<(std::ofstream& os, const Matrix& matrix)
 // overload output file stream operator to write in files
 {
     // TODO: 
@@ -396,8 +396,8 @@ std::ofstream& operator<<(std::ofstream& os, const Matrix<T>& matrix)
 //------------------------------------------------------------------------------
 
 
-template<typename T>
-std::ifstream& operator>>(std::ifstream& is, Matrix<T>& matrix)
+// template<typename T>
+std::ifstream& operator>>(std::ifstream& is, Matrix& matrix)
 // overload input file stream operator to read files
 {
     // TODO:
@@ -407,4 +407,4 @@ std::ifstream& operator>>(std::ifstream& is, Matrix<T>& matrix)
 
 // template class Matrix<float>;
 // template class Matrix<int>;
-template class Matrix<bool>;	// only boolean class is needed for this project
+// template class Matrix<bool>;	// only boolean class is needed for this project

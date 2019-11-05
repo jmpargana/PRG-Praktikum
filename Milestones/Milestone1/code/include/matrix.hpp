@@ -17,7 +17,7 @@
 //------------------------------------------------------------------------------
 
 
-template <typename T>
+// template <typename T>
 class Matrix {
 
 public:    
@@ -27,8 +27,8 @@ public:
     Matrix(unsigned, unsigned);	// regular matrix
 
     // constructor with all elements
-    Matrix(std::vector<std::vector<T> >&);
-    Matrix(std::vector<std::vector<T> >&&); // move with elements
+    Matrix(std::vector<std::vector<bool> >&);
+    Matrix(std::vector<std::vector<bool> >&&); // move with elements
 
     // copy and assignment constructors
     Matrix(Matrix&);		      // copy constructor
@@ -59,8 +59,8 @@ public:
     
 
     // getter for vector
-    std::vector<T>& operator[](unsigned);
-    const std::vector<T>& operator[](unsigned) const;
+    std::vector<bool>& operator[](unsigned);
+    const std::vector<bool>& operator[](unsigned) const;
 
     // main mathods
     unsigned get_row_size() const;	// getter functions
@@ -71,24 +71,24 @@ public:
     
 private:
     unsigned row_size, col_size;
-    std::vector<std::vector<T> > matrix;
+    std::vector<std::vector<bool> > matrix;
     
 };
 
 
 // input and output streams
-template<typename T>
-std::ostream& operator<<(std::ostream&, const Matrix<T>&);
+// template<typename T>
+std::ostream& operator<<(std::ostream&, const Matrix&);
 
-template<typename T>
-std::istream& operator>>(std::istream&, Matrix<T>&);
+// template<typename T>
+std::istream& operator>>(std::istream&, Matrix&);
 
 // input and output file streams
-template<typename T>
-std::ofstream& operator<<(std::ofstream&, const Matrix<T>&);
+// template<typename T>
+std::ofstream& operator<<(std::ofstream&, const Matrix&);
 
-template<typename T>
-std::ifstream& operator>>(std::ifstream&, Matrix<T>&);
+// template<typename T>
+std::ifstream& operator>>(std::ifstream&, Matrix&);
 
 
 #endif

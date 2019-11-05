@@ -16,7 +16,7 @@
 
 
 CellularAutomaton::CellularAutomaton()
-    : current{Matrix<bool>(30, 30)}, next{Matrix<bool>(30, 30)}, timer{1} { }
+    : current{Matrix(30, 30)}, next{Matrix(30, 30)}, timer{1} { }
 // default constructor with size 30 square matrix
 
 
@@ -24,7 +24,7 @@ CellularAutomaton::CellularAutomaton()
 
 
 CellularAutomaton::CellularAutomaton(const int size)
-    : current{Matrix<bool>(size, size)}, next{Matrix<bool>(size, size)},
+    : current{Matrix(size, size)}, next{Matrix(size, size)},
       timer{1} { }
 // square matrix constructor with a given size
 
@@ -33,7 +33,7 @@ CellularAutomaton::CellularAutomaton(const int size)
 
 
 CellularAutomaton::CellularAutomaton(const int rows, const int cols)
-    :current{Matrix<bool>(rows, cols)}, next{Matrix<bool>(rows, cols)},
+    :current{Matrix(rows, cols)}, next{Matrix(rows, cols)},
      timer{1} { }
 // constructor with given dimensions
 
@@ -44,8 +44,8 @@ CellularAutomaton::CellularAutomaton(const int rows, const int cols)
 CellularAutomaton::CellularAutomaton(const int rows,
 				     const int cols,
 				     const int timer)
-    : current{Matrix<bool>(rows, cols)},
-      next{Matrix<bool>(rows, cols)},
+    : current{Matrix(rows, cols)},
+      next{Matrix(rows, cols)},
       timer{timer} { }
 // constructor with all variables given
 
@@ -94,7 +94,7 @@ CellularAutomaton& CellularAutomaton::operator=(CellularAutomaton&& ca) noexcept
 //------------------------------------------------------------------------------
 
 
-std::vector<bool> CellularAutomaton::operator[](int index)
+std::vector<bool>& CellularAutomaton::operator[](int index)
 // subscript operator for assinment
 {
     return this->current[index];
@@ -104,7 +104,7 @@ std::vector<bool> CellularAutomaton::operator[](int index)
 //------------------------------------------------------------------------------
 
 
-const std::vector<bool> CellularAutomaton::operator[](int index) const
+const std::vector<bool>& CellularAutomaton::operator[](int index) const
 // subscript operation overload for const reading
 {
     return this->current[index];
@@ -122,7 +122,7 @@ int CellularAutomaton::get_cols() const { return this->current.get_col_size(); }
 //------------------------------------------------------------------------------
 
 
-Matrix<bool> CellularAutomaton::get_matrix() { return this->current; }
+Matrix CellularAutomaton::get_matrix() { return this->current; }
 
 
 //------------------------------------------------------------------------------
@@ -163,21 +163,21 @@ std::istream& operator>>(std::istream& is, CellularAutomaton& ca)
 //------------------------------------------------------------------------------
 
 
-std::ofstream& operator<<(std::ofstream& os, CellularAutomaton& ca)
-// output file stream operator overload
-{
-    char temp;
-    os << ca.get_rows() << '\n' << ca.get_cols() << '\n'; // output dimensions of cellular automaton
+// std::ofstream& operator<<(std::ofstream& os, CellularAutomaton& ca)
+// // output file stream operator overload
+// {
+//     char temp;
+//     os << ca.get_rows() << '\n' << ca.get_cols() << '\n'; // output dimensions of cellular automaton
 
-    for (int row=0; row<ca.get_rows(); ++row) {
-	for (int col=0; col<ca.get_cols(); ++col) {
-	    temp = (ca[row][col]) ? '*' : '0';
-	    os << temp;
-	}
-	os << '\n';
-    }
-    return os;
-}
+//     for (int row=0; row<ca.get_rows(); ++row) {
+// 	for (int col=0; col<ca.get_cols(); ++col) {
+// 	    temp = (ca[row][col]) ? '*' : '0';
+// 	    os << temp;
+// 	}
+// 	os << '\n';
+//     }
+//     return os;
+// }
 
 
 //------------------------------------------------------------------------------
@@ -211,8 +211,8 @@ void CellularAutomaton::update_cell(int row, int col)
 {
     int total_living_cells = 0;
     // surr_r stands for surrounding row and surr_c for column
-    for (int surr_r=row-1; surr_r<row+2; ++surr_r) {
-	for (int surr_c=col-1; surr_c<col+2; ++surr_c) {
+    for (int surr_r=row-1; surr_r<row+1; ++surr_r) {
+	for (int surr_c=col-1; surr_c<col+1; ++surr_c) {
 	    // ignore counting current cell
 	    if (surr_r==row && surr_r==surr_c) continue;
 	    
@@ -244,7 +244,7 @@ CellularAutomaton& CellularAutomaton::operator++()
 	}
     }
     this->current = this->next;	// update matrices
-    this->next = Matrix<bool>(this->get_rows(), this->get_cols());
+    this->next = Matrix(this->get_rows(), this->get_cols());
     
     // set timeout function for visualization
     std::this_thread::sleep_for(std::chrono::milliseconds(this->timer));

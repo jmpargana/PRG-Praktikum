@@ -52,19 +52,19 @@ void import_file()
 //------------------------------------------------------------------------------
 
 
-void export_file()
-// save current state of cellular automaton to given file name
-{
-    std::string file_name;
-    std::cout << "Enter output file name:" << std::endl;
-    std::cin >> file_name;
+// void export_file()
+// // save current state of cellular automaton to given file name
+// {
+//     std::string file_name;
+//     std::cout << "Enter output file name:" << std::endl;
+//     std::cin >> file_name;
 
-    std::ofstream ost {file_name}; // check if output file stream can be opened
-    if (!ost) throw std::runtime_error("Couldn't open file"); // error detection
+//     std::ofstream ost {file_name}; // check if output file stream can be opened
+//     if (!ost) throw std::runtime_error("Couldn't open file"); // error detection
 
-    ost << ca;
-    std::cout << "Successfully wrote to file \"" << file_name << '\"' << std::endl;
-}
+//     ost << ca;
+//     std::cout << "Successfully wrote to file \"" << file_name << '\"' << std::endl;
+// }
 
 
 
@@ -147,13 +147,13 @@ try
 	std::cin >> key;
 	
 	switch (key) {
-	case '1': import_file();
-	case '2': export_file();
-	case '3': ++ca; std::cout << ca << std::endl;
-	case '4': read_cell();
-	case '5': change_cell();
-	case '6': random_start();
-	case '0': exit(0);
+	case '1': import_file(); break;
+	// case '2': export_file(); break;
+	case '3': ++ca; std::cout << ca << std::endl; break;
+	case '4': read_cell(); break;
+	case '5': change_cell(); break;
+	case '6': random_start(); break;
+	case '0': exit(0); break;
 	default: continue;	// ignore invalid input
 	}
     }
