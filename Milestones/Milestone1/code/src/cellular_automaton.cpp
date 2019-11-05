@@ -224,7 +224,10 @@ void CellularAutomaton::update_cell(int row, int col)
 		++total_living_cells;
 	}
     }
-    this->next[row][col] = (total_living_cells <= 3 && total_living_cells >= 2);
+    // more than 3 or less than 2 dies in next life
+    // 2 neighbours maintains the current status and with 3 creates life
+    this->next[row][col] = (total_living_cells <= 3 && total_living_cells >= 2) ?
+	(total_living_cells == 2) ? this->current[row][col] : true : true;
 }
 
 
