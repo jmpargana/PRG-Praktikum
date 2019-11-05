@@ -163,21 +163,22 @@ std::istream& operator>>(std::istream& is, CellularAutomaton& ca)
 //------------------------------------------------------------------------------
 
 
-// std::ofstream& operator<<(std::ofstream& os, CellularAutomaton& ca)
-// // output file stream operator overload
-// {
-//     char temp;
-//     os << ca.get_rows() << '\n' << ca.get_cols() << '\n'; // output dimensions of cellular automaton
+std::ofstream& operator<<(std::ofstream& os, CellularAutomaton const& ca)
+// output file stream operator overload
+{
+    std::string temp;
+    os << std::to_string(ca.get_rows()) << std::endl
+       << std::to_string(ca.get_cols()) << std::endl; // output dimensions of cellular automaton
 
-//     for (int row=0; row<ca.get_rows(); ++row) {
-// 	for (int col=0; col<ca.get_cols(); ++col) {
-// 	    temp = (ca[row][col]) ? '*' : 'o';
-// 	    os << temp;
-// 	}
-// 	os << '\n';
-//     }
-//     return os;
-// }
+    for (int row=0; row<ca.get_rows(); ++row) {
+	for (int col=0; col<ca.get_cols(); ++col) {
+	    temp = (ca[row][col]) ? "*" : "o";
+	    os << temp;
+	}
+	os << std::endl;
+    }
+    return os;
+}
 
 
 //------------------------------------------------------------------------------

@@ -80,7 +80,7 @@ std::istream& operator>>(std::istream&, CellularAutomaton&);
 
 
 // output file stream
-std::ofstream& operator<<(std::ofstream&, CellularAutomaton&);
+std::ofstream& operator<<(std::ofstream&, CellularAutomaton const&);
 
 // input file stream
 std::ifstream& operator>>(std::ifstream&, CellularAutomaton&);

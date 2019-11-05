@@ -61,10 +61,10 @@ void export_file()
     std::cout << "Enter output file name:" << std::endl;
     std::cin >> file_name;
 
-    // std::ofstream ost {file_name}; // check if output file stream can be opened
-    // if (!ost) throw std::runtime_error("Couldn't open file"); // error detection
+    std::ofstream ost {file_name}; // check if output file stream can be opened
+    if (!ost) throw std::runtime_error("Couldn't open file"); // error detection
 
-    // ost << ca;
+    ost << ca;
     std::cout << "Successfully wrote to file \"" << file_name << '\"' << std::endl;
 }
 
