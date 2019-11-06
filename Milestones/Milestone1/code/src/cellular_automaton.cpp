@@ -163,6 +163,15 @@ std::istream& operator>>(std::istream& is, CellularAutomaton& ca)
 //------------------------------------------------------------------------------
 
 
+void CellularAutomaton::set_timer(int new_timer)
+{
+    this->timer = new_timer;
+}
+
+
+//------------------------------------------------------------------------------
+
+
 std::ofstream& operator<<(std::ofstream& os, CellularAutomaton const& ca)
 // output file stream operator overload
 {
@@ -265,4 +274,3 @@ CellularAutomaton& CellularAutomaton::operator+=(int phases)
     }
     return *this;
 }
-

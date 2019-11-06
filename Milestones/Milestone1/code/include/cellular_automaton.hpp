@@ -56,6 +56,8 @@ public:
     CellularAutomaton& operator++();
     CellularAutomaton& operator+=(int);
 
+    void set_timer(int);
+
     int get_rows() const;
     int get_cols() const;
     Matrix get_matrix();
