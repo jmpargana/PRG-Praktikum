@@ -70,7 +70,6 @@ public:
 
     
 private:
-    unsigned row_size, col_size;
     std::vector<std::vector<bool> > matrix;
     
 };

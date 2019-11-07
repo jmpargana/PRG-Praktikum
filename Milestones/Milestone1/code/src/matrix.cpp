@@ -21,9 +21,8 @@ Matrix::Matrix() { };	// empty initialization
 
 
 // template<typename T>
-Matrix::Matrix(unsigned n)    
-    :row_size{n}, col_size{n},
-     matrix{n, std::vector<bool>(n)} { }
+Matrix::Matrix(unsigned n)
+    : matrix{n, std::vector<bool>(n)} { }
      // matrix construct to build n-square matrix of any type
 
 
@@ -32,8 +31,7 @@ Matrix::Matrix(unsigned n)
 
 // template<typename T>
 Matrix::Matrix(unsigned n, unsigned m)
-    :row_size{n}, col_size{m},
-     matrix{n, std::vector<bool>(m)} { }
+    : matrix{n, std::vector<bool>(m)} { }
      // matrix construct to build n*m matrix of any type
 
 
@@ -59,8 +57,8 @@ Matrix::Matrix(std::vector<std::vector<bool> >&& elements)
 
 
 // template<typename T>
-Matrix::Matrix(Matrix& to_copy)
-    : matrix{to_copy.matrix} { }
+Matrix::Matrix(Matrix& other)
+    : matrix{other.matrix} { }
 // matrix construct to copy matrix of any type
 
 
@@ -68,18 +66,18 @@ Matrix::Matrix(Matrix& to_copy)
 
 
 // template<typename T>
-Matrix::Matrix(Matrix&& to_copy)
-    : matrix{std::move(to_copy.matrix)} { }
+Matrix::Matrix(Matrix&& other)
+    : matrix{std::move(other.matrix)} { }
 
 
 //------------------------------------------------------------------------------
 
 
 // template<typename T>
-Matrix& Matrix::operator=(const Matrix& to_assign)
+Matrix& Matrix::operator=(const Matrix& other)
 // matrix assignment operation overload template
 {
-    matrix = to_assign.matrix;
+    matrix = other.matrix;
     return *this;
 }
 
@@ -88,10 +86,10 @@ Matrix& Matrix::operator=(const Matrix& to_assign)
 
 
 // template<typename T>
-Matrix& Matrix::operator=(Matrix&& to_move) noexcept
+Matrix& Matrix::operator=(Matrix&& other) noexcept
 // matrix move operation overload assignment template
 {
-    matrix = std::move(to_move.matrix);
+    matrix = std::move(other.matrix);
     return *this;
 }
 
@@ -114,12 +112,12 @@ Matrix::~Matrix()
 
 
 // template<typename T>
-// Matrix<T> Matrix<T>::operator+(Matrix<T>& second)
+// Matrix<T> Matrix<T>::operator+(Matrix<T>& rhs)
 // // sum of matrix template
 // {
 //     // error detection
-//     if (this->row_size != second.get_row_size() ||
-// 	this->col_size != second.get_col_size())
+//     if (this->row_size != rhs.get_row_size() ||
+// 	this->col_size != rhs.get_col_size())
 // 	throw std::runtime_error("Matrix sizes don't match");
 
 //     // iteration without iterators for easy subscription
@@ -187,11 +185,11 @@ Matrix::~Matrix()
 Matrix Matrix::transpose()
 // matrix transpose operation template
 {
-    Matrix transposed_matrix(this->col_size, this->row_size);
+    Matrix transposed_matrix(this->get_col_size(), this->get_row_size());
 
     // get inverted values
-    for (unsigned i=0; i<this->row_size; i++) {
-	for (unsigned j=0; j<this->col_size; j++) {
+    for (unsigned i=0; i<this->get_row_size(); i++) {
+	for (unsigned j=0; j<this->get_col_size(); j++) {
 	    transposed_matrix[i][j] = this->matrix[j][i];
 	}
     }
@@ -301,7 +299,7 @@ Matrix Matrix::transpose()
 // template<typename T>
 std::vector<bool>& Matrix::operator[](unsigned index)
 {
-    if (index>this->row_size || index<0)
+    if (index>this->get_row_size() || index<0)
 	throw std::runtime_error("Out of range");
 
     return this->matrix[index];
@@ -316,7 +314,7 @@ const std::vector<bool>& Matrix::operator[](unsigned index) const
 // subscription operation overload
 {
     // error detection
-    if (index>this->row_size || index<0)
+    if (index>this->get_row_size() || index<0)
     	throw std::runtime_error("Out of range");
 
     return this->matrix[index];	// second subscription should work as expected
@@ -328,10 +326,10 @@ const std::vector<bool>& Matrix::operator[](unsigned index) const
 
 // usefull public functions to access outside class
 // template<typename T>
-unsigned Matrix::get_row_size() const { return row_size; }
+unsigned Matrix::get_row_size() const { return matrix.size(); }
 
 // template<typename T>
-unsigned Matrix::get_col_size() const { return col_size; }
+unsigned Matrix::get_col_size() const { return matrix[0].size(); }
 
 
 //------------------------------------------------------------------------------
@@ -339,7 +337,7 @@ unsigned Matrix::get_col_size() const { return col_size; }
 
 // might be usefull in future
 // template<typename T>
-bool Matrix::square() { return (row_size == col_size); }
+bool Matrix::square() { return (get_row_size() == get_col_size()); }
 
 
 //------------------------------------------------------------------------------
