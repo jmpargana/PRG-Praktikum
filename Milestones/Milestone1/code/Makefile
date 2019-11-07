@@ -38,6 +38,6 @@ clean:
 	@echo "Cleaning build directory and binaries..."
 	$(RM) -r $(BUILDDIR) $(TARGET)
 
-tester:
+tester: test/test.cpp
 	@echo "Creating tests..."
-	$(CC) $(CFLAGS) test/tester.cpp $(INC) -o bin/tester
+	$(CC) $(CFLAGS) $(INC) test/test.cpp build/matrix.o build/cellular_automaton.o -o bin/tester
