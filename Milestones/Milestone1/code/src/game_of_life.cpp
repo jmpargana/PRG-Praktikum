@@ -85,7 +85,7 @@ void read_cell()
     }
 
     std::cout << "The value in " << row << ' ' << col << " is:" << std::endl;
-    std::cout << ca[row][col] << std::endl;
+    std::cout << ca[col][row] << std::endl;
 }
 
 
@@ -107,7 +107,7 @@ void change_cell()
 	std::cin >> row >> col;
     }
 
-    ca[row][col] = (new_value);
+    ca[col][row] = (new_value);
     std::cout << "Value successfully updated to " << new_value << " in "
 	      << row << ' ' << col << std::endl;
 }

@@ -224,7 +224,7 @@ void CellularAutomaton::update_cell(int row, int col)
     for (int surr_r=row-1; surr_r<row+2; ++surr_r) {
 	for (int surr_c=col-1; surr_c<col+2; ++surr_c) {
 	    // ignore counting current cell
-	    if (surr_r==row && surr_r==surr_c) continue;
+	    if (surr_r==row && surr_c==col) continue;
 	    
 	    // deal with negative numbers and modulo
 	    // increment if living cell was found
