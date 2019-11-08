@@ -39,11 +39,11 @@ void import_file()
 // read cellular automaton matrix from given file name as input
 {
     std::string file_name;
-    // std::cout << "Enter input file name:" << std::endl;
-    // std::cin >> file_name;
+    std::cout << "Enter input file name:" << std::endl;
+    std::cin >> file_name;
 
-    // std::ifstream ist {file_name}; // instatiate input file stream with fiven string
-    std::ifstream ist {"../../materials/beispieldatei_cellularautomaton.txt"};
+    std::ifstream ist {file_name}; // instatiate input file stream with fiven string
+    // std::ifstream ist {"../../materials/beispieldatei_cellularautomaton.txt"};
     if (!ist) throw std::runtime_error("File not found"); // test if file can be opened
 
     ist >> ca; 			// input file to cellular automaton
