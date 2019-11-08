@@ -31,14 +31,14 @@ void VCrypt::XBild::importFile(std::string file) {
     if (!isf) throw std::runtime_error("io error while reading: file not found.");
     // TODO: copy file to imageMx
 //    for (int x = 0; x < )
-    std::cout << "import successful" << std:endl;
+    std::cout << "import successful" << std::endl;
 }
 
 void VCrypt::XBild::exportFile(std::string file) {
     std::ofstream osf{file};
     if (!osf) throw std::runtime_error("io error while writing: file not found.");
     //TODO: write image to file
-    std::cout << "export successful" << std:endl;
+    std::cout << "export successful" << std::endl;
 }
 
 // task 2c
