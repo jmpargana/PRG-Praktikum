@@ -95,20 +95,15 @@ void read_cell()
 void change_cell()
 // change cell value by overriding matrix value via subscripting
 {
-    unsigned new_value = 2, row = 30000, col = 30000;
-
-    while (new_value > 1) {
-	std::cout << "Give new value (1 for true or 0 for false)" << std::endl;
-	std::cin >> new_value;
-    }
+    unsigned row = 30000, col = 30000;
 
     while (row >= ca.get_rows() || col >= ca.get_cols()) {
 	std::cout << "Give a row and column value:" << std::endl;
 	std::cin >> row >> col;
     }
 
-    ca[col][row] = (new_value);
-    std::cout << "Value successfully updated to " << new_value << " in "
+    ca[col][row] = (!ca[col][row]);
+    std::cout << "Value successfully updated to " << ca[col][row] << " in "
 	      << row << ' ' << col << std::endl;
 }
 
