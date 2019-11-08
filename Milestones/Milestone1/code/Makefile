@@ -1,7 +1,7 @@
 # MakeFile For this project
 # run "make" in current library to compile
 
-CC := g++ # This is the main compiler
+CC := g++ -std=c++17 # This is the main compiler
 
 SRCDIR := src
 BUILDDIR := build
