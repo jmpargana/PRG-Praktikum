@@ -39,11 +39,11 @@ void import_file()
 // read cellular automaton matrix from given file name as input
 {
     std::string file_name;
-    // std::cout << "Enter input file name:" << std::endl;
-    // std::cin >> file_name;
+    std::cout << "Enter input file name:" << std::endl;
+    std::cin >> file_name;
 
-    // std::ifstream ist {file_name}; // instatiate input file stream with fiven string
-    std::ifstream ist {"../../materials/beispieldatei_cellularautomaton.txt"};
+    std::ifstream ist {file_name}; // instatiate input file stream with fiven string
+    // std::ifstream ist {"../../materials/beispieldatei_cellularautomaton.txt"};
     if (!ist) throw std::runtime_error("File not found"); // test if file can be opened
 
     ist >> ca; 			// input file to cellular automaton
@@ -95,20 +95,15 @@ void read_cell()
 void change_cell()
 // change cell value by overriding matrix value via subscripting
 {
-    unsigned new_value = 2, row = 30000, col = 30000;
-
-    while (new_value > 1) {
-	std::cout << "Give new value (1 for true or 0 for false)" << std::endl;
-	std::cin >> new_value;
-    }
+    unsigned row = 30000, col = 30000;
 
     while (row >= ca.get_rows() || col >= ca.get_cols()) {
 	std::cout << "Give a row and column value:" << std::endl;
 	std::cin >> row >> col;
     }
 
-    ca[col][row] = (new_value);
-    std::cout << "Value successfully updated to " << new_value << " in "
+    ca[col][row] = (!ca[col][row]);
+    std::cout << "Value successfully updated to " << ca[col][row] << " in "
 	      << row << ' ' << col << std::endl;
 }
 

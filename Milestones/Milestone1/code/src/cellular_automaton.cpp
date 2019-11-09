@@ -250,7 +250,7 @@ CellularAutomaton& CellularAutomaton::operator++()
     for (int row=0; row<this->get_rows(); ++row) {
 	for (int col=0; col<this->get_cols(); ++col) {
 	    // check cells surrounding it in modulo "size"
-	    this->update_cell(row, col);
+	    this->update_cell(col, row);
 	}
     }
     this->current = this->next;	// update matrices
