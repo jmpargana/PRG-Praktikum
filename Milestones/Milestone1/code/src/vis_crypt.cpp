@@ -14,7 +14,7 @@
 XBild::XBild() {}
 
 // create 2D Matrix with x rows filled with y columns each and all elements set to false
- XBild::XBild(unsigned int x, unsigned int y) : imageMx{x, std::vector<bool>(y, false)} { xLen = x; yLen = y; }
+XBild::XBild(unsigned int x, unsigned int y) : imageMx{x, std::vector<bool>(y, false)} { xLen = x; yLen = y; }
 //XBild::XBild(unsigned int x, unsigned int y) {
 //    imageMx.resize(x);
 //    for (unsigned row = 0; row < imageMx.size(); row++) {
@@ -42,7 +42,7 @@ XBild &XBild::operator=(XBild &&other) noexcept {
 
 // read & write
 std::vector<bool> &XBild::operator[](unsigned col) {
-    if (col > this->get_x_size() || col < 0)
+    if (col > xLen || col < 0)
         throw std::runtime_error("Out of range");
 
     return this->imageMx[col];
@@ -56,7 +56,7 @@ const std::vector<bool> &XBild::operator[](unsigned col) const
 // subscription operation overload
 {
     // error detection
-    if (col > this->get_x_size() || col < 0)
+    if (col > this->xLen || col < 0)
         throw std::runtime_error("Out of range");
 
     return this->imageMx[col];    // second subscription should work as expected
@@ -83,14 +83,11 @@ CBild::CBild() : XBild::XBild() {}
 CBild::~CBild() {}
 
 void XBild::printImage() {
-    for (int row = 0; row < get_y_size(); row++) {
-//        char* line[];
-        for (int col = 0; col < get_x_size(); col++) {
-//            line
-            std::cout << this->imageMx[row][col]; // << std::endl;
+    for (int row = 0; row < yLen; row++) {
+        for (int col = 0; col < xLen; col++) {
+            std::cout << this->imageMx[row][col];
         }
         std::cout << std::endl;
-//        std::cout << line << std::endl;
     }
 }
 
@@ -99,37 +96,43 @@ void XBild::importFile(std::string file) {
     if (!isf.is_open()) throw std::runtime_error("io error while reading: file not found.");
 
     char elem;
-    const char* txt;
-    std::string lines;
+    // const char* txt;
+    std::string lines = "";
 
-    std::vector<bool> elems (xLen, false); //(get_x_size(), false);
-    std::vector<std::vector<bool>> elemns (yLen, elems);
+    // std::vector<bool> elems (xLen, false); //(xLen, false);
+    std::vector<std::vector<bool>> elemns; // (yLen, elems);
+
 
     XBild tmp(xLen, yLen);
+
     tmp.imageMx.clear();
     // this->imageMx.clear();
-
+    imageMx.clear();
     // elems.clear();
-    // elems.resize(xLen);
     // elemns.clear();
+
+    // elems.resize(xLen);
     // elemns.push_back(elems);
     // elemns.assign(2, elems);
     while (std::getline(isf, lines)) {
-        std::istringstream lineStream(lines);
+        std::vector<bool> elems; // (xLen, false); //(xLen, false);
+        // std::istringstream lineStream(lines);
+        std::stringstream lineStream(lines);
         // tmp.imageMx.resize(tmp.imageMx.size() + 1);
-        elemns.resize(elemns.size() + 1);
-        auto tt = "";
+        // elemns.resize(elemns.size() + 1);
         while (lineStream >> elem)
         {
-            elems.push_back(elem);
-            tt += elem;
+            elems.push_back(elem == '1');
+            std::cout << elem;
         }
+        lineStream.clear();
         tmp.imageMx.push_back(elems);
         // elemns[elemns.size()-1].push_back(elems);
         elemns.push_back(elems);
-        std::cout << elem << std::endl;
-        // std::cout << tt << std::endl;
+        imageMx.push_back(elems);
+        std::cout << std::endl;
     }
+    std::cout << std::endl;
 
 //     for (unsigned row = 0; row < xLen; row++) {
 //         elems.clear();
@@ -159,11 +162,13 @@ void XBild::importFile(std::string file) {
 //     }
     isf.close();
     tmp.printImage();
+
     // this->imageMx = tmp.imageMx;
     // imageMx = tmp.imageMx;
-    this->imageMx = elemns;
+    // this->imageMx = elemns;
+    // imageMx = elemns;
+
     std::cout << "import successful" << std::endl;
-    std::cout << "x: " << get_x_size() << " y: " << get_y_size() << std::endl;
     std::cout << "x: " << xLen << " y: " << yLen << std::endl;
 }
 
@@ -191,7 +196,8 @@ void merge();
 
 
 int main(int argc, const char **argv) {
-    NBild imEncoded(303, 89); // bsp_bild_1 303, 89 // 2f_* 360² // inappr 360²
+    // NBild imEncoded(303, 89); // bsp_bild_1 303, 89 // 2f_* 360² // inappr 360²
+    XBild imEncoded(303, 89); // bsp_bild_1 303, 89 // 2f_* 360² // inappr 360²
     CBild imDecoded;
 
 //    imEncoded.importFile("../../materials/beispielbild_1.txt");

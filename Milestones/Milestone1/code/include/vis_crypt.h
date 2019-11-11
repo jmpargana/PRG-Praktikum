@@ -19,6 +19,7 @@
 
 //namespace VCrypt {
 
+// template <typename T>
 class XBild {
 public:
     // constructor
@@ -54,7 +55,7 @@ public:
 
 private:
     // image in matrix representation
-    std::vector <std::vector<bool>> imageMx;
+    std::vector<std::vector<bool>> imageMx;
     unsigned xLen, yLen;
 };
 
