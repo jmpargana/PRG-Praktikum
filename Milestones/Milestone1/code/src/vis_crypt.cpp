@@ -3,38 +3,171 @@
 //
 
 #include "../include/vis_crypt.h"
-// #include "vis_crypt.h"
+//#include "vis_crypt.h"
 
+// using namespace std;
 // using namespace VCrypt;
 
-VCrypt::XBild::XBild() {}
+// https://www.quantstart.com/articles/Matrix-Classes-in-C-The-Header-File
+// https://www.quantstart.com/articles/Matrix-Classes-in-C-The-Source-File
 
-// TODO: fill ImageMx with 0s or maybe with noise or maybe with data
-VCrypt::XBild::XBild(unsigned int x, unsigned int y) : imageMx{x, std::vector<bool>(y)} {}
+XBild::XBild() {}
 
-VCrypt::XBild::~XBild() {}
+// create 2D Matrix with x rows filled with y columns each and all elements set to false
+ XBild::XBild(unsigned int x, unsigned int y) : imageMx{x, std::vector<bool>(y, false)} { xLen = x; yLen = y; }
+//XBild::XBild(unsigned int x, unsigned int y) {
+//    imageMx.resize(x);
+//    for (unsigned row = 0; row < imageMx.size(); row++) {
+//        imageMx[row].resize(y, false);
+//    }
+//    xLen = x; yLen = y;
+//}
 
-VCrypt::NBild::NBild(unsigned int x, unsigned int y) : VCrypt::XBild::XBild(x, y) {}
+XBild::~XBild() {}
 
-VCrypt::NBild::NBild() : VCrypt::XBild::XBild() {}
-
-VCrypt::NBild::~NBild() {}
-
-VCrypt::CBild::CBild(unsigned int x, unsigned int y) : VCrypt::XBild::XBild(x, y) {}
-
-VCrypt::CBild::CBild() : VCrypt::XBild::XBild() {}
-
-VCrypt::CBild::~CBild() {}
-
-void VCrypt::XBild::importFile(std::string file) {
-    std::ifstream isf{file};
-    if (!isf) throw std::runtime_error("io error while reading: file not found.");
-    // TODO: copy file to imageMx
-//    for (int x = 0; x < )
-    std::cout << "import successful" << std::endl;
+// matrix assignment operation overload template
+XBild &XBild::operator=(const XBild &other) {
+    imageMx = other.imageMx;
+    return *this;
 }
 
-void VCrypt::XBild::exportFile(std::string file) {
+
+// matrix move operation overload assignment template
+XBild &XBild::operator=(XBild &&other) noexcept {
+    imageMx = std::move(other.imageMx);
+    return *this;
+}
+
+
+
+// read & write
+std::vector<bool> &XBild::operator[](unsigned col) {
+    if (col > this->get_x_size() || col < 0)
+        throw std::runtime_error("Out of range");
+
+    return this->imageMx[col];
+}
+
+// https://isocpp.org/wiki/faq/const-correctness
+// https://www.geeksforgeeks.org/function-overloading-and-const-functions/
+// https://stackoverflow.com/questions/19237411/const-and-non-const-operator-overloading/19237455#19237455
+// read only
+const std::vector<bool> &XBild::operator[](unsigned col) const
+// subscription operation overload
+{
+    // error detection
+    if (col > this->get_x_size() || col < 0)
+        throw std::runtime_error("Out of range");
+
+    return this->imageMx[col];    // second subscription should work as expected
+}
+
+
+// unsigned XBild::get_x_size() const { return imageMx.size(); }
+// unsigned XBild::get_y_size() const { return imageMx[0].size(); }
+unsigned XBild::get_x_size() const { return this->xLen; }
+unsigned XBild::get_y_size() const { return this->yLen; }
+
+// matrix construct to build x*y matrix for the image
+NBild::NBild(unsigned int x, unsigned int y) : XBild::XBild(x, y) {}
+
+NBild::NBild() : XBild::XBild() {}
+
+NBild::~NBild() {}
+
+// matrix construct to build x*y matrix for the image
+CBild::CBild(unsigned int x, unsigned int y) : XBild::XBild(x, y) {}
+
+CBild::CBild() : XBild::XBild() {}
+
+CBild::~CBild() {}
+
+void XBild::printImage() {
+    for (int row = 0; row < get_y_size(); row++) {
+//        char* line[];
+        for (int col = 0; col < get_x_size(); col++) {
+//            line
+            std::cout << this->imageMx[row][col]; // << std::endl;
+        }
+        std::cout << std::endl;
+//        std::cout << line << std::endl;
+    }
+}
+
+void XBild::importFile(std::string file) {
+    std::ifstream isf(file);
+    if (!isf.is_open()) throw std::runtime_error("io error while reading: file not found.");
+
+    char elem;
+    const char* txt;
+    std::string lines;
+
+    std::vector<bool> elems (xLen, false); //(get_x_size(), false);
+    std::vector<std::vector<bool>> elemns (yLen, elems);
+
+    XBild tmp(xLen, yLen);
+    tmp.imageMx.clear();
+    // this->imageMx.clear();
+
+    // elems.clear();
+    // elems.resize(xLen);
+    // elemns.clear();
+    // elemns.push_back(elems);
+    // elemns.assign(2, elems);
+    while (std::getline(isf, lines)) {
+        std::istringstream lineStream(lines);
+        // tmp.imageMx.resize(tmp.imageMx.size() + 1);
+        elemns.resize(elemns.size() + 1);
+        auto tt = "";
+        while (lineStream >> elem)
+        {
+            elems.push_back(elem);
+            tt += elem;
+        }
+        tmp.imageMx.push_back(elems);
+        // elemns[elemns.size()-1].push_back(elems);
+        elemns.push_back(elems);
+        std::cout << elem << std::endl;
+        // std::cout << tt << std::endl;
+    }
+
+//     for (unsigned row = 0; row < xLen; row++) {
+//         elems.clear();
+//         elems.assign(xLen, false);
+//         // elems.resize(xLen, 0);
+//         txt = "";
+//         for (unsigned col = 0; col < yLen; col++) {
+//             // isf >> tmp.imageMx[row][col];
+//             isf >> elem;
+//             txt += elem;
+//             // std::cout << elem << std::endl;
+// //            tmp[row][col] = (elem == '1' || elem == 'A');
+//             // tmp.imageMx[row][col] = (elem == '1' || elem == 'A');
+//             if ((elem == '1') || (elem == 'A')) {
+//                 // elems.push_back(true);
+//                 elems[col] = true;
+//             }
+//             else {
+//                 // elems.push_back(false);
+//                 elems[col] = false;
+//             }
+//         }
+//         tmp.imageMx.push_back(elems);
+//         // std::cout << txt << std::endl;
+//         // std::cout << &txt << std::endl; // memory address
+//         // std::cout << *txt << std::endl;
+//     }
+    isf.close();
+    tmp.printImage();
+    // this->imageMx = tmp.imageMx;
+    // imageMx = tmp.imageMx;
+    this->imageMx = elemns;
+    std::cout << "import successful" << std::endl;
+    std::cout << "x: " << get_x_size() << " y: " << get_y_size() << std::endl;
+    std::cout << "x: " << xLen << " y: " << yLen << std::endl;
+}
+
+void XBild::exportFile(std::string file) {
     std::ofstream osf{file};
     if (!osf) throw std::runtime_error("io error while writing: file not found.");
     //TODO: write image to file
@@ -58,12 +191,17 @@ void merge();
 
 
 int main(int argc, const char **argv) {
-    VCrypt::NBild imEncoded(10, 10);
-    VCrypt::CBild imDecoded;
+    NBild imEncoded(303, 89); // bsp_bild_1 303, 89 // 2f_* 360² // inappr 360²
+    CBild imDecoded;
 
 //    imEncoded.importFile("../../materials/beispielbild_1.txt");
     imEncoded.importFile("../materials/beispielbild_1.txt");
 //    imEncoded.importFile("Milestones/Milestone1/materials/beispielbild_1.txt");
 
-    std::cout << "hi" << std::endl;
+    // std::cout << imEncoded.printImage() << std::endl;
+    imEncoded.printImage();
+    std::cout << "\n\nEND" << std::endl;
+
+    return 0;
 }
+

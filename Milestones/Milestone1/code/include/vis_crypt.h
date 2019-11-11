@@ -11,53 +11,74 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <stdio.h>
+#include <iostream>
+#include <sstream>
 
-// using namespace std;
+//using namespace std;
 
-namespace VCrypt {
+//namespace VCrypt {
 
-    class XBild {
-    public:
-        // constructor
-        XBild();
+class XBild {
+public:
+    // constructor
+    XBild();
 
-        XBild(unsigned int, unsigned int);
+    XBild(unsigned int, unsigned int);
 
-        // destructor
-        ~XBild();
+    // assignment operator
+    XBild &operator=(const XBild &);
 
-        // methods
-        void importFile(std::string file);
+    // move constructor and move operator
+    XBild &operator=(XBild &&) noexcept;
 
-        void exportFile(std::string file);
+    // read & write
+    std::vector<bool> &operator[](unsigned);
 
-    private:
-        // image in matrix representation
-        std::vector <std::vector<bool>> imageMx;
-    };
+    // read only
+    const std::vector<bool> &operator[](unsigned) const;
 
-    class NBild : public XBild {
-    public:
-        NBild();
+    // destructor
+    ~XBild();
 
-        NBild(unsigned int x, unsigned int y);
+    void printImage();
 
-        ~NBild();
+    unsigned get_x_size() const;
 
-    private:
-    };
+    unsigned get_y_size() const;
 
-    class CBild : public XBild {
-    public:
-        CBild();
+    // methods
+    void importFile(std::string);
 
-        CBild(unsigned int x, unsigned int y);
+    void exportFile(std::string);
 
-        ~CBild();
+private:
+    // image in matrix representation
+    std::vector <std::vector<bool>> imageMx;
+    unsigned xLen, yLen;
+};
 
-    private:
-    };
-}
+class NBild : public XBild {
+public:
+    NBild();
 
+    NBild(unsigned int x, unsigned int y);
+
+    ~NBild();
+
+private:
+};
+
+class CBild : public XBild {
+public:
+    CBild();
+
+    CBild(unsigned int x, unsigned int y);
+
+    ~CBild();
+
+private:
+};
+//} // namespace VCrypt
 
 #endif //PRG_PR_VIS_CRYPT_H
