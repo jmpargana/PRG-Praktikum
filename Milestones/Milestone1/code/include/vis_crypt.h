@@ -12,8 +12,8 @@
 #include <vector>
 #include <string>
 #include <stdio.h>
-#include <iostream>
 #include <sstream>
+#include <algorithm>
 
 //using namespace std;
 
@@ -25,7 +25,7 @@ public:
     // constructor
     XBild();
 
-    XBild(unsigned int, unsigned int);
+    XBild(unsigned int, unsigned int, bool);
 
     // assignment operator
     XBild &operator=(const XBild &);
@@ -57,6 +57,7 @@ private:
     // image in matrix representation
     std::vector<std::vector<bool>> imageMx;
     unsigned xLen, yLen;
+    bool isNBild;
 };
 
 class NBild : public XBild {

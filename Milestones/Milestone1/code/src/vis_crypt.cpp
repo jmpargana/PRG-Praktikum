@@ -8,14 +8,18 @@
 // using namespace std;
 // using namespace VCrypt;
 
+// http://www.cplusplus.com/doc/tutorial/pointers/
+// https://www.w3schools.com/cpp/cpp_pointers.asp
+
 // https://www.quantstart.com/articles/Matrix-Classes-in-C-The-Header-File
 // https://www.quantstart.com/articles/Matrix-Classes-in-C-The-Source-File
 
 XBild::XBild() {}
 
 // create 2D Matrix with x rows filled with y columns each and all elements set to false
-XBild::XBild(unsigned int x, unsigned int y) : imageMx{x, std::vector<bool>(y, false)}, xLen{x}, yLen{y} {
-// xLen = x; yLen = y;
+XBild::XBild(unsigned int x, unsigned int y, bool isNBild) : imageMx{x, std::vector<bool>(y, false)}, xLen{x}, yLen{y}, isNBild(isNBild) {
+    // xLen = x; yLen = y;
+    std::cout << "is N Bild: " << isNBild << std::endl;
 }
 
 XBild::~XBild() {}
@@ -63,14 +67,21 @@ const std::vector<bool> &XBild::operator[](unsigned col) const
 //// unsigned XBild::get_x_size() const { return imageMx.size(); }
 
 // matrix construct to build x*y matrix for the image
-NBild::NBild(unsigned int x, unsigned int y) : XBild::XBild(x, y) {}
+NBild::NBild(unsigned int x, unsigned int y) : XBild::XBild(x, y, true) { //, XBild::isNBild{true} {
+    // std::string typeOfClass = typeid(this).name();
+    // std::string nBildStr = "NBild";
+    // std::string cBildStr = "CBild";
+    // std::cout << "str compare1: " << typeOfClass << typeOfClass.compare(nBildStr) << typeOfClass.compare(cBildStr) << std::endl;
+    // std::cout << "str compare1: " << typeOfClass << typeOfClass.compare(nBildStr) << typeOfClass.compare(cBildStr) << std::endl;
+    // std::cout << "str compare2: " << typeOfClass << (typeOfClass == nBildStr) << (typeOfClass == cBildStr) << std::endl;
+}
 
 NBild::NBild() : XBild::XBild() {}
 
 NBild::~NBild() {}
 
 // matrix construct to build x*y matrix for the image
-CBild::CBild(unsigned int x, unsigned int y) : XBild::XBild(x, y) {}
+CBild::CBild(unsigned int x, unsigned int y) : XBild::XBild(x, y, false) {}
 
 CBild::CBild() : XBild::XBild() {}
 
@@ -83,6 +94,7 @@ void XBild::printImage() {
         }
         std::cout << std::endl;
     }
+    std::cout << std::endl;
 }
 
 // https://codereview.stackexchange.com/questions/206852/template-matrix-class-second-version
@@ -91,19 +103,26 @@ void XBild::importFile(std::string file) {
     if (!isf.is_open()) throw std::runtime_error("io error while reading: file not found.");
 
     char elem;
-    std::string lines; // = "";
+    std::string line; // = "";
     std::vector<bool> elems; // (xLen, false); //(xLen, false);
 
     imageMx.clear(); // this->imageMx.clear();
 
-    while (std::getline(isf, lines)) {
+    // split file by delimitors '\n' and ' '
+    // https://stackoverflow.com/questions/37957080/can-i-use-2-or-more-delimiters-in-c-function-getline
+    while (std::getline(isf, line, '\n')) {
+    std::stringstream lines(line);
+    while (std::getline(lines, line, ' ')) {
         elems.clear(); // std::vector<bool> elems;
-        std::stringstream lineStream(lines); // std::istringstream lineStream(lines);
+        std::stringstream lineStream(line); // std::istringstream lineStream(lines);
         while (lineStream >> elem) {
+            if (elem == '\n')
+                break;
             elems.push_back(elem == '1' || elem == 'A');
         }
         // lineStream.clear();
         imageMx.push_back(elems);
+    }
     }
 
     isf.close();
@@ -118,7 +137,12 @@ void XBild::exportFile(std::string file) {
     // https://stackoverflow.com/questions/409348/iteration-over-stdvector-unsigned-vs-signed-index-variable/409396#409396
     for (auto const &line: imageMx) {
         for (auto const &elem: line) {
-            osf << elem;
+            // osf << (isNBild ? elem : (elem == 1 ? 'A' : 'B'));
+            if (isNBild) {
+                osf << elem;
+            } else {
+                osf << (elem == 1 ? 'A' : 'B');
+            }
         }
         osf << std::endl;
     }
@@ -146,6 +170,7 @@ int main(int argc, const char **argv) {
     NBild imEncoded(303, 89); // bsp_bild_1 303, 89 // 2f_* 360² // inappr 360²
     CBild imDecoded(360, 360);
 
+
 //    imEncoded.importFile("../../materials/beispielbild_1.txt");
     imEncoded.importFile("../materials/beispielbild_1.txt");
     imDecoded.importFile("../materials/2f_approval.txt");
@@ -153,9 +178,9 @@ int main(int argc, const char **argv) {
     imEncoded.exportFile("../materials/beispielbild_1_OUT.txt");
     imDecoded.exportFile("../materials/2f_approval_OUT.txt");
 
-    // std::cout << imEncoded.printImage() << std::endl;
     imEncoded.printImage();
     imDecoded.printImage();
+
     std::cout << "\n\nEND" << std::endl;
 
     return 0;
