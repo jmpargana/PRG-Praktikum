@@ -14,17 +14,9 @@
 XBild::XBild() {}
 
 // create 2D Matrix with x rows filled with y columns each and all elements set to false
-XBild::XBild(unsigned int x, unsigned int y) : imageMx{x, std::vector<bool>(y, false)} {
-    xLen = x;
-    yLen = y;
+XBild::XBild(unsigned int x, unsigned int y) : imageMx{x, std::vector<bool>(y, false)}, xLen{x}, yLen{y} {
+// xLen = x; yLen = y;
 }
-//XBild::XBild(unsigned int x, unsigned int y) {
-//    imageMx.resize(x);
-//    for (unsigned row = 0; row < imageMx.size(); row++) {
-//        imageMx[row].resize(y, false);
-//    }
-//    xLen = x; yLen = y;
-//}
 
 XBild::~XBild() {}
 
@@ -65,11 +57,10 @@ const std::vector<bool> &XBild::operator[](unsigned col) const
 }
 
 
-// unsigned XBild::get_x_size() const { return imageMx.size(); }
-// unsigned XBild::get_y_size() const { return imageMx[0].size(); }
-unsigned XBild::get_x_size() const { return this->xLen; }
-
-unsigned XBild::get_y_size() const { return this->yLen; }
+//unsigned XBild::get_y_size() const { return this->yLen; }
+//// unsigned XBild::get_y_size() const { return imageMx[0].size(); }
+//unsigned XBild::get_x_size() const { return this->xLen; }
+//// unsigned XBild::get_x_size() const { return imageMx.size(); }
 
 // matrix construct to build x*y matrix for the image
 NBild::NBild(unsigned int x, unsigned int y) : XBild::XBild(x, y) {}
@@ -152,17 +143,19 @@ void merge();
 
 
 int main(int argc, const char **argv) {
-    // NBild imEncoded(303, 89); // bsp_bild_1 303, 89 // 2f_* 360² // inappr 360²
-    XBild imEncoded(303, 89); // bsp_bild_1 303, 89 // 2f_* 360² // inappr 360²
-    CBild imDecoded;
+    NBild imEncoded(303, 89); // bsp_bild_1 303, 89 // 2f_* 360² // inappr 360²
+    CBild imDecoded(360, 360);
 
 //    imEncoded.importFile("../../materials/beispielbild_1.txt");
     imEncoded.importFile("../materials/beispielbild_1.txt");
+    imDecoded.importFile("../materials/2f_approval.txt");
 //    imEncoded.importFile("Milestones/Milestone1/materials/beispielbild_1.txt");
     imEncoded.exportFile("../materials/beispielbild_1_OUT.txt");
+    imDecoded.exportFile("../materials/2f_approval_OUT.txt");
 
     // std::cout << imEncoded.printImage() << std::endl;
     imEncoded.printImage();
+    imDecoded.printImage();
     std::cout << "\n\nEND" << std::endl;
 
     return 0;
