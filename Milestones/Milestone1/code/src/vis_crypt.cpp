@@ -14,7 +14,7 @@
 // https://www.quantstart.com/articles/Matrix-Classes-in-C-The-Header-File
 // https://www.quantstart.com/articles/Matrix-Classes-in-C-The-Source-File
 
-XBild::XBild() {}
+XBild::XBild(bool isNBild) : imageMx{360, std::vector<bool>(360, false)}, xLen{360}, yLen{360}, isNBild(isNBild) {}
 
 // create 2D Matrix with x rows filled with y columns each and all elements set to false
 XBild::XBild(unsigned int x, unsigned int y, bool isNBild) : imageMx{x, std::vector<bool>(y, false)}, xLen{x}, yLen{y}, isNBild(isNBild) {
@@ -60,7 +60,6 @@ const std::vector<bool> &XBild::operator[](unsigned col) const
     return this->imageMx[col];    // second subscription should work as expected
 }
 
-
 //unsigned XBild::get_y_size() const { return this->yLen; }
 //// unsigned XBild::get_y_size() const { return imageMx[0].size(); }
 //unsigned XBild::get_x_size() const { return this->xLen; }
@@ -76,14 +75,14 @@ NBild::NBild(unsigned int x, unsigned int y) : XBild::XBild(x, y, true) { //, XB
     // std::cout << "str compare2: " << typeOfClass << (typeOfClass == nBildStr) << (typeOfClass == cBildStr) << std::endl;
 }
 
-NBild::NBild() : XBild::XBild() {}
+NBild::NBild() : XBild::XBild(true) {}
 
 NBild::~NBild() {}
 
 // matrix construct to build x*y matrix for the image
 CBild::CBild(unsigned int x, unsigned int y) : XBild::XBild(x, y, false) {}
 
-CBild::CBild() : XBild::XBild() {}
+CBild::CBild() : XBild::XBild(false) {}
 
 CBild::~CBild() {}
 
@@ -105,8 +104,10 @@ void XBild::importFile(std::string file) {
     char elem;
     std::string line; // = "";
     std::vector<bool> elems; // (xLen, false); //(xLen, false);
+    // std::vector<std::vector<bool>> elemsLines;
 
     imageMx.clear(); // this->imageMx.clear();
+    // elemsLines.clear();
 
     // split file by delimitors '\n' and ' '
     // https://stackoverflow.com/questions/37957080/can-i-use-2-or-more-delimiters-in-c-function-getline
@@ -116,14 +117,25 @@ void XBild::importFile(std::string file) {
         elems.clear(); // std::vector<bool> elems;
         std::stringstream lineStream(line); // std::istringstream lineStream(lines);
         while (lineStream >> elem) {
-            if (elem == '\n')
-                break;
+            // if (elem == '\n')
+            //     break;
             elems.push_back(elem == '1' || elem == 'A');
         }
         // lineStream.clear();
+        // elemsLines.push_back(elems);
         imageMx.push_back(elems);
     }
     }
+
+    // for (int i = 1; i < elemsLines.size(); i++) {
+    for (int i = 1; i < imageMx.size(); i++) {
+        // if (elemsLines[0].size() != elemsLines[i].size())
+        if (imageMx[0].size() != imageMx[i].size())
+            throw std::runtime_error("error: image is broken.");
+    }
+    // set the dimensions from the imported file
+    yLen = imageMx.size(); // elemsLines.size();
+    xLen = imageMx[0].size(); // elemsLines[0].size();
 
     isf.close();
 
@@ -152,7 +164,10 @@ void XBild::exportFile(std::string file) {
 
 // task 2c
 // create a random image and provide the size by parameters
-void randomImage(const unsigned int x, const unsigned int y) {}
+// void randomImage(const unsigned int x, const unsigned int y) {}
+CBild randomImage(const unsigned int x, const unsigned int y) {
+
+}
 
 // task 2d
 // create two methods for encryption and decryption
@@ -168,8 +183,7 @@ void merge();
 
 int main(int argc, const char **argv) {
     NBild imEncoded(303, 89); // bsp_bild_1 303, 89 // 2f_* 360² // inappr 360²
-    CBild imDecoded(360, 360);
-
+    CBild imDecoded; // CBild imDecoded(360, 360);
 
 //    imEncoded.importFile("../../materials/beispielbild_1.txt");
     imEncoded.importFile("../materials/beispielbild_1.txt");

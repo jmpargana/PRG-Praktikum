@@ -23,7 +23,7 @@
 class XBild {
 public:
     // constructor
-    XBild();
+    XBild(bool);
 
     XBild(unsigned int, unsigned int, bool);
 
@@ -52,6 +52,8 @@ public:
     void importFile(std::string);
 
     void exportFile(std::string);
+
+    static void randomImage(unsigned, unsigned) {}
 
 private:
     // image in matrix representation
