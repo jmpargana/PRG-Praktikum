@@ -25,10 +25,12 @@ Menu\n\n\
 
 XBild::XBild(bool isNBild) : imageMx{360, std::vector<bool>(360, false)}, xLen{360}, yLen{360}, isNBild(isNBild) {}
 
-XBild::XBild(const XBild& xxBild, bool isNBild) : imageMx{360, std::vector<bool>(360, false)}, xLen{360}, yLen{360}, isNBild(isNBild) {}
+XBild::XBild(const XBild &xxBild, bool isNBild) : imageMx{360, std::vector<bool>(360, false)}, xLen{360}, yLen{360},
+                                                  isNBild(isNBild) {}
 
 // create 2D Matrix with x rows filled with y columns each and all elements set to false
-XBild::XBild(unsigned int x, unsigned int y, bool isNBild) : imageMx{x, std::vector<bool>(y, false)}, xLen{x}, yLen{y}, isNBild(isNBild) {
+XBild::XBild(unsigned int x, unsigned int y, bool isNBild) : imageMx{x, std::vector<bool>(y, false)}, xLen{x}, yLen{y},
+                                                             isNBild(isNBild) {
     // xLen = x; yLen = y;
     std::cout << "is N Bild: " << isNBild << std::endl;
 }
@@ -72,13 +74,14 @@ const std::vector<bool> &XBild::operator[](unsigned col) const
 }
 
 unsigned XBild::get_y_size() const { return this->yLen; }
+
 // unsigned XBild::get_y_size() const { return imageMx.size() > 0 ? imageMx[0].size() : 0; }
 unsigned XBild::get_x_size() const { return this->xLen; }
 // unsigned XBild::get_x_size() const { return imageMx.size(); }
 
 NBild::NBild() : XBild::XBild(true) {}
 
-NBild::NBild(const NBild& nnBild) : XBild::XBild(true) {}
+NBild::NBild(const NBild &nnBild) : XBild::XBild(true) {}
 
 // matrix construct to build x*y matrix for the image
 NBild::NBild(unsigned int x, unsigned int y) : XBild::XBild(x, y, true) { //, XBild::isNBild{true} {
@@ -97,7 +100,7 @@ NBild::~NBild() {}
 CBild::CBild() : XBild::XBild(false) {}
 
 // copy constructor (needed for returning a CBild object in randomImage)
-CBild::CBild(const CBild& ccBild) : XBild::XBild(false) {}
+CBild::CBild(const CBild &ccBild) : XBild::XBild(false) {}
 
 CBild::CBild(unsigned int x, unsigned int y) : XBild::XBild(x, y, false) {}
 
@@ -107,7 +110,7 @@ void XBild::printImage() {
     for (int row = 0; row < yLen; row++) {
         for (int col = 0; col < xLen; col++) {
             std::cout << this->imageMx[row][col];
-            // std::cout << this->imageMx[col][row];
+//            std::cout << this->imageMx[col][row];
         }
         std::cout << std::endl;
     }
@@ -130,19 +133,19 @@ void XBild::importFile(std::string file) {
     // split file by delimitors '\n' and ' '
     // https://stackoverflow.com/questions/37957080/can-i-use-2-or-more-delimiters-in-c-function-getline
     while (std::getline(isf, line, '\n')) {
-    std::stringstream lines(line);
-    while (std::getline(lines, line, ' ')) {
-        elems.clear(); // std::vector<bool> elems;
-        std::stringstream lineStream(line); // std::istringstream lineStream(lines);
-        while (lineStream >> elem) {
-            // if (elem == '\n')
-            //     break;
-            elems.push_back(elem == '1' || elem == 'A');
+        std::stringstream lines(line);
+        while (std::getline(lines, line, ' ')) {
+            elems.clear(); // std::vector<bool> elems;
+            std::stringstream lineStream(line); // std::istringstream lineStream(lines);
+            while (lineStream >> elem) {
+                // if (elem == '\n')
+                //     break;
+                elems.push_back(elem == '1' || elem == 'A');
+            }
+            // lineStream.clear();
+            // elemsLines.push_back(elems);
+            imageMx.push_back(elems);
         }
-        // lineStream.clear();
-        // elemsLines.push_back(elems);
-        imageMx.push_back(elems);
-    }
     }
 
     // for (int i = 1; i < elemsLines.size(); i++) {
@@ -186,6 +189,38 @@ void XBild::exportFile(std::string file) {
 // task 2c
 // create a random image and provide the size by parameters
 // void randomImage(const unsigned int x, const unsigned int y) {}
+
+//void XBild::encode(CBild &k) {
+//    int imX, imY, kX, kY;
+//    imX = this->xLen;
+//    imY = this->yLen;
+//    kX = k.get_x_size();
+//    kY = k.get_y_size();
+//    CBild c(imX, imY);
+//
+//    std::cout << imX << ' ' << kX << "  <<<< x      y >>>>  " << imY << ' ' << kY << std::endl;
+//    if (imX != kX || imY != kY)
+//        throw std::runtime_error("Dimensions error: The dimensions of the matrices to encode don't match.");
+//
+//    for (int xx = 0; xx < imX; xx++) {
+//        for (int yy = 0; yy < imY; yy++) {
+//            // std::cout << xx << ' ' << yy << std::endl;
+//            // std::cout << xx << ' ' << yy << "   " << c[xx][yy] << im[xx][yy] << k[xx][yy] << std::endl;
+////             c[xx][yy] = im[xx][yy] == k[xx][yy] ? false : true;
+//            c[yy][xx] = im[yy][xx] == k[yy][xx] ? false : true;
+////             c[yy][xx] = im[xx][yy] == k[xx][yy] ? false : true;
+//            // std::cout << xx << ' ' << yy << "   " << c[xx][yy] << im[xx][yy] << k[xx][yy] << std::endl;
+//            // std::cout << xx << ' ' << yy << "   " << c->operator[](yy)[xx] << im[yy][xx] << k[yy][xx] << std::endl;
+//            // std::cout << xx << ' ' << yy << "   " << c->operator[](yy).operator[](xx) << im[yy][xx] << k[yy][xx] << std::endl;
+//        }
+//        // std::cout << xx << "   " << c[xx][-1] << im[xx][-1] << k[xx][-1] << std::endl;
+//    }
+//
+//    std::cout << "print encoded image:" << std::endl;
+//    c.printImage();
+//    imageMx = c.imageMx;
+//}
+
 // https://de.wikibooks.org/wiki/C%2B%2B-Programmierung/_Im_Zusammenhang_mit_Klassen/_Statische_Methoden
 // https://www.tutorialspoint.com/cplusplus/cpp_static_members.htm
 // static CBild XBild::randomImage(const unsigned int x, const unsigned int y) {
@@ -196,22 +231,53 @@ CBild randomImage(const unsigned int x, const unsigned int y) {
     int randPixel;
     srand(time(NULL)); // initialize random seed
 
-    for (int yy = 0; yy < y; yy++) {
-        for (int xx = 0; xx < x; xx++) {
+    for (int xx = 0; xx < x; xx++) {
+        for (int yy = 0; yy < y; yy++) {
             // #define RAND_MAX = 1;
             randPixel = rand() % 2;
-            key[xx][yy] = randPixel > 0; // ? true : false;
-            // key[yy][xx] = randPixel > 0 ? true : false;
+//            key[xx][yy] = randPixel > 0; // ? true : false;
+            key[yy][xx] = randPixel > 0; // ? true : false;
         }
     }
     // needs the copy constructor to copy/return an object
+    key.printImage();
     return key;
+//    return std::move(key);
+}
+
+std::unique_ptr<CBild> randomImage2(const unsigned int x, const unsigned int y) {
+//    std::unique_ptr<CBild> key(new CBild(x, y));
+    CBild key(x, y);
+//    std::make_unique<CBild>(key);
+    int randPixel;
+    srand(time(NULL)); // initialize random seed
+
+    for (int xx = 0; xx < x; xx++) {
+        for (int yy = 0; yy < y; yy++) {
+            randPixel = rand() % 2;
+//            key->operator[](xx)[yy] = randPixel > 0; // ? true : false;
+//            key->operator[](yy).operator[](xx) = randPixel > 0; // ? true : false;
+//            key->operator[](yy)[xx] = randPixel > 0; // ? true : false;
+            key[yy][xx] = randPixel > 0; // ? true : false;
+        }
+    }
+    // needs the copy constructor to copy/return an object
+    CBild kk;
+//    kk = key;
+//    kk.printImage();
+    key.printImage();
+//    return key;
+    return std::make_unique<CBild>(key);
 }
 
 // task 2d
 // create two methods for encryption and decryption
-// CBild encode(NBild& im, CBild& k) {
-std::shared_ptr<CBild> encode(NBild& im, CBild& k) {
+// https://www.internalpointers.com/post/move-smart-pointers-and-out-functions-modern-c
+// https://www.geeksforgeeks.org/auto_ptr-unique_ptr-shared_ptr-weak_ptr-2/
+// http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-sharedptrparam
+// https://stackoverflow.com/questions/3350385/how-to-return-an-object-in-c/3350439#3350439
+//std::shared_ptr <CBild> encode2(NBild &im, CBild &k) {
+std::unique_ptr <CBild> encode2(NBild &im, CBild &k) {
     int imX, imY, kX, kY;
     imX = im.get_x_size();
     imY = im.get_y_size();
@@ -219,11 +285,12 @@ std::shared_ptr<CBild> encode(NBild& im, CBild& k) {
     kY = k.get_y_size();
     // CBild *c(new CBild(imX, imY));
     // CBild c(imX, imY);
-    // std::unique_ptr<CBild> c(new CBild(imX, imY));
-    std::shared_ptr<CBild> c(new CBild(imX, imY));
+     std::unique_ptr<CBild> c(new CBild(imX, imY));
+//    std::shared_ptr <CBild> c(new CBild(imX, imY));
 
     std::cout << imX << ' ' << kX << "  <<<< x      y >>>>  " << imY << ' ' << kY << std::endl;
-    if (imX != kX || imY != kY) throw std::runtime_error("Dimensions error: The dimensions of the matrices to encode don't match.");
+    if (imX != kX || imY != kY)
+        throw std::runtime_error("Dimensions error: The dimensions of the matrices to encode don't match.");
 
     for (int xx = 0; xx < imX; xx++) {
         for (int yy = 0; yy < imY; yy++) {
@@ -249,7 +316,40 @@ std::shared_ptr<CBild> encode(NBild& im, CBild& k) {
     return c; // *c;
 }
 
-NBild decode(CBild& im, CBild& k) {
+
+CBild encode(NBild &im, CBild &k) {
+    int imX, imY, kX, kY;
+    imX = im.get_x_size();
+    imY = im.get_y_size();
+    kX = k.get_x_size();
+    kY = k.get_y_size();
+    CBild c(imX, imY);
+
+    std::cout << imX << ' ' << kX << "  <<<< x      y >>>>  " << imY << ' ' << kY << std::endl;
+    if (imX != kX || imY != kY)
+        throw std::runtime_error("Dimensions error: The dimensions of the matrices to encode don't match.");
+
+    for (int xx = 0; xx < imX; xx++) {
+        for (int yy = 0; yy < imY; yy++) {
+            // std::cout << xx << ' ' << yy << std::endl;
+            // std::cout << xx << ' ' << yy << "   " << c[xx][yy] << im[xx][yy] << k[xx][yy] << std::endl;
+//             c[xx][yy] = im[xx][yy] == k[xx][yy] ? false : true;
+            c[yy][xx] = im[yy][xx] == k[yy][xx] ? false : true;
+//             c[yy][xx] = im[xx][yy] == k[xx][yy] ? false : true;
+            // std::cout << xx << ' ' << yy << "   " << c[xx][yy] << im[xx][yy] << k[xx][yy] << std::endl;
+            // std::cout << xx << ' ' << yy << "   " << c->operator[](yy)[xx] << im[yy][xx] << k[yy][xx] << std::endl;
+            // std::cout << xx << ' ' << yy << "   " << c->operator[](yy).operator[](xx) << im[yy][xx] << k[yy][xx] << std::endl;
+        }
+        // std::cout << xx << "   " << c[xx][-1] << im[xx][-1] << k[xx][-1] << std::endl;
+    }
+
+    std::cout << "print encoded image:" << std::endl;
+    c.printImage();
+    std::cout << "DONE :D" << std::endl;
+    return c; // *c;
+}
+
+NBild decode(CBild &im, CBild &k) {
     int imX, imY, kX, kY;
     imX = im.get_x_size();
     imY = im.get_y_size();
@@ -257,11 +357,12 @@ NBild decode(CBild& im, CBild& k) {
     kY = k.get_y_size();
     NBild d(imX, imY);
 
-    if (imX != kX || imY != kY) throw std::runtime_error("Dimensions error: The dimensions of the matrices to decode don't match.");
+    if (imX != kX || imY != kY)
+        throw std::runtime_error("Dimensions error: The dimensions of the matrices to decode don't match.");
 
     for (int xx = 0; xx < imX; xx++) {
         for (int yy = 0; yy < imY; yy++) {
-            d[xx][yy] = im[xx][yy] == k[xx][yy] ? false : true;
+            // d[xx][yy] = im[xx][yy] == k[xx][yy] ? false : true;
         }
     }
     return d;
@@ -274,26 +375,32 @@ NBild decode(CBild& im, CBild& k) {
 void merge();
 
 
-int _main(int argc, const char **argv) {
-//int main(int argc, const char **argv) {
+//int _main(int argc, const char **argv) {
+int main(int argc, const char **argv) {
 
-    std::vector<std::string> options {"encode", "decode", "overlay"};
+    std::vector <std::string> options{"encode", "decode", "overlay"};
 
     // if (argc != 5 || options.end() != std::find(options.begin(), options.end(), argv[2])) {
-	// std::cout << menu << std::endl;
-	// exit(0);
+    // std::cout << menu << std::endl;
+    // exit(0);
     // }
 
     switch (argv[2][0]) {
-    // case 'e': encodeCode(); break;
-    // case 'd': decodeCode(); break;
-    // case 'o': overlayCode(); break;
+        // case 'e': encodeCode(); break;
+        // case 'd': decodeCode(); break;
+        // case 'o': overlayCode(); break;
     }
 
 
     NBild imDecoded(303, 89); // bsp_bild_1 303, 89 // 2f_* 360² // inappr 360²
-    CBild imEncoded; // CBild imDecoded(360, 360);
+//    CBild imEncoded; // CBild imDecoded(360, 360);
     // CBild key;
+    std::cout << "keyy1" << std::endl;
+    CBild keyy1(8,4); keyy1 = randomImage(8,4);
+    std::cout << "keyy2" << std::endl;
+//    CBild keyy2(2,4); keyy2 = randomImage(2,4);
+    std::cout << "keyy3" << std::endl;
+//    CBild keyy3(3,6); keyy3 = randomImage(3,6);
 
 //    imEncoded.importFile("../../materials/beispielbild_1.txt");
     imDecoded.importFile("../materials/beispielbild_1.txt");
@@ -302,17 +409,42 @@ int _main(int argc, const char **argv) {
     imDecoded.printImage();
     std::cout << imDecoded.get_x_size() << " xxx  yyy " << imDecoded.get_y_size() << std::endl;
 
+
+    std::cout << "KEY KEY KEY KEY" << std::endl;
+    std::cout << "KEY KEY KEY KEY" << std::endl;
+    std::cout << "KEY KEY KEY KEY" << std::endl;
     CBild key(imDecoded.get_x_size(), imDecoded.get_y_size());
+    CBild imEncoded(imDecoded.get_x_size(), imDecoded.get_y_size());
     std::cout << key.get_x_size() << " xxx  yyy " << key.get_y_size() << std::endl;
     key = randomImage(imDecoded.get_x_size(), imDecoded.get_y_size());
-    std::cout << key.get_x_size() << " xxx  yyy " << key.get_y_size() << std::endl;
+////    std::cout << key.get_x_size() << " xxx  yyy " << key.get_y_size() << std::endl;
+
+    std::cout << "KEY KEY KEY KEY" << std::endl;
+    std::cout << "KEY KEY KEY KEY" << std::endl;
+    std::cout << "KEY KEY KEY KEY" << std::endl;
+    std::cout << imDecoded.get_x_size() << "  " << imDecoded.get_y_size() << std::endl;
+////    CBild key(imDecoded.get_x_size(), imDecoded.get_y_size());
+////    std::unique_ptr<CBild> keyPtr;
+//    std::unique_ptr<CBild> keyPtr(new CBild(imDecoded.get_x_size(), imDecoded.get_y_size()));
+//    keyPtr = randomImage2(imDecoded.get_x_size(), imDecoded.get_y_size());
+//    key = *keyPtr;
+
     // key = randomImage(89, 303);
     // key.printImage();
-    std::shared_ptr<CBild> imEncodedPtr;
-    imEncodedPtr = encode(imDecoded, key);
-    imEncoded = *imEncodedPtr;
+
+    std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
+    std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
+    std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
+//    std::shared_ptr <CBild> imEncodedPtr;
+//    imEncodedPtr = encode2(imDecoded, key);
+//    imEncoded = *imEncodedPtr;
+    imEncoded = encode(imDecoded, key);
+
     // imEncoded.printImage();
 
+    std::cout << "EXPORT EXPORT EXPORT EXPORT EXPORT " << std::endl;
+    std::cout << "EXPORT EXPORT EXPORT EXPORT EXPORT " << std::endl;
+    std::cout << "EXPORT EXPORT EXPORT EXPORT EXPORT " << std::endl;
     imEncoded.exportFile("../materials/beispielbild_1_OUT.txt");
     // imDecoded.exportFile("../materials/2f_approval_OUT.txt");
 

@@ -59,6 +59,9 @@ public:
 
     void exportFile(std::string);
 
+//    void encode(CBild) {}
+//    void decode(CBild) {}
+
     // static CBild randomImage(unsigned, unsigned) {}
     // CBild randomImage(unsigned, unsigned) {}
 
@@ -93,6 +96,7 @@ public:
 
 private:
 };
+
 //} // namespace VCrypt
 
 #endif //PRG_PR_VIS_CRYPT_H
