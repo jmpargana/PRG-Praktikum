@@ -21,6 +21,9 @@ Usage:
 	The a) and b) parts of the first exercise can be found in the code/Aufgabe1ab folder
 	and one needs to type *make* to compile this seperate program from the project.
 
+	To run the GUI version of the program navigate to the gui folder, type *qmake*
+	to create a MakeFile followed by *make* and execute the gui binary.
+
 
 Working hours:
 	Each member focused on one of the exercises.
