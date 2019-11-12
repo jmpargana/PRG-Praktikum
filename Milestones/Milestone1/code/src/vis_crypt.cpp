@@ -3,6 +3,7 @@
 //
 
 #include "../include/vis_crypt.h"
+#include <algorithm>
 //#include "vis_crypt.h"
 
 // using namespace std;
@@ -13,6 +14,14 @@
 
 // https://www.quantstart.com/articles/Matrix-Classes-in-C-The-Header-File
 // https://www.quantstart.com/articles/Matrix-Classes-in-C-The-Source-File
+
+
+std::string menu = "\
+Menu\n\n\
+\tvisualencrypt encode <source> <result> <key>\n\
+\tvisualencrypt decode <image_a> <image_b> <result>\n\
+\tvisualencrypt overlay <image_a> <image_b> <result>\n";
+
 
 XBild::XBild(bool isNBild) : imageMx{360, std::vector<bool>(360, false)}, xLen{360}, yLen{360}, isNBild(isNBild) {}
 
@@ -182,6 +191,22 @@ void merge();
 
 
 int main(int argc, const char **argv) {
+
+    std::vector<std::string> options {"encode", "decode", "overlay"};
+
+    if (argc != 5 || options.end() == std::find(options.begin(), options.end(), argv[2])) {
+	std::cout << menu << std::endl;
+	exit(0);
+    }
+
+    switch (argv[2][0]) {
+    // case 'e': encodeCode(); break;
+    // case 'd': decodeCode(); break;
+    // case 'o': overlayCode(); break;
+    }
+
+    
+    
     NBild imEncoded(303, 89); // bsp_bild_1 303, 89 // 2f_* 360² // inappr 360²
     CBild imDecoded; // CBild imDecoded(360, 360);
 
