@@ -12,6 +12,23 @@
 #include <iostream>
 #include <cstdlib>
 #include <array>
+#include <string>
+
+
+//------------------------------------------------------------------------------
+
+
+std::string menu = "\
+Menu:\n\n\
+\t1 -> Create random two dimensional Array\n\
+\t2 -> Create long one dimensional Array\n\
+\t3 -> Save to long one dimensional Array\n\
+\t4 -> Print result\n\
+\t0 -> Exit\n\
+";
+char input;
+std::array<std::array<int, 30>, 30> matrix;
+std::array<int, 30*30> matrix_verbose;
 
 
 //------------------------------------------------------------------------------
@@ -28,7 +45,7 @@ std::array<std::array<int, 30>, 30> aufgabe1a1(unsigned size)
     for (unsigned rol=0; rol<size; ++rol) {
 	for (unsigned col=0; col<size; ++col) {
 	    // generate random value between [0, 9]
-	    matrix[rol][col] = (std::rand() % 10); 
+	    matrix[rol][col] = (std::rand() % 10);
 	}
     }
     return matrix;
@@ -38,16 +55,17 @@ std::array<std::array<int, 30>, 30> aufgabe1a1(unsigned size)
 //------------------------------------------------------------------------------
 
 
-const char* aufgabe1a2(std::array<std::array<int, 30>, 30> data,
-		       unsigned int size)
+std::array<int, 30*30> aufgabe1a2(
+				  std::array<std::array<int, 30>, 30>& data,
+				  unsigned int size)
 // copy data from two-dimensional static array to one-dimensional dynamic array
 // of chars to simplify printing process
 {
-    char *matrix_verbose = new char[size*size+size];
+    std::array<int, 30*30> matrix_verbose;
 
-    for (unsigned int rol=0; rol<size; ++rol) {
+    for (unsigned int row=0; row<size; ++row) {
 	for (unsigned int col=0; col<size; ++col) {
-	    matrix_verbose[rol+col] = (char)data[rol][col];
+	    matrix_verbose[row+col] = data[col][row];
 	}
     }
     return matrix_verbose;
@@ -57,7 +75,7 @@ const char* aufgabe1a2(std::array<std::array<int, 30>, 30> data,
 //------------------------------------------------------------------------------
 
 
-void aufgabe1a3(const char* data, unsigned int size)
+void aufgabe1a3(std::array<int, 30*30>& data, unsigned int size)
 // output string intercalated by new line characters
 {
     for (unsigned int rol=0; rol<size; ++rol) {
@@ -76,9 +94,21 @@ int main(int argc, const char *argv[])
  try
  {
      unsigned int size = 30;
-     std::array<std::array<int, 30>, 30> matrix = aufgabe1a1(size);
-     const char* matrix_verbose = aufgabe1a2(matrix, size);
-     aufgabe1a3(matrix_verbose, size);
+
+     while (true) {
+	 std::cout << menu << std::endl;
+	 std::cin >> input;
+
+	 switch (input) {
+	 case '1': matrix = aufgabe1a1(size); break;
+	 case '2': continue;
+	 case '3': matrix_verbose = aufgabe1a2(matrix, size); break;
+	 case '4': aufgabe1a3(matrix_verbose, size); break;
+	 case '0': exit(0);
+	 default: continue;
+	 }
+     }
+
      return 0;
  }
 

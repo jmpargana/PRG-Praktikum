@@ -7,7 +7,7 @@ SRCDIR := src
 BUILDDIR := build
 
 GAMEOFLIFE := bin/GameOfLife
-# VISUALENCRYPTION := bin/VisualEncryption
+VICRYPT := bin/visualencrypt
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
@@ -17,26 +17,27 @@ INC := -I include
 
 
 # main rule to generate both programs
-all: $(GAMEOFLIFE) # $(VISUALENCRYPTION)
+all: $(GAMEOFLIFE) $(VICRYPT)
 
 
-$(GAMEOFLIFE): $(OBJECTS)
+$(GAMEOFLIFE): $(BUILDDIR)/game_of_life.o $(BUILDDIR)/matrix.o $(BUILDDIR)/cellular_automaton.o
 	@echo "Creating GameOfLife binary..."
 	$(CC) $^ -o $(GAMEOFLIFE)
 
 
-# $(VISUALENCRYPTION): $(OBJECTS)
-#	@echo "Creating VisualEncryption binary..."
-# 	$(CC) $^ -o $(VISUALENCRYPTION)
+$(VICRYPT): $(BUILDDIR)/vis_crypt.o
+	@echo "Creating VisualEncryption binary..."
+	$(CC) $^ -o $(VICRYPT)
 
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@echo "Creating object file..."
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 clean:
 	@echo "Cleaning build directory and binaries..."
-	$(RM) -r $(BUILDDIR) $(TARGET)
+	$(RM) -r $(BUILDDIR) bin/GameOfLife bin/visualencrypt bin/tester
 
 tester: test/test.cpp
 	@echo "Creating tests..."
