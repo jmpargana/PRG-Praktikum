@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include "gameoflifewidget.h"
+#include "visualcryptpicturewidget.h"
 
 #include <QFileDialog>
 #include <iostream>
@@ -13,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this); // creating all the widgets
 
+    // Game of Life
     m_golWidget = new GameOfLifeWidget(this);
     m_golWidget->setMatrix(&m_automaton);
     QHBoxLayout* gameBoxLayout = new QHBoxLayout;
@@ -51,6 +53,59 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->QPushButton_export_2, &QPushButton::clicked,
             this, &MainWindow::exportFile);
+
+// VisualCrypt
+
+    connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &MainWindow::onVisualCryptModeChanged);
+// encryption screen
+    //load original picture
+
+    //m_encOrigPictureWidget->setPicture(picture);
+    m_encOrigPictureWidget = new VisualCryptPictureWidget(this);
+    QHBoxLayout* encOrigPictureLayout = new QHBoxLayout;
+    encOrigPictureLayout->addWidget(m_encOrigPictureWidget);
+    ui->enc_groupBoxLoadOriginal->setLayout(encOrigPictureLayout);
+
+    connect(ui->enc_buttonLoadOriginalPic, &QPushButton::clicked,
+            this, &MainWindow::enc_importOriginalFile);
+
+    m_encLoadKeyWidget = new VisualCryptPictureWidget(this);
+    QHBoxLayout* encLoadKeyLayout = new QHBoxLayout;
+    encLoadKeyLayout->addWidget(m_encLoadKeyWidget);
+    ui->enc_groupBoxLoadKey->setLayout(encLoadKeyLayout);
+
+   // m_encLoadKeyWidget->setPicture(picture);
+
+    connect(ui->enc_buttonLoadKey, &QPushButton::clicked,
+            this, &MainWindow::enc_importKeyFile);
+
+    m_encEncryptedWidget = new VisualCryptPictureWidget(this);
+    QHBoxLayout* encEncryptedLayout = new QHBoxLayout;
+    encEncryptedLayout->addWidget(m_encEncryptedWidget);
+    ui->enc_groupBoxEncryption->setLayout(encEncryptedLayout);
+//    m_encEncryptedWidget->setPicture(picture);
+//TODO
+
+
+    // decrytion screen
+    // load encrypted picture
+
+    connect(ui->dec_buttonLoadEncryptedPic, &QPushButton::clicked,
+            this, &MainWindow::dec_importEncryptedPicture);
+
+    m_decEncryptedPictureWidget = new VisualCryptPictureWidget(this);
+    QHBoxLayout* decLoadDecryptedPictureLayout = new QHBoxLayout;
+    decLoadDecryptedPictureLayout->addWidget(m_decEncryptedPictureWidget);
+    ui->dec_groupBoxLoadEncryptedPic->setLayout(decLoadDecryptedPictureLayout);
+
+    // load key picture
+    connect(ui->dec_buttonLoadKey, &QPushButton::clicked,
+            this, &MainWindow::dec_importKeyPicture);
+    m_decKeyPictureWidget = new VisualCryptPictureWidget(this);
+    QHBoxLayout* decKeyPictureLayout = new QHBoxLayout;
+    decKeyPictureLayout->addWidget(m_decKeyPictureWidget);
+    ui->dec_groupBoxLoadKey->setLayout(decKeyPictureLayout);
 }
 
 MainWindow::~MainWindow()
@@ -127,3 +182,41 @@ void MainWindow::exportFile()
     ost << m_automaton;
 
 }
+
+void MainWindow::onVisualCryptModeChanged(int index)
+{
+    ui->stackedWidget->setCurrentIndex(index);
+}
+
+void MainWindow::enc_importOriginalFile()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Choose a file");
+    std::string fileNameStd = fileName.toStdString();
+    m_encOrigPicture.importFile(fileNameStd);
+    m_encOrigPictureWidget->setPicture(&m_encOrigPicture);
+}
+
+void MainWindow::enc_importKeyFile()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Choose a file");
+    std::string fileNameStd = fileName.toStdString();
+    m_encKeyPicture.importFile(fileNameStd);
+    m_encLoadKeyWidget->setPicture(&m_encKeyPicture);
+}
+
+void MainWindow::dec_importEncryptedPicture()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Choose a file");
+    std::string fileNameStd = fileName.toStdString();
+    m_decEncryptedPicture.importFile(fileNameStd);
+    m_decEncryptedPictureWidget->setPicture(&m_decEncryptedPicture);
+}
+
+void MainWindow::dec_importKeyPicture()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Choose a file");
+    std::string fileNameStd = fileName.toStdString();
+    m_decKeyPicture.importFile(fileNameStd);
+    m_decKeyPictureWidget->setPicture(&m_decKeyPicture);
+}
+

@@ -70,9 +70,9 @@ const std::vector<bool> &XBild::operator[](unsigned col) const
 }
 
 //unsigned XBild::get_y_size() const { return this->yLen; }
-//// unsigned XBild::get_y_size() const { return imageMx[0].size(); }
+ unsigned XBild::get_y_size() const { return imageMx.size() > 0 ? imageMx[0].size() : 0; }
 //unsigned XBild::get_x_size() const { return this->xLen; }
-//// unsigned XBild::get_x_size() const { return imageMx.size(); }
+ unsigned XBild::get_x_size() const { return imageMx.size(); }
 
 // matrix construct to build x*y matrix for the image
 NBild::NBild(unsigned int x, unsigned int y) : XBild::XBild(x, y, true) { //, XBild::isNBild{true} {
@@ -190,7 +190,7 @@ void encode();
 void merge();
 
 
-int main(int argc, const char **argv) {
+int _main(int argc, const char **argv) {
 
     std::vector<std::string> options {"encode", "decode", "overlay"};
 
