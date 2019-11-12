@@ -14,6 +14,10 @@
 #include <stdio.h>
 #include <sstream>
 #include <algorithm>
+#include <random>
+#include <stdlib.h>
+#include <time.h>
+#include <memory>
 
 //using namespace std;
 
@@ -24,6 +28,8 @@ class XBild {
 public:
     // constructor
     XBild(bool);
+
+    XBild(const XBild& xxBild, bool);
 
     XBild(unsigned int, unsigned int, bool);
 
@@ -53,7 +59,8 @@ public:
 
     void exportFile(std::string);
 
-    static void randomImage(unsigned, unsigned) {}
+    // static CBild randomImage(unsigned, unsigned) {}
+    // CBild randomImage(unsigned, unsigned) {}
 
 private:
     // image in matrix representation
@@ -65,6 +72,7 @@ private:
 class NBild : public XBild {
 public:
     NBild();
+    NBild(const NBild& nnBild);
 
     NBild(unsigned int x, unsigned int y);
 
@@ -76,6 +84,8 @@ private:
 class CBild : public XBild {
 public:
     CBild();
+
+    CBild(const CBild& ccBild); // copy constructor
 
     CBild(unsigned int x, unsigned int y);
 
