@@ -18,11 +18,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     gameoflifewidget.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    visualcryptpicturewidget.cpp
 
 HEADERS += \
     gameoflifewidget.h \
-    mainwindow.h
+    mainwindow.h \
+    visualcryptpicturewidget.h
 
 FORMS += \
     mainwindow.ui
@@ -35,7 +37,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 SOURCES += \
     ../code/src/matrix.cpp \
     ../code/src/cellular_automaton.cpp \
+    ../code/src/vis_crypt.cpp \
 
 HEADERS += \
     ../code/include/matrix.hpp \
     ../code/include/cellular_automaton.hpp \
+    ../code/include/vis_crypt.h \

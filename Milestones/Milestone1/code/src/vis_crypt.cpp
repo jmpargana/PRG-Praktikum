@@ -72,7 +72,7 @@ const std::vector<bool> &XBild::operator[](unsigned col) const
 }
 
 unsigned XBild::get_y_size() const { return this->yLen; }
-// unsigned XBild::get_y_size() const { return imageMx[0].size(); }
+// unsigned XBild::get_y_size() const { return imageMx.size() > 0 ? imageMx[0].size() : 0; }
 unsigned XBild::get_x_size() const { return this->xLen; }
 // unsigned XBild::get_x_size() const { return imageMx.size(); }
 
@@ -152,11 +152,11 @@ void XBild::importFile(std::string file) {
             throw std::runtime_error("error: image is broken.");
     }
     // set the dimensions from the imported file
-    std::cout << imageMx.size() << std::endl;
+//    std::cout << imageMx.size() << std::endl;
     yLen = imageMx.size(); // elemsLines.size();
     xLen = imageMx[0].size(); // elemsLines[0].size();
-    std::cout << imageMx.size() << std::endl;
-    std::cout << yLen << std::endl;
+//    std::cout << imageMx.size() << std::endl;
+//    std::cout << yLen << std::endl;
 
     isf.close();
 
@@ -274,7 +274,8 @@ NBild decode(CBild& im, CBild& k) {
 void merge();
 
 
-int main(int argc, const char **argv) {
+int _main(int argc, const char **argv) {
+//int main(int argc, const char **argv) {
 
     std::vector<std::string> options {"encode", "decode", "overlay"};
 
