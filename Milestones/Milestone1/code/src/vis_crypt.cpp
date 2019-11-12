@@ -194,7 +194,7 @@ int main(int argc, const char **argv) {
 
     std::vector<std::string> options {"encode", "decode", "overlay"};
 
-    if (argc != 5 || options.end() == std::find(options.begin(), options.end(), argv[2])) {
+    if (argc != 5 || options.end() != std::find(options.begin(), options.end(), argv[2])) {
 	std::cout << menu << std::endl;
 	exit(0);
     }
