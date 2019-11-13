@@ -288,7 +288,7 @@ void XBild::decode(C &im, C &k) {
 void merge();
 
 
-//int _main(int argc, const char **argv) {
+#ifndef VISCRYPT_NOMAIN
 int main(int argc, const char **argv) {
 
     std::vector <std::string> options{"encode", "decode", "overlay"};
@@ -354,3 +354,4 @@ int main(int argc, const char **argv) {
 
     return 0;
 }
+#endif
