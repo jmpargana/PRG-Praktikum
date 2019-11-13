@@ -20,6 +20,7 @@
 #include <utility>
 #include <functional>
 #include <numeric>
+#include <cmath>		// for std::exp(double) function
 
 
 //------------------------------------------------------------------------------
@@ -53,13 +54,14 @@ public:
     const std::vector<std::pair<double, double>>& get_inputs() const;
 
     // operation overloads
-    double sum();
+    double sum(const std::vector<double>&);
     
     
     
 private:
     std::function<void(int, int)> activation_function;
     std::vector<std::pair<double, double>> inputs;
+    std::vector<double> weights;
     
 };
 

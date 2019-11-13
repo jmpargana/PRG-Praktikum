@@ -188,11 +188,12 @@ const std::vector<std::pair<double, double>>& Neuron::get_inputs() const
  * @return result sum of inputs * weigths
  *
  */
-double Neuron::sum()
+double Neuron::sum(const std::vector<double>& inpts)
 {
     double result = 0;
-    for (auto begin=inputs.begin(); begin!=inputs.end(); ++begin)
-	result += begin->first * begin->second;
+    for (unsigned i=0; i<inpts.size(); ++i){
+	result += inpts[i] * this->weights[i];
+    }
     return result;
 }
 
