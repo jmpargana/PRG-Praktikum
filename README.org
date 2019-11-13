@@ -12,7 +12,7 @@ code.
 ** Here is a link to each respectively:
 - [[file:./Milestones/Milestone1/][Game of Life]]
 - [[file:./Milestones/Milestone1/][Visual encryption]]
-- [[file:./Milestones/Milestone3/README.org][Convolutional Neural Network]]
+- [[file:./Milestones/Milestone2/code/][Fully Connected Neural Network]]
 
 
 ** General recommendations
