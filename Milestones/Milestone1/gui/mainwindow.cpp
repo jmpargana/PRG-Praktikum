@@ -80,12 +80,18 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->enc_buttonLoadKey, &QPushButton::clicked,
             this, &MainWindow::enc_importKeyFile);
 
+    connect(ui->enc_buttonSave, &QPushButton::clicked,
+            this, &MainWindow::enc_save);
+
     m_encEncryptedWidget = new VisualCryptPictureWidget(this);
     QHBoxLayout* encEncryptedLayout = new QHBoxLayout;
     encEncryptedLayout->addWidget(m_encEncryptedWidget);
     ui->enc_groupBoxEncryption->setLayout(encEncryptedLayout);
 //    m_encEncryptedWidget->setPicture(picture);
 //TODO
+
+    connect(ui->enc_buttonEncryption, &QPushButton::clicked,
+            this, &MainWindow::enc_encrypt);
 
 
     // decrytion screen
@@ -102,10 +108,25 @@ MainWindow::MainWindow(QWidget *parent)
     // load key picture
     connect(ui->dec_buttonLoadKey, &QPushButton::clicked,
             this, &MainWindow::dec_importKeyPicture);
+
     m_decKeyPictureWidget = new VisualCryptPictureWidget(this);
     QHBoxLayout* decKeyPictureLayout = new QHBoxLayout;
     decKeyPictureLayout->addWidget(m_decKeyPictureWidget);
     ui->dec_groupBoxLoadKey->setLayout(decKeyPictureLayout);
+
+
+    // decryted picture
+    m_decDecryptedPictureWidget = new VisualCryptPictureWidget(this);
+    QHBoxLayout* decDecryptedPictureLayout = new QHBoxLayout;
+    decDecryptedPictureLayout->addWidget(m_decDecryptedPictureWidget);
+    ui->dec_groupBoxDecryption->setLayout(decDecryptedPictureLayout);
+
+    connect(ui->dec_buttonDecryption, &QPushButton::clicked,
+            this, &MainWindow::dec_decrypt);
+
+   // decrytion save
+    connect(ui->dec_buttonSave, &QPushButton::clicked,
+            this, &MainWindow::dec_save);
 }
 
 MainWindow::~MainWindow()
@@ -160,6 +181,8 @@ void MainWindow::newRowSize(int newRowSize)
 void MainWindow::importFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Choose a Game of Life file");
+    if (fileName.isNull())
+        return;
     std::string fileNameStd = fileName.toStdString();
     std::ifstream ist{fileNameStd};
     if (!ist) {
@@ -174,6 +197,8 @@ void MainWindow::importFile()
 void MainWindow::exportFile()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Chose a file to save to");
+    if (fileName.isNull())
+        return;
     std::string fileNameStd = fileName.toStdString();
     std::ofstream ost{fileNameStd};
     if (!ost) {
@@ -191,6 +216,8 @@ void MainWindow::onVisualCryptModeChanged(int index)
 void MainWindow::enc_importOriginalFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Choose a file");
+    if (fileName.isNull())
+        return;
     std::string fileNameStd = fileName.toStdString();
     m_encOrigPicture.importFile(fileNameStd);
     m_encOrigPictureWidget->setPicture(&m_encOrigPicture);
@@ -199,14 +226,33 @@ void MainWindow::enc_importOriginalFile()
 void MainWindow::enc_importKeyFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Choose a file");
+    if (fileName.isNull())
+        return;
     std::string fileNameStd = fileName.toStdString();
     m_encKeyPicture.importFile(fileNameStd);
     m_encLoadKeyWidget->setPicture(&m_encKeyPicture);
 }
 
+void MainWindow::enc_encrypt()
+{
+    m_encEncryptedPicture.encode(m_encOrigPicture, m_encKeyPicture);
+    m_encEncryptedWidget->setPicture(&m_encEncryptedPicture);
+}
+
+void MainWindow::enc_save()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Chose a file to save to");
+    if (fileName.isNull())
+        return;
+    std::string fileNameStd = fileName.toStdString();
+    m_encEncryptedPicture.exportFile(fileNameStd);
+}
+
 void MainWindow::dec_importEncryptedPicture()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Choose a file");
+    if (fileName.isNull())
+        return;
     std::string fileNameStd = fileName.toStdString();
     m_decEncryptedPicture.importFile(fileNameStd);
     m_decEncryptedPictureWidget->setPicture(&m_decEncryptedPicture);
@@ -215,8 +261,25 @@ void MainWindow::dec_importEncryptedPicture()
 void MainWindow::dec_importKeyPicture()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Choose a file");
+    if (fileName.isNull())
+        return;
     std::string fileNameStd = fileName.toStdString();
     m_decKeyPicture.importFile(fileNameStd);
     m_decKeyPictureWidget->setPicture(&m_decKeyPicture);
+}
+
+void MainWindow::dec_decrypt()
+{
+    m_decDecryptedPicture.decode(m_decEncryptedPicture, m_decKeyPicture);
+    m_decDecryptedPictureWidget->setPicture(&m_decDecryptedPicture);
+}
+
+void MainWindow::dec_save()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Chose a file to save to");
+    if (fileName.isNull())
+        return;
+    std::string fileNameStd = fileName.toStdString();
+    m_decDecryptedPicture.exportFile(fileNameStd);
 }
 

@@ -34,10 +34,14 @@ private slots:
 // encryption screen
     void enc_importOriginalFile();
     void enc_importKeyFile();
+    void enc_encrypt();
+    void enc_save();
 
 // decryption screen
     void dec_importEncryptedPicture();
     void dec_importKeyPicture();
+    void dec_decrypt();
+    void dec_save();
 
 private:
     Ui::MainWindow *ui; // contains all widgets // properties of main window

@@ -254,8 +254,10 @@ void XBild::encode(N &im, C &k) {
     xLen = im.imageMx[0].size();
 
     std::cout << "print encoded image:" << std::endl;
-    // this->printImage();
+//     this->printImage();
 }
+
+template void XBild::encode<NBild, CBild>(NBild&, CBild&);
 
 template<class C>
 void XBild::decode(C &im, C &k) {
@@ -282,6 +284,8 @@ void XBild::decode(C &im, C &k) {
     std::cout << "print decoded image:" << std::endl;
     this->printImage();
 }
+
+template void XBild::decode<CBild>(CBild&, CBild&);
 
 // task 2e
 // merge two images
