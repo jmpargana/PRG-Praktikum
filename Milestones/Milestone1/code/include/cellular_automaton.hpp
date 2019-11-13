@@ -21,6 +21,16 @@
 //------------------------------------------------------------------------------
 
 
+/**
+ *
+ * This class contains two matrices that hold the cells' values on the current
+ * phase and the methods to calculate the next phases' values
+ * 
+ * @param current matrix with cells current values
+ * @param next empty matrix where next life will be saved
+ * @param timer used to time the graphical visualization
+ * 
+ */
 class CellularAutomaton {
 public:
     // constructors

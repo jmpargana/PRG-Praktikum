@@ -35,15 +35,20 @@ CellularAutomaton ca;		// global variable with cellular automaton
 //------------------------------------------------------------------------------
 
 
+/**
+ * This function creates an input file stream and saves the files'
+ * content into the ca instance
+ * 
+ * @return void
+ * 
+ */
 void import_file()
-// read cellular automaton matrix from given file name as input
 {
     std::string file_name;
     std::cout << "Enter input file name:" << std::endl;
     std::cin >> file_name;
 
     std::ifstream ist {file_name}; // instatiate input file stream with fiven string
-    // std::ifstream ist {"../../materials/beispieldatei_cellularautomaton.txt"};
     if (!ist) throw std::runtime_error("File not found"); // test if file can be opened
 
     ist >> ca; 			// input file to cellular automaton
@@ -54,8 +59,14 @@ void import_file()
 //------------------------------------------------------------------------------
 
 
+/**
+ * This function creates an output file stream instance and saves the contents 
+ * of ca class instance in file with given name
+ * 
+ * @return void
+ * 
+ */
 void export_file()
-// save current state of cellular automaton to given file name
 {
     std::string file_name;
     std::cout << "Enter output file name:" << std::endl;
@@ -73,8 +84,13 @@ void export_file()
 //------------------------------------------------------------------------------
 
 
+/**
+ * This function reads the values of the ca instance by subscription
+ * 
+ * @return void
+ * 
+ */
 void read_cell()
-// after testing user's input read value in given cell
 {
     int row = 30000, col = 30000;		// initialize with impossible value
 
@@ -92,8 +108,14 @@ void read_cell()
 //------------------------------------------------------------------------------
 
 
+/**
+ * This function asks for input from user and updates the value
+ * in a given cell
+ * 
+ * @return void
+ * 
+ */
 void change_cell()
-// change cell value by overriding matrix value via subscripting
 {
     unsigned row = 30000, col = 30000;
 
@@ -111,8 +133,14 @@ void change_cell()
 //------------------------------------------------------------------------------
 
 
+/**
+ * This function saves random boolean values to all cells in the instanced
+ * ca CellularAutomaton
+ * 
+ * @return void
+ * 
+ */
 void random_start()
-// initiate or override cellular automaton with random true or false values
 {
     // generator function for random boolean
     auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
@@ -129,13 +157,21 @@ void random_start()
 
 //------------------------------------------------------------------------------
 
-
+/**
+ * The main function runs console game presenting the user a simple menu
+ * the user is prompted some numbers and manipulates the game using them
+ * including functionalities are importing and exporting of files
+ * showing next phase of cellular automaton, reading and writing specific cell
+ * initiate game with random values and exit at any time
+ * 
+ * @param argc number of command line arguments default 1
+ * @param argv strings with seperate arguments given
+ * 
+ * return integer value associated with success of program calling
+ * 
+ */
 int main(int argc, const char** argv)
-// main function runs console game presenting the user a simple menu
-// the user is prompted some numbers and manipulates the game using them
-// including functionalities are importing and exporting of files
-// showing next phase of cellular automaton, reading and writing specific cell
-// initiate game with random values and exit at any time
+
 try
 {
     // run until case '0' has been selected

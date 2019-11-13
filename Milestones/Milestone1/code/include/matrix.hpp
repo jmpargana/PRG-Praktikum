@@ -17,6 +17,17 @@
 //------------------------------------------------------------------------------
 
 
+/**
+ * Matrix template
+ * this class contains a template for a matrix with all 
+ * its needed methods (all the operator overloads)
+ * currently the template is commented feature is commented,
+ * since for this exercise we have a specific type
+ * 
+ * @param matrix is a two dimensional vector
+ * 
+ */
+
 // template <typename T>
 class Matrix {
 
