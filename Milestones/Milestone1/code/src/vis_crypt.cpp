@@ -25,6 +25,8 @@ Menu\n\n\
 
 XBild::XBild(bool isNBild) : imageMx{360, std::vector<bool>(360, false)}, xLen{360}, yLen{360}, isNBild(isNBild) {}
 
+XBild::XBild(const XBild &xxBild) : imageMx{360, std::vector<bool>(360, false)}, xLen{360}, yLen{360}, isNBild(isNBild) {}
+
 XBild::XBild(const XBild &xxBild, bool isNBild) : imageMx{360, std::vector<bool>(360, false)}, xLen{360}, yLen{360},
                                                   isNBild(isNBild) {}
 
@@ -171,13 +173,23 @@ void XBild::exportFile(std::string file) {
     std::ofstream osf{file};
     if (!osf) throw std::runtime_error("io error while writing: file not found.");
     // https://stackoverflow.com/questions/409348/iteration-over-stdvector-unsigned-vs-signed-index-variable/409396#409396
-    for (auto const &line: imageMx) {
-        for (auto const &elem: line) {
-            // osf << (isNBild ? elem : (elem == 1 ? 'A' : 'B'));
+    // for (auto const &line: imageMx) {
+    //     for (auto const &elem: line) {
+    //         // osf << (isNBild ? elem : (elem == 1 ? 'A' : 'B'));
+    //         if (isNBild) {
+    //             osf << elem;
+    //         } else {
+    //             osf << (elem == 1 ? 'A' : 'B');
+    //         }
+    //     }
+    //     osf << std::endl;
+    // }
+        for (int row = 0; row < yLen; row++) {
+        for (int col = 0; col < xLen; col++) {
             if (isNBild) {
-                osf << elem;
+                osf << imageMx[row][col];
             } else {
-                osf << (elem == 1 ? 'A' : 'B');
+                osf << (imageMx[row][col] == 1 ? 'A' : 'B');
             }
         }
         osf << std::endl;
@@ -223,7 +235,30 @@ void XBild::exportFile(std::string file) {
 
 // https://de.wikibooks.org/wiki/C%2B%2B-Programmierung/_Im_Zusammenhang_mit_Klassen/_Statische_Methoden
 // https://www.tutorialspoint.com/cplusplus/cpp_static_members.htm
-// static CBild XBild::randomImage(const unsigned int x, const unsigned int y) {
+void XBild::randomImage3(const unsigned int x, const unsigned int y) {
+    // CBild key(x, y);
+//    XBild key(x, y);
+//    std::make_unique<XBild>(key);
+    int randPixel;
+    srand(time(NULL)); // initialize random seed
+
+    for (int xx = 0; xx < x; xx++) {
+        for (int yy = 0; yy < y; yy++) {
+            randPixel = rand() % 2;
+//            key[xx][yy] = randPixel > 0; // ? true : false;
+//            key[yy][xx] = randPixel > 0; // ? true : false;
+            imageMx[yy][xx] = randPixel > 0; // ? true : false;
+        }
+    }
+
+    xLen = x; // imageMx[0].size();
+    yLen = y; // imageMx.size();
+    // needs the copy constructor to copy/return an object
+//    key.printImage();
+    // return std::make_unique<XBild>(key);
+    // return &key;
+    // return std::make_unique<XBild>(&XBild(key));
+}
 // CBild XBild::randomImage(const unsigned int x, const unsigned int y) {xLen = x; yLen = y;}
 // https://stackoverflow.com/questions/3350385/how-to-return-an-object-in-c/3350439#3350439
 CBild randomImage(const unsigned int x, const unsigned int y) {
@@ -245,30 +280,31 @@ CBild randomImage(const unsigned int x, const unsigned int y) {
 //    return std::move(key);
 }
 
-std::unique_ptr<CBild> randomImage2(const unsigned int x, const unsigned int y) {
-//    std::unique_ptr<CBild> key(new CBild(x, y));
-    CBild key(x, y);
-//    std::make_unique<CBild>(key);
-    int randPixel;
-    srand(time(NULL)); // initialize random seed
-
-    for (int xx = 0; xx < x; xx++) {
-        for (int yy = 0; yy < y; yy++) {
-            randPixel = rand() % 2;
-//            key->operator[](xx)[yy] = randPixel > 0; // ? true : false;
-//            key->operator[](yy).operator[](xx) = randPixel > 0; // ? true : false;
-//            key->operator[](yy)[xx] = randPixel > 0; // ? true : false;
-            key[yy][xx] = randPixel > 0; // ? true : false;
-        }
-    }
-    // needs the copy constructor to copy/return an object
-    CBild kk;
-//    kk = key;
-//    kk.printImage();
-    key.printImage();
-//    return key;
-    return std::make_unique<CBild>(key);
-}
+// std::unique_ptr<CBild> randomImage2(const unsigned int x, const unsigned int y) {
+// //CBild randomImage2(const unsigned int x, const unsigned int y) {
+// //    std::unique_ptr<CBild> key(new CBild(x, y));
+//     CBild key(x, y);
+//     std::make_unique<CBild>(key);
+//     int randPixel;
+//     srand(time(NULL)); // initialize random seed
+//
+//     for (int xx = 0; xx < x; xx++) {
+//         for (int yy = 0; yy < y; yy++) {
+//             randPixel = rand() % 2;
+// //            key->operator[](xx)[yy] = randPixel > 0; // ? true : false;
+// //            key->operator[](yy).operator[](xx) = randPixel > 0; // ? true : false;
+// //            key->operator[](yy)[xx] = randPixel > 0; // ? true : false;
+//             key[yy][xx] = randPixel > 0; // ? true : false;
+//         }
+//     }
+//     // needs the copy constructor to copy/return an object
+// //    CBild kk;
+// //    kk = key;
+// //    kk.printImage();
+//     key.printImage();
+// //    return key;
+//     return std::make_unique<CBild>(key);
+// }
 
 // task 2d
 // create two methods for encryption and decryption
@@ -276,6 +312,7 @@ std::unique_ptr<CBild> randomImage2(const unsigned int x, const unsigned int y) 
 // https://www.geeksforgeeks.org/auto_ptr-unique_ptr-shared_ptr-weak_ptr-2/
 // http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-sharedptrparam
 // https://stackoverflow.com/questions/3350385/how-to-return-an-object-in-c/3350439#3350439
+// https://stackoverflow.com/questions/8293426/error-invalid-initialization-of-non-const-reference-of-type-int-from-an-rval
 //std::shared_ptr <CBild> encode2(NBild &im, CBild &k) {
 std::unique_ptr <CBild> encode2(NBild &im, CBild &k) {
     int imX, imY, kX, kY;
@@ -285,8 +322,8 @@ std::unique_ptr <CBild> encode2(NBild &im, CBild &k) {
     kY = k.get_y_size();
     // CBild *c(new CBild(imX, imY));
     // CBild c(imX, imY);
-     std::unique_ptr<CBild> c(new CBild(imX, imY));
-//    std::shared_ptr <CBild> c(new CBild(imX, imY));
+    std::unique_ptr<CBild> c(new CBild(imX, imY));
+    // std::shared_ptr <CBild> c(new CBild(imX, imY));
 
     std::cout << imX << ' ' << kX << "  <<<< x      y >>>>  " << imY << ' ' << kY << std::endl;
     if (imX != kX || imY != kY)
@@ -299,6 +336,7 @@ std::unique_ptr <CBild> encode2(NBild &im, CBild &k) {
             // c[xx][yy] = im[xx][yy] == k[xx][yy] ? false : true;
             // c->operator[](yy).operator[](xx) = im[yy][xx] == k[yy][xx] ? false : true;
             c->operator[](yy)[xx] = im[yy][xx] == k[yy][xx] ? false : true;
+            // c[yy][xx] = im[yy][xx] == k[yy][xx] ? false : true;
             // c->operator[](xx)[yy] = im[xx][yy] == k[xx][yy] ? false : true;
             // c[yy][xx] = im[xx][yy] == k[xx][yy] ? false : true;
             // std::cout << xx << ' ' << yy << "   " << c[xx][yy] << im[xx][yy] << k[xx][yy] << std::endl;
@@ -310,12 +348,11 @@ std::unique_ptr <CBild> encode2(NBild &im, CBild &k) {
 
     std::cout << "DONE :D" << std::endl;
     CBild cc;
-    cc = *c;
+    // cc = *c;
     // cc.printImage();
     std::cout << "DONE :D" << std::endl;
     return c; // *c;
 }
-
 
 CBild encode(NBild &im, CBild &k) {
     int imX, imY, kX, kY;
@@ -333,9 +370,9 @@ CBild encode(NBild &im, CBild &k) {
         for (int yy = 0; yy < imY; yy++) {
             // std::cout << xx << ' ' << yy << std::endl;
             // std::cout << xx << ' ' << yy << "   " << c[xx][yy] << im[xx][yy] << k[xx][yy] << std::endl;
-//             c[xx][yy] = im[xx][yy] == k[xx][yy] ? false : true;
+            // c[xx][yy] = im[xx][yy] == k[xx][yy] ? false : true;
             c[yy][xx] = im[yy][xx] == k[yy][xx] ? false : true;
-//             c[yy][xx] = im[xx][yy] == k[xx][yy] ? false : true;
+            // c[yy][xx] = im[xx][yy] == k[xx][yy] ? false : true;
             // std::cout << xx << ' ' << yy << "   " << c[xx][yy] << im[xx][yy] << k[xx][yy] << std::endl;
             // std::cout << xx << ' ' << yy << "   " << c->operator[](yy)[xx] << im[yy][xx] << k[yy][xx] << std::endl;
             // std::cout << xx << ' ' << yy << "   " << c->operator[](yy).operator[](xx) << im[yy][xx] << k[yy][xx] << std::endl;
@@ -347,6 +384,43 @@ CBild encode(NBild &im, CBild &k) {
     c.printImage();
     std::cout << "DONE :D" << std::endl;
     return c; // *c;
+}
+
+// void XBild::encode(NBild &im, CBild &k) {
+// void XBild::encode(NBild &im, XBild &k) {
+template <class N, class C>
+void XBild::encode(N &im, C &k) {
+   int imX, imY, kX, kY;
+   imX = im.get_x_size();
+   imY = im.get_y_size();
+   kX = k.get_x_size();
+   kY = k.get_y_size();
+   CBild c(imX, imY);
+
+   std::cout << imX << ' ' << kX << "  <<<< x      y >>>>  " << imY << ' ' << kY << std::endl;
+   if (imX != kX || imY != kY)
+       throw std::runtime_error("Dimensions error: The dimensions of the matrices to encode don't match.");
+
+   for (int xx = 0; xx < imX; xx++) {
+       for (int yy = 0; yy < imY; yy++) {
+           // std::cout << xx << ' ' << yy << std::endl;
+           // std::cout << xx << ' ' << yy << "   " << c[xx][yy] << im[xx][yy] << k[xx][yy] << std::endl;
+           // c[xx][yy] = im[xx][yy] == k[xx][yy] ? false : true;
+
+           // c[yy][xx] = im[yy][xx] == k[yy][xx] ? false : true;
+           imageMx[yy][xx] = im[yy][xx] == k[yy][xx] ? false : true;
+
+           // c[yy][xx] = im[xx][yy] == k[xx][yy] ? false : true;
+           // std::cout << xx << ' ' << yy << "   " << c[xx][yy] << im[xx][yy] << k[xx][yy] << std::endl;
+           // std::cout << xx << ' ' << yy << "   " << c->operator[](yy)[xx] << im[yy][xx] << k[yy][xx] << std::endl;
+           // std::cout << xx << ' ' << yy << "   " << c->operator[](yy).operator[](xx) << im[yy][xx] << k[yy][xx] << std::endl;
+       }
+       // std::cout << xx << "   " << c[xx][-1] << im[xx][-1] << k[xx][-1] << std::endl;
+   }
+
+   std::cout << "print encoded image:" << std::endl;
+   this->printImage();
+   std::cout << "DONE :D" << std::endl;
 }
 
 NBild decode(CBild &im, CBild &k) {
@@ -396,11 +470,10 @@ int main(int argc, const char **argv) {
 //    CBild imEncoded; // CBild imDecoded(360, 360);
     // CBild key;
     std::cout << "keyy1" << std::endl;
-    CBild keyy1(8,4); keyy1 = randomImage(8,4);
+    CBild keyy1(10,4); keyy1 = randomImage(10,4);
     std::cout << "keyy2" << std::endl;
-//    CBild keyy2(2,4); keyy2 = randomImage(2,4);
-    std::cout << "keyy3" << std::endl;
-//    CBild keyy3(3,6); keyy3 = randomImage(3,6);
+//    CBild keyy2(2,6); keyy2 = randomImage(2,6);
+    XBild keyy2(2,6); keyy2.randomImage3(2,6); keyy2.printImage();
 
 //    imEncoded.importFile("../../materials/beispielbild_1.txt");
     imDecoded.importFile("../materials/beispielbild_1.txt");
@@ -414,23 +487,32 @@ int main(int argc, const char **argv) {
     std::cout << "KEY KEY KEY KEY" << std::endl;
     std::cout << "KEY KEY KEY KEY" << std::endl;
     CBild key(imDecoded.get_x_size(), imDecoded.get_y_size());
-    CBild imEncoded(imDecoded.get_x_size(), imDecoded.get_y_size());
+    // CBild imEncoded(imDecoded.get_x_size(), imDecoded.get_y_size());
     std::cout << key.get_x_size() << " xxx  yyy " << key.get_y_size() << std::endl;
-    key = randomImage(imDecoded.get_x_size(), imDecoded.get_y_size());
+//    key = randomImage(imDecoded.get_x_size(), imDecoded.get_y_size());
 ////    std::cout << key.get_x_size() << " xxx  yyy " << key.get_y_size() << std::endl;
 
-    std::cout << "KEY KEY KEY KEY" << std::endl;
-    std::cout << "KEY KEY KEY KEY" << std::endl;
-    std::cout << "KEY KEY KEY KEY" << std::endl;
+    std::cout << "KEY 2 KEY 2 KEY 2 KEY" << std::endl;
+    std::cout << "KEY 2 KEY 2 KEY 2 KEY" << std::endl;
+    std::cout << "KEY 2 KEY 2 KEY 2 KEY" << std::endl;
     std::cout << imDecoded.get_x_size() << "  " << imDecoded.get_y_size() << std::endl;
-////    CBild key(imDecoded.get_x_size(), imDecoded.get_y_size());
-////    std::unique_ptr<CBild> keyPtr;
+//////    CBild key(imDecoded.get_x_size(), imDecoded.get_y_size());
+//////    std::unique_ptr<CBild> keyPtr;
 //    std::unique_ptr<CBild> keyPtr(new CBild(imDecoded.get_x_size(), imDecoded.get_y_size()));
 //    keyPtr = randomImage2(imDecoded.get_x_size(), imDecoded.get_y_size());
+////    key = randomImage2(imDecoded.get_x_size(), imDecoded.get_y_size());
 //    key = *keyPtr;
 
     // key = randomImage(89, 303);
     // key.printImage();
+
+    std::cout << "KEY 3 KEY 3 KEY 3 KEY" << std::endl;
+    std::cout << "KEY 3 KEY 3 KEY 3 KEY" << std::endl;
+    std::cout << "KEY 3 KEY 3 KEY 3 KEY" << std::endl;
+//    XBild key3(false);
+//    CBild key3;
+    CBild key3(imDecoded.get_x_size(), imDecoded.get_y_size());
+    key3.randomImage3(imDecoded.get_x_size(), imDecoded.get_y_size());
 
     std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
     std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
@@ -438,18 +520,31 @@ int main(int argc, const char **argv) {
 //    std::shared_ptr <CBild> imEncodedPtr;
 //    imEncodedPtr = encode2(imDecoded, key);
 //    imEncoded = *imEncodedPtr;
-    imEncoded = encode(imDecoded, key);
-
+    // CBild *key33 = &key3;
+    // CBild && key33 = std::make_shared<CBild>(key3);
+    // imEncoded = encode(imDecoded, key3);
+    CBild imEncoded(imDecoded.get_x_size(), imDecoded.get_y_size());
+    imEncoded.encode(imDecoded, key3);
     // imEncoded.printImage();
 
     std::cout << "EXPORT EXPORT EXPORT EXPORT EXPORT " << std::endl;
     std::cout << "EXPORT EXPORT EXPORT EXPORT EXPORT " << std::endl;
     std::cout << "EXPORT EXPORT EXPORT EXPORT EXPORT " << std::endl;
-    imEncoded.exportFile("../materials/beispielbild_1_OUT.txt");
+    imEncoded.exportFile("../materials/beispielbild_1_OUT_en.txt");
+    key3.exportFile("../materials/beispielbild_1_OUT_key.txt");
     // imDecoded.exportFile("../materials/2f_approval_OUT.txt");
 
     // imEncoded.printImage();
     // imDecoded.printImage();
+
+    NBild im1Encoded2;
+    CBild im1Key;
+    NBild im1Decoded2;
+    im1Encoded2.importFile("../materials/beispielbild_1_OUT_en.txt");
+    im1Key.importFile("../materials/beispielbild_1_OUT_key.txt");
+
+    // im1Decoded2.decode
+
 
     std::cout << "\n\nEND" << std::endl;
 

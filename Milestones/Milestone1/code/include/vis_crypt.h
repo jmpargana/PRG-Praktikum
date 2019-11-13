@@ -29,6 +29,8 @@ public:
     // constructor
     XBild(bool);
 
+    XBild(const XBild& xxBild);
+
     XBild(const XBild& xxBild, bool);
 
     XBild(unsigned int, unsigned int, bool);
@@ -59,11 +61,15 @@ public:
 
     void exportFile(std::string);
 
-//    void encode(CBild) {}
-//    void decode(CBild) {}
+    void randomImage3(const unsigned int x, const unsigned int y);
+    // XBild randomImage(unsigned, unsigned);
+    // CBild randomImage(unsigned, unsigned);
 
-    // static CBild randomImage(unsigned, unsigned) {}
-    // CBild randomImage(unsigned, unsigned) {}
+//    void encode(NBild&, CBild&);
+    template <class N, class C> void encode(N&, C&);
+//    void decode(CBild);
+    // void encode(NBild &im, CBild &k) {};
+
 
 private:
     // image in matrix representation
@@ -79,6 +85,8 @@ public:
 
     NBild(unsigned int x, unsigned int y);
 
+    // void decode(CBild &im, CBild &k) {};
+
     ~NBild();
 
 private:
@@ -91,6 +99,9 @@ public:
     CBild(const CBild& ccBild); // copy constructor
 
     CBild(unsigned int x, unsigned int y);
+
+    // void encode(NBild &im, CBild &k) {};
+    // void encode(NBild &im, CBild &k) {};
 
     ~CBild();
 
