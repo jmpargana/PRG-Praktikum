@@ -25,7 +25,7 @@ $(GAMEOFLIFE): $(BUILDDIR)/game_of_life.o $(BUILDDIR)/matrix.o $(BUILDDIR)/cellu
 	$(CC) $^ -o $(GAMEOFLIFE)
 
 
-$(VICRYPT): $(BUILDDIR)/vis_crypt.o $(BUILDDIR)/vis_crypt_dirty.o
+$(VICRYPT): $(BUILDDIR)/vis_crypt.o
 	@echo "Creating VisualEncryption binary..."
 	$(CC) $^ -o $(VICRYPT)
 
