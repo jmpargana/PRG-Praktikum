@@ -22,6 +22,7 @@ Menu\n\n\
 \tvisualencrypt overlay <image_a> <image_b> <result>\n";
 
 
+//constructor
 XBild::XBild(bool isNBild) : imageMx{360, std::vector<bool>(360, false)}, xLen{360}, yLen{360}, isNBild(isNBild) {}
 
 XBild::XBild(const XBild &xxBild) : imageMx{360, std::vector<bool>(360, false)}, xLen{360}, yLen{360},
@@ -36,8 +37,10 @@ XBild::XBild(unsigned int x, unsigned int y, bool isNBild) : imageMx{x, std::vec
     // xLen = x; yLen = y;
 }
 
+// destructor
 XBild::~XBild() {}
 
+// constructor
 NBild::NBild() : XBild::XBild(true) {}
 
 NBild::NBild(const NBild &nnBild) : XBild::XBild(true) {}
@@ -46,10 +49,10 @@ NBild::NBild(const NBild &nnBild) : XBild::XBild(true) {}
 NBild::NBild(unsigned int x, unsigned int y) : XBild::XBild(x, y, true) {
 }
 
+//  destructor
 NBild::~NBild() {}
 
-// A = true, B = false
-// matrix construct to build x*y matrix for the image
+// constructor
 CBild::CBild() : XBild::XBild(false) {}
 
 // copy constructor (needed for returning a CBild object in randomImage)
@@ -57,6 +60,7 @@ CBild::CBild(const CBild &ccBild) : XBild::XBild(false) {}
 
 CBild::CBild(unsigned int x, unsigned int y) : XBild::XBild(x, y, false) {}
 
+// destructor
 CBild::~CBild() {}
 
 // matrix assignment operation overload template
@@ -94,10 +98,12 @@ const std::vector<bool> &XBild::operator[](unsigned col) const
     return this->imageMx[col];    // second subscription should work as expected
 }
 
+// getter for dimension of matrix
 unsigned XBild::get_y_size() const { return this->yLen; }
 
 unsigned XBild::get_x_size() const { return this->xLen; }
 
+// print function used for development
 void XBild::printImage() {
     for (int row = 0; row < yLen; row++) {
         for (int col = 0; col < xLen; col++) {
@@ -108,6 +114,7 @@ void XBild::printImage() {
     std::cout << std::endl;
 }
 
+// import a file from a file given as parameter
 // https://codereview.stackexchange.com/questions/206852/template-matrix-class-second-version
 void XBild::importFile(std::string file) {
     std::ifstream isf(file);
@@ -155,6 +162,7 @@ void XBild::importFile(std::string file) {
     std::cout << "import successful" << std::endl;
 }
 
+// export an image to a textfile
 void XBild::exportFile(std::string file) {
     std::ofstream osf{file};
     if (!osf) throw std::runtime_error("io error while writing: file not found.");
@@ -188,6 +196,7 @@ void XBild::exportFile(std::string file) {
 // create a random image and provide the size by parameters
 // void randomImage(const unsigned int x, const unsigned int y) {}
 
+// create a random pixels picture used as a key for encryption (the dimensions have to be provided as arguments)
 // https://de.wikibooks.org/wiki/C%2B%2B-Programmierung/_Im_Zusammenhang_mit_Klassen/_Statische_Methoden
 // https://www.tutorialspoint.com/cplusplus/cpp_static_members.htm
 void XBild::randomImage(const unsigned int x, const unsigned int y) {
@@ -222,6 +231,8 @@ void XBild::randomImage(const unsigned int x, const unsigned int y) {
 // http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-sharedptrparam
 // https://stackoverflow.com/questions/3350385/how-to-return-an-object-in-c/3350439#3350439
 // https://stackoverflow.com/questions/8293426/error-invalid-initialization-of-non-const-reference-of-type-int-from-an-rval
+
+// encode an image with a given key
 template<class N, class C>
 void XBild::encode(N &im, C &k) {
     int imX, imY, kX, kY;
@@ -247,8 +258,9 @@ void XBild::encode(N &im, C &k) {
 //     this->printImage();
 }
 
-template void XBild::encode<NBild, CBild>(NBild&, CBild&);
+template void XBild::encode<NBild, CBild>(NBild &, CBild &);
 
+// decode an image using the encryption key
 template<class C>
 void XBild::decode(C &im, C &k) {
     int imX, imY, kX, kY;
@@ -275,16 +287,16 @@ void XBild::decode(C &im, C &k) {
     // this->printImage();
 }
 
-template void XBild::decode<CBild>(CBild&, CBild&);
+template void XBild::decode<CBild>(CBild &, CBild &);
 
 // task 2e
 // merge two images
-// ===> we can use the encode functionality to achieve that (see overlayCode)
+// ===> we can use the encode functionality to achieve that (see overlayCode())
 
 // task 2g
-// console ui
+// console ui methods
 // g++ src/vis_crypt.cpp include/vis_crypt.h && ./a.out encode ../materials/2f_approval.txt ../materials/_ENCODED.txt ../materials/2f_bugaspicture.txt
-void encodeCode(const char* source, const char* result, const char* key) {
+void encodeCode(const char *source, const char *result, const char *key) {
     NBild imDecoded;
     imDecoded.importFile(source);
 
@@ -298,7 +310,7 @@ void encodeCode(const char* source, const char* result, const char* key) {
 }
 
 // g++ src/vis_crypt.cpp include/vis_crypt.h && ./a.out decode ../materials/_ENCODED.txt ../materials/2f_bugaspicture.txt ../materials/_DECODED.txt
-void decodeCode(const char* im, const char* k, const char* res) {
+void decodeCode(const char *im, const char *k, const char *res) {
     CBild imEncoded;
     CBild imKey;
     NBild imDecoded;
@@ -311,7 +323,7 @@ void decodeCode(const char* im, const char* k, const char* res) {
 }
 
 // g++ src/vis_crypt.cpp include/vis_crypt.h && ./a.out overlay ../materials/2f_bugaspicture.txt ../materials/2f_approval.txt ../materials/_MERGE.txt
-void overlayCode(const char* im, const char* k, const char* res) {
+void overlayCode(const char *im, const char *k, const char *res) {
     NBild imDecoded;
     imDecoded.importFile(im);
 
@@ -326,27 +338,40 @@ void overlayCode(const char* im, const char* k, const char* res) {
 
 
 #ifndef VISCRYPT_NOMAIN
+
 int main(int argc, const char **argv) {
 
+    // console UI
     std::vector <std::string> options{"encode", "decode", "overlay"};
 
-     if (argc != 5 || options.end() != std::find(options.begin(), options.end(), argv[2])) {
-         std::cout << menu << std::endl;
-         exit(0);
-     }
+    if (argc != 5 || options.end() != std::find(options.begin(), options.end(), argv[2])) {
+        std::cout << menu << std::endl;
+        exit(0);
+    }
 
     switch (argv[1][0]) {
 
-        case 'e': encodeCode(argv[2], argv[3], argv[4]); break;
-        case 'd': decodeCode(argv[2], argv[3], argv[4]); break;
-        case 'o': overlayCode(argv[2], argv[3], argv[4]); break;
+        case 'e':
+            encodeCode(argv[2], argv[3], argv[4]);
+            break;
+        case 'd':
+            decodeCode(argv[2], argv[3], argv[4]);
+            break;
+        case 'o':
+            overlayCode(argv[2], argv[3], argv[4]);
+            break;
     }
 
+    // some examples for the code above
     if (false) {
         std::cout << "keyy1" << std::endl;
-        CBild keyy1(10, 4); keyy1.randomImage(10,4); keyy1.printImage();
+        CBild keyy1(10, 4);
+        keyy1.randomImage(10, 4);
+        keyy1.printImage();
         std::cout << "keyy2" << std::endl;
-        XBild keyy2(2, 6); keyy2.randomImage(2, 6); keyy2.printImage();
+        XBild keyy2(2, 6);
+        keyy2.randomImage(2, 6);
+        keyy2.printImage();
 
         NBild imDecoded; //(303, 89);
         imDecoded.importFile("../materials/2f_approval.txt");
@@ -402,4 +427,5 @@ int main(int argc, const char **argv) {
 
     return 0;
 }
+
 #endif
