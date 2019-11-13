@@ -45,6 +45,11 @@ private slots:
     void dec_decrypt();
     void dec_save();
 
+// overy screen
+    void over_importP1();
+    void over_importP2();
+    void over_overlay();
+    void over_save();
 
 private:
     Ui::MainWindow *ui; // contains all widgets // properties of main window
@@ -67,6 +72,14 @@ private:
     VisualCryptPictureWidget *m_decEncryptedPictureWidget;
     VisualCryptPictureWidget *m_decKeyPictureWidget;
     VisualCryptPictureWidget *m_decDecryptedPictureWidget;
+
+    // overlay screen
+    NBild m_overP1;
+    NBild m_overP2;
+    NBild m_overlayPicture;
+    VisualCryptPictureWidget *m_overP1Widget;
+    VisualCryptPictureWidget *m_overP2Widget;
+    VisualCryptPictureWidget *m_overlayPictureWidget;
 
 
 };

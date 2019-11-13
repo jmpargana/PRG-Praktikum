@@ -229,7 +229,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="pageEncrypt">
        <widget class="QPushButton" name="enc_buttonLoadKey">
@@ -450,7 +450,99 @@
        <zorder>dec_buttonDecryption</zorder>
        <zorder>dec_groupBoxDecryption</zorder>
       </widget>
-      <widget class="QWidget" name="pageBlend"/>
+      <widget class="QWidget" name="pageBlend">
+       <widget class="QPushButton" name="over_buttonLoadP1">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>load picture 1 </string>
+        </property>
+       </widget>
+       <widget class="QGroupBox" name="over_groupBoxLoadP1">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>60</y>
+          <width>441</width>
+          <height>471</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QGroupBox" name="over_groupBoxLoadP2">
+        <property name="geometry">
+         <rect>
+          <x>470</x>
+          <y>60</y>
+          <width>431</width>
+          <height>471</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QGroupBox" name="over_groupBoxOverlayPicture">
+        <property name="geometry">
+         <rect>
+          <x>910</x>
+          <y>60</y>
+          <width>451</width>
+          <height>471</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="over_butttonLoadP2">
+        <property name="geometry">
+         <rect>
+          <x>470</x>
+          <y>20</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>load picture 2</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="over_buttonOverlay">
+        <property name="geometry">
+         <rect>
+          <x>910</x>
+          <y>20</y>
+          <width>171</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>overlay picture 1 and 2</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="over_buttonSave">
+        <property name="geometry">
+         <rect>
+          <x>1220</x>
+          <y>530</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>save</string>
+        </property>
+       </widget>
+      </widget>
      </widget>
      <widget class="QComboBox" name="comboBox">
       <property name="geometry">
