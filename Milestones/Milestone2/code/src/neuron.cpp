@@ -183,6 +183,24 @@ const std::vector<std::pair<double, double>>& Neuron::get_inputs() const
 
 
 /**
+ * Sum function performs the same as accumulate function from the numeric
+ * library it iterates over inputs and increments its value * weigth
+ * @return result sum of inputs * weigths
+ *
+ */
+double Neuron::sum()
+{
+    double result = 0;
+    for (auto begin=inputs.begin(); begin!=inputs.end(); ++begin)
+	result += begin->first * begin->second;
+    return result;
+}
+
+
+//------------------------------------------------------------------------------
+
+
+/**
  * Output stream operator overload 
  * 
  * @param os is an instance of the standard output stream class

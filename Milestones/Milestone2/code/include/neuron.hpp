@@ -53,6 +53,7 @@ public:
     const std::vector<std::pair<double, double>>& get_inputs() const;
 
     // operation overloads
+    double sum();
     
     
     
