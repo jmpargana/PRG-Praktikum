@@ -31,6 +31,8 @@ Working hours:
 	game_of_life both header and source files.
 	Hendrik Edelmann on Aufgabe 2 and programmed the vis_crypt header and source file.
 	Kai Wo Yau on Aufgabe 3 and created all of the Qt code.
+	Working time on Qt was about 15 hours for initial learning, about 11 hours
+	for game of life screen and about 10 hours for visual encryption screen.
 
 	We started a github REPO to coordinate the project between each other, each
 	contains a list of everyone's commits and contribution to the project as well
