@@ -34,7 +34,6 @@ XBild::XBild(const XBild &xxBild, bool isNBild) : imageMx{360, std::vector<bool>
 XBild::XBild(unsigned int x, unsigned int y, bool isNBild) : imageMx{x, std::vector<bool>(y, false)}, xLen{x}, yLen{y},
                                                              isNBild(isNBild) {
     // xLen = x; yLen = y;
-    std::cout << "is N Bild: " << isNBild << std::endl;
 }
 
 XBild::~XBild() {}
@@ -135,20 +134,13 @@ void XBild::importFile(std::string file) {
             elems.clear();
             std::stringstream lineStream(line);
             while (lineStream >> elem) {
-                // std::cout << elem;
                 elems.push_back(elem == '1' || elem == 'A');
             }
-            // std::cout<< std::endl;
             elems.resize(elems.size());
             imageMx.push_back(elems);
         }
     }
     imageMx.resize(imageMx.size());
-
-    std::cout << "imageMx.capacity():  " << imageMx.capacity() << std::endl;
-    std::cout << "imageMx.size():  " << imageMx.size() << std::endl;
-    std::cout << "imageMx[0].capacity():  " << imageMx[0].capacity() << std::endl;
-    std::cout << "imageMx[0].size():  " << imageMx[0].size() << std::endl;
 
     for (int i = 1; i < imageMx.size(); i++) {
         if (imageMx[0].size() != imageMx[i].size())
@@ -161,7 +153,6 @@ void XBild::importFile(std::string file) {
     isf.close();
 
     std::cout << "import successful" << std::endl;
-    std::cout << "x: " << xLen << " y: " << yLen << std::endl;
 }
 
 void XBild::exportFile(std::string file) {
@@ -240,7 +231,6 @@ void XBild::encode(N &im, C &k) {
     kY = k.get_y_size();
     CBild c(imX, imY);
 
-    std::cout << imX << ' ' << kX << "  <<<< x      y >>>>  " << imY << ' ' << kY << std::endl;
     if (imX != kX || imY != kY)
         throw std::runtime_error("Dimensions error: The dimensions of the matrices to encode don't match.");
 
@@ -253,7 +243,7 @@ void XBild::encode(N &im, C &k) {
     yLen = im.imageMx.size();
     xLen = im.imageMx[0].size();
 
-    std::cout << "print encoded image:" << std::endl;
+    // std::cout << "print encoded image:" << std::endl;
 //     this->printImage();
 }
 
@@ -281,15 +271,58 @@ void XBild::decode(C &im, C &k) {
     }
     yLen = im.imageMx.size();
     xLen = im.imageMx[0].size();
-    std::cout << "print decoded image:" << std::endl;
-    this->printImage();
+    // std::cout << "print decoded image:" << std::endl;
+    // this->printImage();
 }
 
 template void XBild::decode<CBild>(CBild&, CBild&);
 
 // task 2e
 // merge two images
-void merge();
+// ===> we can use the encode functionality to achieve that (see overlayCode)
+
+// task 2g
+// console ui
+// g++ src/vis_crypt.cpp include/vis_crypt.h && ./a.out encode ../materials/2f_approval.txt ../materials/_ENCODED.txt ../materials/2f_bugaspicture.txt
+void encodeCode(const char* source, const char* result, const char* key) {
+    NBild imDecoded;
+    imDecoded.importFile(source);
+
+    CBild imKey(imDecoded.get_y_size(), imDecoded.get_x_size());
+    imKey.importFile(key);
+    // imKey.randomImage(imDecoded.get_x_size(), imDecoded.get_y_size());
+
+    CBild imEncoded(imDecoded.get_x_size(), imDecoded.get_y_size());
+    imEncoded.encode(imDecoded, imKey);
+    imEncoded.exportFile(result);
+}
+
+// g++ src/vis_crypt.cpp include/vis_crypt.h && ./a.out decode ../materials/_ENCODED.txt ../materials/2f_bugaspicture.txt ../materials/_DECODED.txt
+void decodeCode(const char* im, const char* k, const char* res) {
+    CBild imEncoded;
+    CBild imKey;
+    NBild imDecoded;
+
+    imEncoded.importFile(im);
+    imKey.importFile(k);
+
+    imDecoded.decode(imEncoded, imKey);
+    imDecoded.exportFile(res);
+}
+
+// g++ src/vis_crypt.cpp include/vis_crypt.h && ./a.out overlay ../materials/2f_bugaspicture.txt ../materials/2f_approval.txt ../materials/_MERGE.txt
+void overlayCode(const char* im, const char* k, const char* res) {
+    NBild imDecoded;
+    imDecoded.importFile(im);
+
+    CBild imKey(imDecoded.get_y_size(), imDecoded.get_x_size());
+    imKey.importFile(k);
+    // imKey.randomImage(imDecoded.get_x_size(), imDecoded.get_y_size());
+
+    CBild imEncoded(imDecoded.get_x_size(), imDecoded.get_y_size());
+    imEncoded.encode(imDecoded, imKey);
+    imEncoded.exportFile(res);
+}
 
 
 #ifndef VISCRYPT_NOMAIN
@@ -297,72 +330,75 @@ int main(int argc, const char **argv) {
 
     std::vector <std::string> options{"encode", "decode", "overlay"};
 
-    // if (argc != 5 || options.end() != std::find(options.begin(), options.end(), argv[2])) {
-    // std::cout << menu << std::endl;
-    // exit(0);
-    // }
+     if (argc != 5 || options.end() != std::find(options.begin(), options.end(), argv[2])) {
+         std::cout << menu << std::endl;
+         exit(0);
+     }
 
-    switch (argv[2][0]) {
-        // case 'e': encodeCode(); break;
-        // case 'd': decodeCode(); break;
-        // case 'o': overlayCode(); break;
+    switch (argv[1][0]) {
+
+        case 'e': encodeCode(argv[2], argv[3], argv[4]); break;
+        case 'd': decodeCode(argv[2], argv[3], argv[4]); break;
+        case 'o': overlayCode(argv[2], argv[3], argv[4]); break;
     }
 
-    std::cout << "keyy1" << std::endl;
-    CBild keyy1(10, 4); keyy1.randomImage(10,4); keyy1.printImage();
-    std::cout << "keyy2" << std::endl;
-    XBild keyy2(2, 6); keyy2.randomImage(2, 6); keyy2.printImage();
+    if (false) {
+        std::cout << "keyy1" << std::endl;
+        CBild keyy1(10, 4); keyy1.randomImage(10,4); keyy1.printImage();
+        std::cout << "keyy2" << std::endl;
+        XBild keyy2(2, 6); keyy2.randomImage(2, 6); keyy2.printImage();
 
-    NBild imDecoded; //(303, 89);
-    imDecoded.importFile("../materials/2f_approval.txt");
-    // imDecoded.importFile("../materials/beispielbild_1.txt");
-    imDecoded.exportFile("../materials/2f_approval_OUT.txt");
-    imDecoded.printImage();
-    // imDecoded2.printImage();
+        NBild imDecoded; //(303, 89);
+        imDecoded.importFile("../materials/2f_approval.txt");
+        // imDecoded.importFile("../materials/beispielbild_1.txt");
+        imDecoded.exportFile("../materials/2f_approval_OUT.txt");
+        imDecoded.printImage();
+        // imDecoded2.printImage();
 
-    std::cout << "KEY KEY KEY KEY" << std::endl;
-    std::cout << "KEY KEY KEY KEY" << std::endl;
-    std::cout << "KEY KEY KEY KEY" << std::endl;
-    // CBild key2(imDecoded.get_x_size(), imDecoded.get_y_size());
-    // CBild key(imDecoded.get_x_size(), imDecoded.get_y_size());
-    CBild key(imDecoded.get_y_size(), imDecoded.get_x_size());
-    key.randomImage(imDecoded.get_x_size(), imDecoded.get_y_size());
-    key.exportFile("../materials/2f_approval_OUT_key.txt");
-    // key.printImage();
-    CBild key2;
-    key2.importFile("../materials/2f_bugaspicture.txt");
+        std::cout << "KEY KEY KEY KEY" << std::endl;
+        std::cout << "KEY KEY KEY KEY" << std::endl;
+        std::cout << "KEY KEY KEY KEY" << std::endl;
+        // CBild key2(imDecoded.get_x_size(), imDecoded.get_y_size());
+        // CBild key(imDecoded.get_x_size(), imDecoded.get_y_size());
+        CBild key(imDecoded.get_y_size(), imDecoded.get_x_size());
+        key.randomImage(imDecoded.get_x_size(), imDecoded.get_y_size());
+        key.exportFile("../materials/2f_approval_OUT_key.txt");
+        // key.printImage();
+        CBild key2;
+        key2.importFile("../materials/2f_bugaspicture.txt");
 
-    std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
-    std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
-    std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
-    CBild imEncoded(imDecoded.get_x_size(), imDecoded.get_y_size());
-    CBild imEncoded2(imDecoded.get_x_size(), imDecoded.get_y_size());
-    imEncoded.encode(imDecoded, key);
-    imEncoded.exportFile("../materials/2f_approval_OUT_en.txt");
-    imEncoded.printImage();
-    imEncoded2.encode(imDecoded, key2);
-    imEncoded2.exportFile("../materials/2f_bugaspicture_OUT_en.txt");
-    imEncoded2.printImage();
+        std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
+        std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
+        std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
+        CBild imEncoded(imDecoded.get_x_size(), imDecoded.get_y_size());
+        CBild imEncoded2(imDecoded.get_x_size(), imDecoded.get_y_size());
+        imEncoded.encode(imDecoded, key);
+        imEncoded.exportFile("../materials/2f_approval_OUT_en.txt");
+        imEncoded.printImage();
+        imEncoded2.encode(imDecoded, key2);
+        imEncoded2.exportFile("../materials/2f_bugaspicture_OUT_en.txt");
+        imEncoded2.printImage();
 
-    std::cout << "DECODE DECODE DECODE DECODE" << std::endl;
-    std::cout << "DECODE DECODE DECODE DECODE" << std::endl;
-    std::cout << "DECODE DECODE DECODE DECODE" << std::endl;
+        std::cout << "DECODE DECODE DECODE DECODE" << std::endl;
+        std::cout << "DECODE DECODE DECODE DECODE" << std::endl;
+        std::cout << "DECODE DECODE DECODE DECODE" << std::endl;
 
-    CBild im2Encoded;
-    CBild im2Encoded2;
-    CBild im2Key;
-    CBild im2Key2;
-    NBild im2Decoded;
-    NBild im2Decoded2;
-    im2Encoded.importFile("../materials/2f_approval_OUT_en.txt");
-    im2Encoded2.importFile("../materials/2f_bugaspicture_OUT_en.txt");
-    im2Key.importFile("../materials/2f_approval_OUT_key.txt");
-    im2Key.importFile("../materials/2f_bugaspicture.txt");
-    im2Decoded.decode(im2Encoded, im2Key);
-    im2Decoded2.decode(im2Encoded2, im2Key2);
-    im2Decoded.exportFile("../materials/2f_approval_OUT_de.txt");
+        CBild im2Encoded;
+        CBild im2Encoded2;
+        CBild im2Key;
+        CBild im2Key2;
+        NBild im2Decoded;
+        NBild im2Decoded2;
+        im2Encoded.importFile("../materials/2f_approval_OUT_en.txt");
+        im2Encoded2.importFile("../materials/2f_bugaspicture_OUT_en.txt");
+        im2Key.importFile("../materials/2f_approval_OUT_key.txt");
+        im2Key.importFile("../materials/2f_bugaspicture.txt");
+        im2Decoded.decode(im2Encoded, im2Key);
+        im2Decoded2.decode(im2Encoded2, im2Key2);
+        im2Decoded.exportFile("../materials/2f_approval_OUT_de.txt");
 
-    std::cout << "\n\nEND" << std::endl;
+        std::cout << "\n\nEND" << std::endl;
+    }
 
     return 0;
 }
