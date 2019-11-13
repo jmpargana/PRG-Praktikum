@@ -5,6 +5,7 @@
 #include "visualcryptpicturewidget.h"
 
 #include <QFileDialog>
+#include <QDebug>
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -70,6 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->enc_buttonLoadOriginalPic, &QPushButton::clicked,
             this, &MainWindow::enc_importOriginalFile);
 
+    // import key picture
     m_encLoadKeyWidget = new VisualCryptPictureWidget(this);
     QHBoxLayout* encLoadKeyLayout = new QHBoxLayout;
     encLoadKeyLayout->addWidget(m_encLoadKeyWidget);
@@ -80,21 +82,31 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->enc_buttonLoadKey, &QPushButton::clicked,
             this, &MainWindow::enc_importKeyFile);
 
+    // save picture
     connect(ui->enc_buttonSave, &QPushButton::clicked,
             this, &MainWindow::enc_save);
 
+
+     // Encryption
     m_encEncryptedWidget = new VisualCryptPictureWidget(this);
     QHBoxLayout* encEncryptedLayout = new QHBoxLayout;
     encEncryptedLayout->addWidget(m_encEncryptedWidget);
     ui->enc_groupBoxEncryption->setLayout(encEncryptedLayout);
 //    m_encEncryptedWidget->setPicture(picture);
-//TODO
 
     connect(ui->enc_buttonEncryption, &QPushButton::clicked,
             this, &MainWindow::enc_encrypt);
 
+    // generate random key picture
 
-    // decrytion screen
+    connect(ui->enc_buttonCreateRandomKey, &QPushButton::clicked,
+            this, &MainWindow::enc_generateRandomKey);
+
+    // save generated random key picture
+    connect(ui->enc_buttonSaveRandomKey, &QPushButton::clicked,
+            this, &MainWindow::enc_saveRandomkeyPic);
+
+// decrytion screen
     // load encrypted picture
 
     connect(ui->dec_buttonLoadEncryptedPic, &QPushButton::clicked,
@@ -246,6 +258,25 @@ void MainWindow::enc_save()
         return;
     std::string fileNameStd = fileName.toStdString();
     m_encEncryptedPicture.exportFile(fileNameStd);
+}
+
+void MainWindow::enc_generateRandomKey()
+{
+    int width = m_encOrigPicture.get_x_size();
+    int height = m_encOrigPicture.get_y_size();
+    qDebug() << width << height;
+    m_encKeyPicture.randomImage(width, height);
+    m_encLoadKeyWidget->setPicture(&m_encKeyPicture);
+}
+
+void MainWindow::enc_saveRandomkeyPic()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Chose a file to save to");
+    if (fileName.isNull())
+        return;
+    std::string fileNameStd = fileName.toStdString();
+    m_encKeyPicture.exportFile(fileNameStd);
+
 }
 
 void MainWindow::dec_importEncryptedPicture()
