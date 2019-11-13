@@ -59,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &MainWindow::onVisualCryptModeChanged);
+    onVisualCryptModeChanged(ui->comboBox->currentIndex());
 // encryption screen
     //load original picture
 
@@ -139,6 +140,40 @@ MainWindow::MainWindow(QWidget *parent)
    // decrytion save
     connect(ui->dec_buttonSave, &QPushButton::clicked,
             this, &MainWindow::dec_save);
+
+// Overlay screen
+    //load picture 1
+    connect(ui->over_buttonLoadP1, &QPushButton::clicked,
+            this, &MainWindow::over_importP1);
+
+    m_overP1Widget = new VisualCryptPictureWidget(this);
+    QHBoxLayout* overP1Layout = new QHBoxLayout;
+    overP1Layout->addWidget(m_overP1Widget);
+    ui->over_groupBoxLoadP1->setLayout(overP1Layout);
+
+    //load picture 2
+    connect(ui->over_butttonLoadP2, &QPushButton::clicked,
+            this, &MainWindow::over_importP2);
+
+    m_overP2Widget = new VisualCryptPictureWidget(this);
+    QHBoxLayout* overP2Layout = new QHBoxLayout;
+    overP2Layout->addWidget(m_overP2Widget);
+    ui->over_groupBoxLoadP2->setLayout(overP2Layout);
+
+    //overlay picture 1 and 2
+    connect(ui->over_buttonOverlay, &QPushButton::clicked,
+            this,&MainWindow::over_overlay);
+
+    QHBoxLayout* overlayLayout = new QHBoxLayout;
+    overlayLayout->addWidget(m_overlayPictureWidget);
+    ui->over_groupBoxOverlayPicture->setLayout(overlayLayout);
+
+
+    // overlay save
+    connect(ui->over_buttonSave, &QPushButton::clicked,
+            this, &MainWindow::over_save);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -312,5 +347,42 @@ void MainWindow::dec_save()
         return;
     std::string fileNameStd = fileName.toStdString();
     m_decDecryptedPicture.exportFile(fileNameStd);
+}
+
+void MainWindow::over_importP1()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Choose a file");
+    if (fileName.isNull())
+        return;
+    std::string fileNameStd = fileName.toStdString();
+    m_overP1.importFile(fileNameStd);
+    m_overP1Widget->setPicture(&m_overP1);
+
+}
+
+void MainWindow::over_importP2()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Choose a file");
+    if (fileName.isNull())
+        return;
+    std::string fileNameStd = fileName.toStdString();
+    m_overP2.importFile(fileNameStd);
+    m_overP2Widget->setPicture(&m_overP2);
+
+}
+
+void MainWindow::over_overlay()
+{
+
+}
+
+void MainWindow::over_save()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Chose a file to save to");
+    if (fileName.isNull())
+        return;
+    std::string fileNameStd = fileName.toStdString();
+    m_overlayPicture.exportFile(fileNameStd);
+
 }
 
