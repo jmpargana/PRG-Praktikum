@@ -19,14 +19,19 @@
 #include <time.h>
 #include <memory>
 
+//using namespace std;
+
+//namespace VCrypt {
+
+// template <typename T>
 class XBild {
 public:
     // constructor
     XBild(bool);
 
-    XBild(const XBild &xxBild);
+    XBild(const XBild& xxBild);
 
-    XBild(const XBild &xxBild, bool);
+    XBild(const XBild& xxBild, bool);
 
     XBild(unsigned int, unsigned int, bool);
 
@@ -57,16 +62,19 @@ public:
     void exportFile(std::string);
 
     void randomImage(const unsigned int x, const unsigned int y);
+    // XBild randomImage(unsigned, unsigned);
+    // CBild randomImage(unsigned, unsigned);
 
-    template<class N, class C>
-    void encode(N &, C &);
+//    void encode(NBild&, CBild&);
+    template <class N, class C> void encode(N&, C&);
+    template <class C> void decode(C&, C&);
+//    void decode(CBild);
+    // void encode(NBild &im, CBild &k) {};
 
-    template<class C>
-    void decode(C &, C &);
 
 private:
     // image in matrix representation
-    std::vector <std::vector<bool>> imageMx;
+    std::vector<std::vector<bool>> imageMx;
     unsigned xLen, yLen;
     bool isNBild;
 };
@@ -74,10 +82,11 @@ private:
 class NBild : public XBild {
 public:
     NBild();
-
-    NBild(const NBild &nnBild);
+    NBild(const NBild& nnBild);
 
     NBild(unsigned int x, unsigned int y);
+
+    // void decode(CBild &im, CBild &k) {};
 
     ~NBild();
 
@@ -88,13 +97,18 @@ class CBild : public XBild {
 public:
     CBild();
 
-    CBild(const CBild &ccBild); // copy constructor
+    CBild(const CBild& ccBild); // copy constructor
 
     CBild(unsigned int x, unsigned int y);
+
+    // void encode(NBild &im, CBild &k) {};
+    // void encode(NBild &im, CBild &k) {};
 
     ~CBild();
 
 private:
 };
+
+//} // namespace VCrypt
 
 #endif //PRG_PR_VIS_CRYPT_H
