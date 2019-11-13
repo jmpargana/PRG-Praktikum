@@ -164,6 +164,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->over_buttonOverlay, &QPushButton::clicked,
             this,&MainWindow::over_overlay);
 
+    m_overlayPictureWidget = new VisualCryptPictureWidget(this);
     QHBoxLayout* overlayLayout = new QHBoxLayout;
     overlayLayout->addWidget(m_overlayPictureWidget);
     ui->over_groupBoxOverlayPicture->setLayout(overlayLayout);
@@ -291,7 +292,7 @@ void MainWindow::enc_save()
     QString fileName = QFileDialog::getSaveFileName(this, "Chose a file to save to");
     if (fileName.isNull())
         return;
-    std::string fileNameStd = fileName.toStdString();
+    std::string fileNameStd = fileName.toStdString(); //convert qsting to standard string
     m_encEncryptedPicture.exportFile(fileNameStd);
 }
 
@@ -300,8 +301,8 @@ void MainWindow::enc_generateRandomKey()
     int width = m_encOrigPicture.get_x_size();
     int height = m_encOrigPicture.get_y_size();
     qDebug() << width << height;
-    m_encKeyPicture.randomImage(width, height);
-    m_encLoadKeyWidget->setPicture(&m_encKeyPicture);
+    m_encKeyPicture.randomImage(width, height);  //object
+    m_encLoadKeyWidget->setPicture(&m_encKeyPicture); //widget is pointer
 }
 
 void MainWindow::enc_saveRandomkeyPic()
@@ -373,7 +374,8 @@ void MainWindow::over_importP2()
 
 void MainWindow::over_overlay()
 {
-
+    m_overlayPicture.encode(m_overP1, m_overP2);
+    m_overlayPictureWidget->setPicture(&m_overlayPicture);
 }
 
 void MainWindow::over_save()

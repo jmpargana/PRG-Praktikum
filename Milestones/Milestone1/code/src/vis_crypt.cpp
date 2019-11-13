@@ -248,6 +248,7 @@ void XBild::encode(N &im, C &k) {
 }
 
 template void XBild::encode<NBild, CBild>(NBild&, CBild&);
+template void XBild::encode<NBild, NBild>(NBild&, NBild&);
 
 template<class C>
 void XBild::decode(C &im, C &k) {
