@@ -74,10 +74,10 @@ private:
     VisualCryptPictureWidget *m_decDecryptedPictureWidget;
 
     // overlay screen
-    NBild m_overP1;
+    NBild m_overP1; //object
     NBild m_overP2;
     NBild m_overlayPicture;
-    VisualCryptPictureWidget *m_overP1Widget;
+    VisualCryptPictureWidget *m_overP1Widget; //pointer (qt)
     VisualCryptPictureWidget *m_overP2Widget;
     VisualCryptPictureWidget *m_overlayPictureWidget;
 
