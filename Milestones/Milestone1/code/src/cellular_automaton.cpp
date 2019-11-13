@@ -15,52 +15,83 @@
 //------------------------------------------------------------------------------
 
 
+/**
+ * Default constructor for class 
+ * takes no arguments and initiates two square matrices with size 30
+ */
 CellularAutomaton::CellularAutomaton()
     : current{Matrix(30, 30)}, next{Matrix(30, 30)}, timer{1} { }
-// default constructor with size 30 square matrix
 
 
 //------------------------------------------------------------------------------
 
 
+/* 
+ * Constructor for square matrix with given size
+ * 
+ * @param size is number of rows and columns
+ */
 CellularAutomaton::CellularAutomaton(const int size)
     : current{Matrix(size, size)}, next{Matrix(size, size)},
       timer{1} { }
-// square matrix constructor with a given size
 
 
 //------------------------------------------------------------------------------
 
 
+/*
+ * Contructor for any matrix with given sizes
+ * 
+ * @param rows is number of rows
+ * @param cols is number of columns
+ * 
+ */
 CellularAutomaton::CellularAutomaton(const int rows, const int cols)
     :current{Matrix(rows, cols)}, next{Matrix(rows, cols)},
      timer{1} { }
-// constructor with given dimensions
 
 
 //------------------------------------------------------------------------------
 
 
+/**
+ * Constructor with all given values
+ * 
+ * @param rows is number of rows
+ * @param cols is number of cols
+ * @param timer is value in seconds for timer 
+ *
+ */
 CellularAutomaton::CellularAutomaton(const int rows,
 				     const int cols,
 				     const int timer)
     : current{Matrix(rows, cols)},
       next{Matrix(rows, cols)},
       timer{timer} { }
-// constructor with all variables given
 
 
 //------------------------------------------------------------------------------
 
 
+/**
+ * Copy constructor
+ * 
+ * @param ca is another instance of the same class
+ * 
+ */
 CellularAutomaton::CellularAutomaton(CellularAutomaton& ca)
     : current{ca.current}, next{ca.next}, timer{ca.timer} { }
-// copy constructor
 
 
 //------------------------------------------------------------------------------
 
 
+/** 
+ * Copy constructor for reference
+ * 
+ * @param ca is another instance of same class
+ * 
+ */
 CellularAutomaton::CellularAutomaton(CellularAutomaton&& ca)
     : current{std::move(ca.current)}, next{std::move(ca.next)}, timer{std::move(ca.timer)} { }
 
@@ -68,8 +99,13 @@ CellularAutomaton::CellularAutomaton(CellularAutomaton&& ca)
 //------------------------------------------------------------------------------
 
 
+/**
+ * Assignment operation
+ * 
+ * @param ca is another instance of the same class
+ * 
+ */
 CellularAutomaton& CellularAutomaton::operator=(const CellularAutomaton& ca)
-// assignment operation overload
 {
     current = ca.current;
     next = ca.next;
@@ -81,8 +117,13 @@ CellularAutomaton& CellularAutomaton::operator=(const CellularAutomaton& ca)
 //------------------------------------------------------------------------------
 
 
+/**
+ * Assignment operation with reference
+ * 
+ * @param ca is another instance of the same class
+ * 
+ */
 CellularAutomaton& CellularAutomaton::operator=(CellularAutomaton&& ca) noexcept
-// move operation overload assignment
 {
     current = std::move(ca.current);
     next = std::move(ca.next);
@@ -94,8 +135,15 @@ CellularAutomaton& CellularAutomaton::operator=(CellularAutomaton&& ca) noexcept
 //------------------------------------------------------------------------------
 
 
+/**
+ * Subscript operation overload
+ * 
+ * @param index is index of rows in current matrix
+ * 
+ * @return vector of bools which isthe whole row
+ *
+ */
 std::vector<bool>& CellularAutomaton::operator[](int index)
-// subscript operator for assinment
 {
     return this->current[index];
 }
@@ -104,8 +152,15 @@ std::vector<bool>& CellularAutomaton::operator[](int index)
 //------------------------------------------------------------------------------
 
 
+/**
+ * Subscript operation overload for const reading
+ * 
+ * @param index is index of rows in current matrix
+ * 
+ * @return vector of bools which is the whole row
+ * 
+ */
 const std::vector<bool>& CellularAutomaton::operator[](int index) const
-// subscript operation overload for const reading
 {
     return this->current[index];
 }
@@ -122,14 +177,28 @@ int CellularAutomaton::get_cols() const { return this->current.get_col_size(); }
 //------------------------------------------------------------------------------
 
 
+/**
+ * Getter function to output the current matrix
+ * 
+ * @return matrix of bools
+ * 
+ */
 Matrix CellularAutomaton::get_matrix() { return this->current; }
 
 
 //------------------------------------------------------------------------------
 
 
+/**
+ * Output stream operator overload 
+ * 
+ * @param os is an instance of the standard output stream class
+ * @param ca is an instance of the CellularAutomaton class
+ * 
+ * @return the same output stream
+ * 
+ */
 std::ostream& operator<<(std::ostream& os, CellularAutomaton const& ca)
-// output file stream operator overload
 {
     char temp;			// save result from boolean
     for (int row=0; row<ca.get_rows(); ++row) {
@@ -146,8 +215,16 @@ std::ostream& operator<<(std::ostream& os, CellularAutomaton const& ca)
 //------------------------------------------------------------------------------
 
 
+/** 
+ * Input stream operator overload
+ * 
+ * @param is is an instance of the standard input stream class
+ * @param ca is an instance of the CellularAutomaton class
+ * 
+ * @return the same input stream
+ * 
+ */
 std::istream& operator>>(std::istream& is, CellularAutomaton& ca)
-// input stream operator overload
 {
     char temp;			// save input character in this variable
     for (int row=0; row<ca.get_rows(); ++row) {
@@ -163,6 +240,14 @@ std::istream& operator>>(std::istream& is, CellularAutomaton& ca)
 //------------------------------------------------------------------------------
 
 
+/**
+ * Setter function for timer
+ * 
+ * @param new_timer integer value to be set
+ * 
+ * @return void
+ * 
+ */
 void CellularAutomaton::set_timer(int new_timer)
 {
     this->timer = new_timer;
@@ -172,8 +257,16 @@ void CellularAutomaton::set_timer(int new_timer)
 //------------------------------------------------------------------------------
 
 
+/**
+ * Output file stream operator overload
+ * 
+ * @param os is an instance of the standard output file stream 
+ * @param ca is an instance of the CellularAutomaton class
+ * 
+ * @return the same output file stream
+ * 
+ */
 std::ofstream& operator<<(std::ofstream& os, CellularAutomaton const& ca)
-// output file stream operator overload
 {
     std::string temp;
     os << std::to_string(ca.get_rows()) << std::endl
@@ -193,8 +286,16 @@ std::ofstream& operator<<(std::ofstream& os, CellularAutomaton const& ca)
 //------------------------------------------------------------------------------
 
 
+/**
+ * Input file stream operator overload
+ * 
+ * @param is is an instance of the standard input file stream
+ * @param ca is an instance of the CellularAutomaton class
+ * 
+ * @return the same input file stream
+ * 
+ */
 std::ifstream& operator>>(std::ifstream& is, CellularAutomaton& ca)
-// input file stream operator overload
 {
     unsigned rows, cols;	// integer values to change size of cellular automaton
     is >> rows >> cols;		// read first two lines into variables
@@ -216,8 +317,19 @@ std::ifstream& operator>>(std::ifstream& is, CellularAutomaton& ca)
 //------------------------------------------------------------------------------
 
 
+/**
+ * This function iterates over the surrounding 9 cells
+ * ignores the center one and calculates the amount of 
+ * living cells, saving the updated value in the next 
+ * matrix by indexing
+ * 
+ * @param row is integer for subscripting
+ * @param col is integer for subscripting the subscription
+ * 
+ * @return void
+ * 
+ */
 void CellularAutomaton::update_cell(int row, int col)
-// update next cell state in "next" matrix
 {
     int total_living_cells = 0;
     // surr_r stands for surrounding row and surr_c for column
@@ -244,8 +356,16 @@ void CellularAutomaton::update_cell(int row, int col)
 //------------------------------------------------------------------------------
 
 
+/**
+ * Incrementation operator overload
+ * iterates over the whole current matrix, calculates each of the cells
+ * value in next life by calling update_cell, updates the matrices
+ * and sleeps for timer amount of time
+ *
+ * @return reference to same class instance
+ * 
+ */
 CellularAutomaton& CellularAutomaton::operator++()
-// update cell in for next phase
 {
     for (int row=0; row<this->get_rows(); ++row) {
 	for (int col=0; col<this->get_cols(); ++col) {
@@ -265,8 +385,16 @@ CellularAutomaton& CellularAutomaton::operator++()
 //------------------------------------------------------------------------------
 
 
+/**
+ * Increment n times operator overload
+ * Run the ++ incrementation n times
+ * 
+ * @param phases is the number of incrementations
+ * 
+ * @return reference to same instance
+ * 
+ */
 CellularAutomaton& CellularAutomaton::operator+=(int phases)
-// update n or "physes" steps
 {
     if (phases <= 0) return *this; // avoid invalid input
     for (;phases; phases--) {
