@@ -314,9 +314,11 @@ int main(int argc, const char **argv) {
     XBild keyy2(2, 6); keyy2.randomImage(2, 6); keyy2.printImage();
 
     NBild imDecoded; //(303, 89);
-    imDecoded.importFile("../materials/beispielbild_1.txt");
-    imDecoded.exportFile("../materials/beispielbild_1_OUT.txt");
+    imDecoded.importFile("../materials/2f_approval.txt");
+    // imDecoded.importFile("../materials/beispielbild_1.txt");
+    imDecoded.exportFile("../materials/2f_approval_OUT.txt");
     imDecoded.printImage();
+    // imDecoded2.printImage();
 
     std::cout << "KEY KEY KEY KEY" << std::endl;
     std::cout << "KEY KEY KEY KEY" << std::endl;
@@ -325,34 +327,40 @@ int main(int argc, const char **argv) {
     // CBild key(imDecoded.get_x_size(), imDecoded.get_y_size());
     CBild key(imDecoded.get_y_size(), imDecoded.get_x_size());
     key.randomImage(imDecoded.get_x_size(), imDecoded.get_y_size());
-    key.exportFile("../materials/beispielbild_1_OUT_key.txt");
+    key.exportFile("../materials/2f_approval_OUT_key.txt");
     // key.printImage();
+    CBild key2;
+    key2.importFile("../materials/2f_bugaspicture.txt");
 
     std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
     std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
     std::cout << "ENCODE ENCODE ENCODE ENCODE" << std::endl;
     CBild imEncoded(imDecoded.get_x_size(), imDecoded.get_y_size());
+    CBild imEncoded2(imDecoded.get_x_size(), imDecoded.get_y_size());
     imEncoded.encode(imDecoded, key);
-    imEncoded.exportFile("../materials/beispielbild_1_OUT_en.txt");
-    // imEncoded.printImage();
+    imEncoded.exportFile("../materials/2f_approval_OUT_en.txt");
+    imEncoded.printImage();
+    imEncoded2.encode(imDecoded, key2);
+    imEncoded2.exportFile("../materials/2f_bugaspicture_OUT_en.txt");
+    imEncoded2.printImage();
 
     std::cout << "DECODE DECODE DECODE DECODE" << std::endl;
     std::cout << "DECODE DECODE DECODE DECODE" << std::endl;
     std::cout << "DECODE DECODE DECODE DECODE" << std::endl;
 
     CBild im2Encoded;
+    CBild im2Encoded2;
     CBild im2Key;
+    CBild im2Key2;
     NBild im2Decoded;
-
-    im2Encoded.importFile("../materials/beispielbild_1_OUT.txt");
-    std::cout << "____DECODE DECODE DECODE DECODE" << std::endl;
-    im2Encoded.printImage();
-    std::cout << "____DECODE DECODE DECODE DECODE" << std::endl;
-    im2Key.importFile("../materials/beispielbild_1_OUT_key.txt");
-
+    NBild im2Decoded2;
+    im2Encoded.importFile("../materials/2f_approval_OUT_en.txt");
+    im2Encoded2.importFile("../materials/2f_bugaspicture_OUT_en.txt");
+    im2Key.importFile("../materials/2f_approval_OUT_key.txt");
+    im2Key.importFile("../materials/2f_bugaspicture.txt");
     im2Decoded.decode(im2Encoded, im2Key);
-    std::cout << "____DECODE DECODE DECODE DECODE" << std::endl;
-    im2Decoded.exportFile("../materials/beispielbild_1_OUT_de.txt");
+    im2Decoded2.decode(im2Encoded2, im2Key2);
+    im2Decoded.exportFile("../materials/2f_approval_OUT_de.txt");
 
     std::cout << "\n\nEND" << std::endl;
 
