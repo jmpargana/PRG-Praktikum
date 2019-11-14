@@ -19,6 +19,7 @@
 #include <functional>
 #include <utility>
 #include <functional>
+#include <algorithm>
 #include <numeric>
 #include <cmath>		// for std::exp(double) function
 
@@ -38,7 +39,7 @@ class Neuron {
 public:
     // constructors
     Neuron();			// default constructor
-    Neuron(std::function<void(int, int)>);
+    Neuron(std::function<std::vector<double>(std::vector<double>)>);
     
     Neuron(Neuron&);		// copy constructor
     Neuron(Neuron&&);		// move constructor
@@ -59,7 +60,7 @@ public:
     
     
 private:
-    std::function<void(int, int)> activation_function;
+    std::function<double(std::vector<double>)> activation_function;
     std::vector<std::pair<double, double>> inputs;
     std::vector<double> weights;
     

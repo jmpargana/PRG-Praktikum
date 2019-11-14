@@ -17,11 +17,18 @@
 
 /**
  * Default constructor for class 
- * Assigns the default activation function
+ * Assigns the default activation function (softmax)
  */
-Neuron::Neuron()
+Neuron::Neuron() 
 {
-    // activation_function = [](int, int){std::accumulate(inputs.begin(), inputs.end(), 0);};
+    std::function<std::vector<double>(std::vector<double>)> softmax =
+    	[](std::vector<double> inpts)
+	{
+	    std::vector<double> outputs; double sum=0.0;
+	    for (auto& val : inpts) sum+=std::exp(val);
+	    for (auto& val : inpts) outputs.push_back(val/sum);
+	    return outputs;
+	};
 }
 
 
@@ -30,15 +37,12 @@ Neuron::Neuron()
 
 /* 
  * Constructor for square matrix with given size
- * 
- * @param other
- * @param first
  * @param second
  * 
  */
-Neuron::Neuron(std::function<void(int first, int second)> other)
+Neuron::Neuron(std::function<std::vector<double>(std::vector<double>)> other)
 {
-    activation_function = other;
+    
 }
 
 
@@ -148,7 +152,7 @@ Neuron& Neuron::set_inputs(std::vector<std::pair<double, double>>& values)
  */
 Neuron& Neuron::set_activation_function(std::function<void(int first, int second)> other)
 {
-    this->activation_function = other;
+    // this->activation_function = other;
     return *this;
 }
 
