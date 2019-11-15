@@ -27,6 +27,9 @@
 //------------------------------------------------------------------------------
 
 
+typedef std::function<std::vector<double>(std::vector<double>&)> FunctionPointer;
+
+
 /**
  * This class contains a the definition of a Perceptron
  * @see perceptron
@@ -39,7 +42,8 @@ class Neuron {
 public:
     // constructors
     Neuron();			// default constructor
-    Neuron(std::function<std::vector<double>(std::vector<double>)>);
+    Neuron(FunctionPointer);	// if activation pointers derivative if also f(x) = f(1 - f(x))
+    Neuron(FunctionPointer, FunctionPointer);
     
     Neuron(Neuron&);		// copy constructor
     Neuron(Neuron&&);		// move constructor
@@ -62,8 +66,7 @@ public:
     
     
 private:
-    std::function<double(std::vector<double>)> m_activation_function, m_derivation_function;
-    // std::vector<std::pair<double, double>> inputs;
+    FunctionPointer m_activation_function, m_derivative_function;
     std::vector<double> m_weights;
     
 };

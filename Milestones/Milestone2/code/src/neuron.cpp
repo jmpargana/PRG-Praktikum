@@ -21,14 +21,14 @@
  */
 Neuron::Neuron() 
 {
-    std::function<std::vector<double>(std::vector<double>)> softmax =
-    	[](std::vector<double> inpts)
+    m_activation_function = [](std::vector<double>& inputs)
 	{
 	    std::vector<double> outputs; double sum=0.0;
-	    for (auto& i_input : inpts) sum+=std::exp(i_input);
-	    for (auto& i_input : inpts) outputs.push_back(i_input/sum);
+	    for (auto& i_input : inputs) sum+=std::exp(i_input);
+	    for (auto& i_input : inputs) outputs.push_back(i_input/sum);
 	    return outputs;
 	};
+    // m_derivative_function;
 }
 
 
@@ -36,14 +36,26 @@ Neuron::Neuron()
 
 
 /* 
- * Constructor for square matrix with given size
- * @param second
+ * Constructor for a specific activation function
+ * only works if given activation function has the same type as softmax or sigmoid
+ * @param other a function pointer like defined in neuron.hpp
  * 
  */
-Neuron::Neuron(std::function<std::vector<double>(std::vector<double>)> other)
+Neuron::Neuron(FunctionPointer other)
+    : m_activation_function{other}
 {
     
 }
+
+
+//------------------------------------------------------------------------------
+
+
+/**
+ *
+ */
+Neuron::Neuron(FunctionPointer activation, FunctionPointer derivative)
+    : m_activation_function{activation}, m_derivative_function{derivative} { }
 
 
 //------------------------------------------------------------------------------
