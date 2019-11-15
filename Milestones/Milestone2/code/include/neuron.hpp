@@ -27,7 +27,8 @@
 //------------------------------------------------------------------------------
 
 
-typedef std::function<std::vector<double>(std::vector<double>&)> FunctionPointer;
+// this alias will save a lot of ink
+using FunctionPointer = std::function<std::vector<double>(std::vector<double>&)>;
 
 
 /**
@@ -42,6 +43,7 @@ class Neuron {
 public:
     // constructors
     Neuron();			// default constructor
+    Neuron(unsigned);		// size of next layer
     Neuron(FunctionPointer);	// if activation pointers derivative if also f(x) = f(1 - f(x))
     Neuron(FunctionPointer, FunctionPointer);
     
@@ -61,13 +63,13 @@ public:
     // methods
     double sum(const std::vector<double>&);
     void activate(const std::vector<double>&);
-    void derive(const std::vector<double>&);
-    
+    void derive(std::vector<double>&);
     
     
 private:
     FunctionPointer m_activation_function, m_derivative_function;
     std::vector<double> m_weights;
+    double m_output_val;
     
 };
 

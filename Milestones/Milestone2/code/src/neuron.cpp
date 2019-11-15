@@ -21,14 +21,13 @@
  */
 Neuron::Neuron() 
 {
-    m_activation_function = [](std::vector<double>& inputs)
+    m_activation_function = [](std::vector<double>& inputs) -> std::vector<double>
 	{
 	    std::vector<double> outputs; double sum=0.0;
 	    for (auto& i_input : inputs) sum+=std::exp(i_input);
 	    for (auto& i_input : inputs) outputs.push_back(i_input/sum);
 	    return outputs;
 	};
-    // m_derivative_function;
 }
 
 
@@ -185,6 +184,28 @@ double Neuron::sum(const std::vector<double>& inpts)
 	result += inpts[i_input] * this->m_weights[i_input];
     }
     return result;
+}
+
+
+//------------------------------------------------------------------------------
+
+
+void Neuron::activate(const std::vector<double>& inputs)
+{
+    std::vector<double> inputs_with_weights;
+    for (unsigned i_input=0; i_input<inputs.size(); ++i_input) {
+	inputs_with_weights[i_input] = inputs[i_input] * m_weights[i_input];
+    }
+    m_activation_function(inputs_with_weights);
+}
+
+
+//------------------------------------------------------------------------------
+
+
+void Neuron::derive(std::vector<double>& inputs)
+{
+    m_derivative_function(inputs);
 }
 
 

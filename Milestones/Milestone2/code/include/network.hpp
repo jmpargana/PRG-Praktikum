@@ -19,7 +19,7 @@
 //------------------------------------------------------------------------------
 
 
-typedef std::vector<Neuron> Layer;
+using Layer = std::vector<Neuron>; // very useful alias for class definition
 
 
 /**

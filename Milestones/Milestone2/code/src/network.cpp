@@ -23,9 +23,13 @@
  */
 Network::Network(std::vector<unsigned>& topology) 
 {
-    // // for (unsigned i_layer_size=0; i_layer_size<topology.size(); ++i_layer_size) {
-    // m_layers[i_layer_size] = std::vector<Neuron>(topology[i_layer_size]);
-    // // }
+    for (unsigned i_layer_size=0; i_layer_size<topology.size(); ++i_layer_size) {
+	unsigned output_layer_size =
+	    (i_layer_size == topology.size() - 1) ? 0 : topology[i_layer_size + 1];
+	// std::vector<Neuron> layer(topology[i_layer_size], Neuron(output_layer_size));
+	m_layers[i_layer_size] =
+	    std::vector<Neuron>(topology[i_layer_size], Neuron(output_layer_size));
+    }
 }
 
 
