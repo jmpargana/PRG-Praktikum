@@ -54,15 +54,17 @@ public:
     std::vector<std::pair<double, double>>& get_inputs();
     const std::vector<std::pair<double, double>>& get_inputs() const;
 
-    // operation overloads
+    // methods
     double sum(const std::vector<double>&);
+    void activate(const std::vector<double>&);
+    void derive(const std::vector<double>&);
     
     
     
 private:
-    std::function<double(std::vector<double>)> activation_function;
-    std::vector<std::pair<double, double>> inputs;
-    std::vector<double> weights;
+    std::function<double(std::vector<double>)> m_activation_function, m_derivation_function;
+    // std::vector<std::pair<double, double>> inputs;
+    std::vector<double> m_weights;
     
 };
 

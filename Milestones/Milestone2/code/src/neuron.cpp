@@ -25,8 +25,8 @@ Neuron::Neuron()
     	[](std::vector<double> inpts)
 	{
 	    std::vector<double> outputs; double sum=0.0;
-	    for (auto& val : inpts) sum+=std::exp(val);
-	    for (auto& val : inpts) outputs.push_back(val/sum);
+	    for (auto& i_input : inpts) sum+=std::exp(i_input);
+	    for (auto& i_input : inpts) outputs.push_back(i_input/sum);
 	    return outputs;
 	};
 }
@@ -56,7 +56,7 @@ Neuron::Neuron(std::function<std::vector<double>(std::vector<double>)> other)
  * 
  */
 Neuron::Neuron(Neuron& other) :
-    activation_function{other.activation_function}, inputs{other.inputs}  { }
+    m_activation_function{other.m_activation_function}, m_weights{other.m_weights} { }
 
 
 //------------------------------------------------------------------------------
@@ -69,8 +69,8 @@ Neuron::Neuron(Neuron& other) :
  * 
  */
 Neuron::Neuron(Neuron&& other) :
-    activation_function{std::move(other.activation_function)},
-    inputs{std::move(other.inputs)}  { }
+    m_activation_function{std::move(other.m_activation_function)},
+    m_weights{std::move(other.m_weights)}  { }
 
 
 //------------------------------------------------------------------------------
@@ -84,8 +84,8 @@ Neuron::Neuron(Neuron&& other) :
  */
 Neuron& Neuron::operator=(const Neuron& lhs)
 {
-    activation_function = lhs.activation_function;
-    inputs = lhs.inputs;
+    m_activation_function = lhs.m_activation_function;
+    m_weights = lhs.m_weights;
     return *this;
 }
 
@@ -101,8 +101,8 @@ Neuron& Neuron::operator=(const Neuron& lhs)
  */
 Neuron& Neuron::operator=(Neuron&& lhs) noexcept
 {
-    activation_function = std::move(lhs.activation_function);
-    inputs = std::move(lhs.inputs);
+    m_activation_function = std::move(lhs.m_activation_function);
+    m_weights = std::move(lhs.m_weights);
     return *this;
 }
 
@@ -132,7 +132,7 @@ Neuron::~Neuron() { }
  */
 Neuron& Neuron::set_inputs(std::vector<std::pair<double, double>>& values)
 {
-    inputs = values;
+    // inputs = values;
     return *this;
 }
 
@@ -161,32 +161,6 @@ Neuron& Neuron::set_activation_function(std::function<void(int first, int second
 
 
 /**
- * Getter function for inputs attribute that can assign
- * @return vector of inputs and weights
- */
-std::vector<std::pair<double, double>>& Neuron::get_inputs()
-{
-    return this->inputs;
-}
-
-
-//------------------------------------------------------------------------------
-
-
-/**
- * Getter function for const values only for reading
- * @return vector of inputs and weights
- */
-const std::vector<std::pair<double, double>>& Neuron::get_inputs() const
-{
-    return this->inputs;
-}
-
-
-//------------------------------------------------------------------------------
-
-
-/**
  * Sum function performs the same as accumulate function from the numeric
  * library it iterates over inputs and increments its value * weigth
  * @return result sum of inputs * weigths
@@ -195,8 +169,8 @@ const std::vector<std::pair<double, double>>& Neuron::get_inputs() const
 double Neuron::sum(const std::vector<double>& inpts)
 {
     double result = 0;
-    for (unsigned i=0; i<inpts.size(); ++i){
-	result += inpts[i] * this->weights[i];
+    for (unsigned i_input=0; i_input<inpts.size(); ++i_input){
+	result += inpts[i_input] * this->m_weights[i_input];
     }
     return result;
 }
