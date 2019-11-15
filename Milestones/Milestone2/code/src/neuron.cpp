@@ -133,6 +133,15 @@ Neuron::~Neuron() { }
 //------------------------------------------------------------------------------
 
 
+double& Neuron::operator[](int index)
+{
+    return m_weights[index];
+}
+
+
+//------------------------------------------------------------------------------
+
+
 /**
  * Assign a value of inputs with their correspondent weights to the
  * inputs variable of the Neuron
@@ -206,6 +215,18 @@ void Neuron::activate(const std::vector<double>& inputs)
 void Neuron::derive(std::vector<double>& inputs)
 {
     m_derivative_function(inputs);
+}
+
+
+//------------------------------------------------------------------------------
+
+
+void Neuron::calculate_gradients()
+{
+    // check if neuron belongs to output or hidden layer
+
+    // calculate
+    
 }
 
 

@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <numeric>
 #include <cmath>		// for std::exp(double) function
+#include <random>
 
 
 //------------------------------------------------------------------------------
@@ -55,6 +56,9 @@ public:
     ~Neuron();			// destructor
 
     // getters and setters
+    double& operator[](int);	// get and set weight value
+    
+    
     Neuron& set_inputs(std::vector<std::pair<double, double>>&);
     Neuron& set_activation_function(std::function<void(int, int)>);
     std::vector<std::pair<double, double>>& get_inputs();
@@ -64,6 +68,7 @@ public:
     double sum(const std::vector<double>&);
     void activate(const std::vector<double>&);
     void derive(std::vector<double>&);
+    void calculate_gradients();
     
     
 private:

@@ -104,8 +104,20 @@ Network::~Network() { }
 //------------------------------------------------------------------------------
 
 
+/**
+ * This method 
+ */
 void Network::feed_forward(const std::vector<double>& inputs)
 {
+    if (inputs.size() != m_layers[0].size()) // error control for layer size
+	throw std::runtime_error("Invalid input size");
+
+    // start each layer of neurons with a vector of one size containing
+    // one single input 
+    for (unsigned i_input=0; i_input<inputs.size(); ++i_input)
+	m_layers[0][i_input].activate(std::vector<double>(1, inputs[0]));
+
+    // forward propogate each layer
     
 }
 
@@ -115,7 +127,23 @@ void Network::feed_forward(const std::vector<double>& inputs)
 
 void Network::back_propagation(const std::vector<double>& goal_values)
 {
-    
+    // Calculate overall net error
+    Layer& output_layer = m_layers.back();
+    double m_error = 0.0;
+
+    for (unsigned i_output=0; i_output<output_layer.size(); ++i_output) {
+	double delta = goal_values[i_output];
+	m_error += delta * delta;
+    }
+    m_error /= output_layer.size();
+    m_error = std::sqrt(m_error);
+
+    // Calculate output layer gradients
+
+    // Calculate gradients on hidden layers
+
+    // For all layers from outputs to first hidden layer
+    // update connection weights
 }
 
 
