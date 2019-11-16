@@ -120,14 +120,19 @@ void Network::feed_forward(const std::vector<double>& inputs)
     // each layer takes a vector of inputs, processes the predict function
     // in each neuron, and for each neuron, saves a double to the output vector
     // which will be used in the next layer as input
-    std::vector<double> inputs_outputs = inputs;
+    std::vector<double> inputs_outputs = inputs, hidden_outputs;
 
     for (unsigned i_layer=0; i_layer<m_layers.size(); ++i_layer) {
 	// initiate vector with next layers' size
 	std::vector<double> hidden_outputs(m_layers[i_layer].size());
     	for (unsigned i_neuron=0; i_neuron<m_layers[i_layer].size(); ++i_neuron) {
-	    // process the input vector and save the result in the output for next layer
-	    m_layers[i_layer][i_neuron].activate(inputs_outputs);
+	    // first layer takes only one element per input
+	    if (i_layer == 0) 
+		m_layers[i_layer][i_neuron]
+		    .activate(std::vector<double>(1, inputs_outputs[i_neuron]));
+	    else
+		// process the input vector and save the result in the output for next layer
+		m_layers[i_layer][i_neuron].activate(inputs_outputs);	    
 	    hidden_outputs.push_back(m_layers[i_layer][i_neuron].get_output_val());
     	}
 	// save current output vector as next layers' input
