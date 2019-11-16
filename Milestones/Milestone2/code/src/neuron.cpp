@@ -18,18 +18,29 @@
 /**
  * Default constructor for class 
  * Assigns the default activation function (softmax)
+ * @param size is amount of inputs from previous layer
  */
-Neuron::Neuron() 
+Neuron::Neuron(unsigned size) 
 {
-    m_activation_function = [](std::vector<double>& inputs) -> std::vector<double>
-	{
-	    std::vector<double> outputs; double sum=0.0;
-	    for (auto& i_input : inputs) sum+=std::exp(i_input);
-	    for (auto& i_input : inputs) outputs.push_back(i_input/sum);
-	    return outputs;
-	};
+    // TODO: not sure about softmax implementation
+    m_activation_function = [this](double input) -> double
+    {
+	double sum = this->sum(this->m_weights);
+	return std::exp(input) / sum;
+    };
 
+    // TODO: check indices of input and weight in vector
+    m_derivative_function = [this](double input) -> double
+    {
+	// kronecker delta is one if indices are the same
+	unsigned delta_i_j = (input == this->m_weights[input]) ? 1 : 0;
+	return m_activation_function(input) * (delta_i_j - m_activation_function(input));
+    };
+
+    // instantiate all weights with random value
     std::uniform_real_distribution<double> random(0.0,1.0);
+    std::default_random_engine generator;
+    m_weights = std::vector<double>(size, random(generator));
 }
 
 
@@ -43,10 +54,7 @@ Neuron::Neuron()
  * 
  */
 Neuron::Neuron(FunctionPointer other)
-    : m_activation_function{other}
-{
-    
-}
+    : m_activation_function{other} { }
 
 
 //------------------------------------------------------------------------------
@@ -204,7 +212,7 @@ void Neuron::activate(const std::vector<double>& inputs)
     for (unsigned i_input=0; i_input<inputs.size(); ++i_input) {
 	inputs_with_weights[i_input] = inputs[i_input] * m_weights[i_input];
     }
-    m_activation_function(inputs_with_weights);
+    // m_activation_function(inputs_with_weights);
 }
 
 
@@ -213,7 +221,7 @@ void Neuron::activate(const std::vector<double>& inputs)
 
 void Neuron::derive(std::vector<double>& inputs)
 {
-    m_derivative_function(inputs);
+    // m_derivative_function(inputs);
 }
 
 

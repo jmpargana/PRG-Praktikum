@@ -24,10 +24,10 @@
 Network::Network(std::vector<unsigned>& topology) 
 {
     for (unsigned i_layer_size=0; i_layer_size<topology.size(); ++i_layer_size) {
-	unsigned output_layer_size =
-	    (i_layer_size == topology.size() - 1) ? 0 : topology[i_layer_size + 1];
-	m_layers[i_layer_size] =
-	    std::vector<Neuron>(topology[i_layer_size], Neuron(output_layer_size));
+    	unsigned input_layer_size =
+    	    (i_layer_size == 0) ? 1 : topology[i_layer_size - 1];
+    	m_layers[i_layer_size] =
+    	    std::vector<Neuron>(topology[i_layer_size], Neuron(input_layer_size));
     }
 }
 
@@ -37,9 +37,7 @@ Network::Network(std::vector<unsigned>& topology)
 
 /**
  * Copy constructor
- * 
  * @param other is another instance of the same class
- * 
  */
 Network::Network(Network& other) : m_layers{other.m_layers} { }
 

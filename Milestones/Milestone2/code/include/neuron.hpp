@@ -29,7 +29,7 @@
 
 
 // this alias will save a lot of ink
-using FunctionPointer = std::function<std::vector<double>(std::vector<double>&)>;
+using FunctionPointer = std::function<double(double)>;
 
 
 /**
