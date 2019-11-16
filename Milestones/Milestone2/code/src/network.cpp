@@ -26,7 +26,6 @@ Network::Network(std::vector<unsigned>& topology)
     for (unsigned i_layer_size=0; i_layer_size<topology.size(); ++i_layer_size) {
 	unsigned output_layer_size =
 	    (i_layer_size == topology.size() - 1) ? 0 : topology[i_layer_size + 1];
-	// std::vector<Neuron> layer(topology[i_layer_size], Neuron(output_layer_size));
 	m_layers[i_layer_size] =
 	    std::vector<Neuron>(topology[i_layer_size], Neuron(output_layer_size));
     }
@@ -177,17 +176,32 @@ void Network::read_output()
 //------------------------------------------------------------------------------
 
 
+/**
+ * This method opens an input file stream with a file name
+ * and inputs the buffer to the instance of the class
+ * what will read an input vector from the file and initiate the
+ * feed forward function
+ * @param file_name a string containing a file name
+ *
+ */
 void Network::train(std::string& file_name)
 {
     std::ifstream ist {file_name};
     if (!ist) throw std::runtime_error("File wasn't found");
-    
+
+    ist >> *this;		// input from file to instance
 }
 
 
 //------------------------------------------------------------------------------
 
 
+/**
+ * This method deals with a vector of strings
+ * it calls the same method for each of the strings in the vector
+ * @param batches contains multiple file names
+ *
+ */
 void Network::train(std::vector<std::string>& batches)
 {
     for (std::string& i_file_name : batches) {
@@ -199,6 +213,10 @@ void Network::train(std::vector<std::string>& batches)
 //------------------------------------------------------------------------------
 
 
+/**
+ * Operator[] overload for indexing each layer in network
+ * @param i_layer contains the layer's index
+ */
 Layer& Network::operator[](unsigned i_layer)
 {
     return m_layers[i_layer];
@@ -229,6 +247,8 @@ std::ostream& operator<<(std::ostream& os, Network const& lhs)
 
 /** 
  * Input stream operator overload
+ * it reads the input vector the the file and runs the feed_forward
+ * method from the network class
  * 
  * @param is is an instance of the standard input stream class
  * @param lhs is an instance of the Network class
@@ -238,7 +258,12 @@ std::ostream& operator<<(std::ostream& os, Network const& lhs)
  */
 std::istream& operator>>(std::istream& is, Network& lhs)
 {
-
+    // read inputs from file    
+    std::vector<double> inputs;
+    // is >> inputs;
+    
+    lhs.feed_forward(inputs);
+    
     return is;
 }
 
