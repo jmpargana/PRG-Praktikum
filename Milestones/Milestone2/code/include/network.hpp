@@ -56,6 +56,7 @@ public:
     
 private:
     std::vector<Layer> m_layers;
+    std::vector<double> m_outputs;
     
 };
 

@@ -112,13 +112,23 @@ void Network::feed_forward(const std::vector<double>& inputs)
     if (inputs.size() != m_layers[0].size()) // error control for layer size
 	throw std::runtime_error("Invalid input size");
 
-    // start each layer of neurons with a vector of one size containing
-    // one single input 
-    for (unsigned i_input=0; i_input<inputs.size(); ++i_input)
-	m_layers[0][i_input].activate(std::vector<double>(1, inputs[0]));
+    // each layer takes a vector of inputs, processes the predict function
+    // in each neuron, and for each neuron, saves a double to the output vector
+    // which will be used in the next layer as input
+    std::vector<double> inputs_outputs = inputs;
 
-    // forward propogate each layer
-    
+    for (unsigned i_layer=0; i_layer<m_layers.size(); ++i_layer) {
+	// initiate vector with next layers' size
+	std::vector<double> hidden_outputs(m_layers[i_layer].size());
+    	for (unsigned i_neuron=0; i_neuron<m_layers[i_layer].size(); ++i_neuron) {
+	    // process the input vector and save the result in the output for next layer
+	    m_layers[i_layer][i_neuron].activate(inputs_outputs);
+	    hidden_outputs.push_back(m_layers[i_layer][i_neuron].get_output_val());
+    	}
+	// save current output vector as next layers' input
+	inputs_outputs = hidden_outputs;
+    }
+    m_outputs = inputs_outputs;	// save last output vector as result from neural network
 }
 
 

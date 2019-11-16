@@ -28,6 +28,8 @@ Neuron::Neuron()
 	    for (auto& i_input : inputs) outputs.push_back(i_input/sum);
 	    return outputs;
 	};
+
+    std::uniform_real_distribution<double> random(0.0,1.0);
 }
 
 
@@ -188,11 +190,8 @@ Neuron& Neuron::set_activation_function(std::function<void(int first, int second
  */
 double Neuron::sum(const std::vector<double>& inpts)
 {
-    double result = 0;
-    for (unsigned i_input=0; i_input<inpts.size(); ++i_input){
-	result += inpts[i_input] * this->m_weights[i_input];
-    }
-    return result;
+    return std::inner_product(inpts.begin(), inpts.end(),
+			      m_weights.begin(), 0.0);
 }
 
 

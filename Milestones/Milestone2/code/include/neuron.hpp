@@ -64,6 +64,8 @@ public:
     std::vector<std::pair<double, double>>& get_inputs();
     const std::vector<std::pair<double, double>>& get_inputs() const;
 
+    double get_output_val();
+
     // methods
     double sum(const std::vector<double>&);
     void activate(const std::vector<double>&);
@@ -75,6 +77,7 @@ private:
     FunctionPointer m_activation_function, m_derivative_function;
     std::vector<double> m_weights;
     double m_output_val;
+    unsigned m_i_layer;		// index of layer
     
 };
 
