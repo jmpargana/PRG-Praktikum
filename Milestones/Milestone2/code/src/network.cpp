@@ -105,7 +105,13 @@ Network::~Network() { }
 
 
 /**
- * This method 
+ * This method implments the feed forward function of the network class
+ * It takes a vector of inputs, which gets processed by each of the neurons in a layer
+ * saves the result to an output vector and iterates all layers with the new input
+ * the result gets saved in the m_output member vector of the network class
+ * 
+ * @param inputs is a vector of input values
+ * 
  */
 void Network::feed_forward(const std::vector<double>& inputs)
 {
