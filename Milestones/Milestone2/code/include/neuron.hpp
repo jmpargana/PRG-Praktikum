@@ -71,6 +71,8 @@ public:
     void activate(const std::vector<double>&, double);
     void derive(std::vector<double>&);
     void calculate_gradients();
+
+    double derivative(double input) { return m_derivative_function(input); }
     
     
 private:

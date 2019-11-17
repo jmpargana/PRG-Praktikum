@@ -147,23 +147,24 @@ void Network::feed_forward(const std::vector<double>& inputs)
 
 void Network::back_propagation(const std::vector<double>& goal_values)
 {
-    // Calculate overall net error
-    Layer& output_layer = m_layers.back();
-    double m_error = 0.0;
-
-    for (unsigned i_output=0; i_output<output_layer.size(); ++i_output) {
-	double delta = goal_values[i_output];
-	m_error += delta * delta;
+    if (goal_values.size() != m_outputs.size()) // error control
+	throw std::runtime_error("Output size doesn't match goal vector");
+    
+    // calculate output layer gradients
+    std::vector<double> output_errors(goal_values.size());
+    for (unsigned i_output=0; i_output<m_outputs.size(); ++i_output) {
+	// error = (expected - output) * derivative(output) where derivative is defined in neuron
+	output_errors.push_back((goal_values[i_output] - goal_values[i_output]) *
+				m_layers[m_layers.size() - 1][i_output]
+				.derivative(m_outputs[i_output]));
     }
-    m_error /= output_layer.size();
-    m_error = std::sqrt(m_error);
-
-    // Calculate output layer gradients
 
     // Calculate gradients on hidden layers
+    
+    
 
-    // For all layers from outputs to first hidden layer
-    // update connection weights
+    // update all the weights across the network
+    
 }
 
 
