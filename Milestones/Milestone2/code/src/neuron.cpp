@@ -23,10 +23,9 @@
 Neuron::Neuron(unsigned size) 
 {
     // TODO: not sure about softmax implementation
-    m_activation_function = [this](double input) -> double
+    m_activation_function = [=](double input) -> double
     {
-	double sum = this->sum(this->m_weights);
-	return std::exp(input) / sum;
+	return std::exp(input) / softmax_sum;
     };
 
     // TODO: check indices of input and weight in vector
@@ -196,9 +195,9 @@ Neuron& Neuron::set_activation_function(std::function<void(int first, int second
  * @return result sum of inputs * weigths
  *
  */
-double Neuron::sum(const std::vector<double>& inpts)
+double Neuron::calculate_sum(const std::vector<double>& inputs)
 {
-    return std::inner_product(inpts.begin(), inpts.end(),
+    return std::inner_product(inputs.begin(), inputs.end(),
 			      m_weights.begin(), 0.0);
 }
 
@@ -206,13 +205,10 @@ double Neuron::sum(const std::vector<double>& inpts)
 //------------------------------------------------------------------------------
 
 
-void Neuron::activate(const std::vector<double>& inputs)
+void Neuron::activate(const std::vector<double>& inputs, double softmax_sum)
 {
-    std::vector<double> inputs_with_weights;
-    for (unsigned i_input=0; i_input<inputs.size(); ++i_input) {
-	inputs_with_weights[i_input] = inputs[i_input] * m_weights[i_input];
-    }
-    // m_activation_function(inputs_with_weights);
+    double sum = calculate_sum(inputs);
+    m_output_val = m_activation_function(sum);
 }
 
 

@@ -67,8 +67,8 @@ public:
     double get_output_val();
 
     // methods
-    double sum(const std::vector<double>&);
-    void activate(const std::vector<double>&);
+    double calculate_sum(const std::vector<double>&);
+    void activate(const std::vector<double>&, double);
     void derive(std::vector<double>&);
     void calculate_gradients();
     

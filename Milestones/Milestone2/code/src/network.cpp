@@ -121,16 +121,18 @@ void Network::feed_forward(const std::vector<double>& inputs)
     std::vector<double> inputs_outputs = inputs, hidden_outputs;
 
     for (unsigned i_layer=0; i_layer<m_layers.size(); ++i_layer) {
+	// calculate the sum of layer inputs and weights or Z_i to be applied in softmax
+	double softmax_sum = sum_of_layer(i_layer, inputs_outputs);
 	// initiate vector with next layers' size
 	std::vector<double> hidden_outputs(m_layers[i_layer].size());
     	for (unsigned i_neuron=0; i_neuron<m_layers[i_layer].size(); ++i_neuron) {
 	    // first layer takes only one element per input
 	    if (i_layer == 0) 
 		m_layers[i_layer][i_neuron]
-		    .activate(std::vector<double>(1, inputs_outputs[i_neuron]));
+		    .activate(std::vector<double>(1, inputs_outputs[i_neuron]), softmax_sum);
 	    else
 		// process the input vector and save the result in the output for next layer
-		m_layers[i_layer][i_neuron].activate(inputs_outputs);	    
+		m_layers[i_layer][i_neuron].activate(inputs_outputs, softmax_sum);
 	    hidden_outputs.push_back(m_layers[i_layer][i_neuron].get_output_val());
     	}
 	// save current output vector as next layers' input
@@ -162,6 +164,19 @@ void Network::back_propagation(const std::vector<double>& goal_values)
 
     // For all layers from outputs to first hidden layer
     // update connection weights
+}
+
+
+//------------------------------------------------------------------------------
+
+
+double Network::sum_of_layer(unsigned i_layer, std::vector<double>& inputs)
+{
+    double sum = 0.0;
+    for (unsigned i_neuron=0; i_neuron<m_layers[i_layer].size(); ++i_neuron) {
+	sum += std::exp(m_layers[i_layer][i_neuron].calculate_sum(inputs));
+    }
+    return sum;
 }
 
 

@@ -45,6 +45,8 @@ public:
     // member functions
     void feed_forward(const std::vector<double>&);
     void back_propagation(const std::vector<double>&);
+    double sum_of_layer(unsigned, std::vector<double>&);
+    
     void read_output();
     void train(std::string&);
     void train(std::vector<std::string>&);
