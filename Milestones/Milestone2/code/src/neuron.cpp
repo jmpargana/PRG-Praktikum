@@ -82,37 +82,14 @@ double& Neuron::operator[](int index)
 
 
 /**
- * Assign a value of inputs with their correspondent weights to the
- * inputs variable of the Neuron
- * 
- * @param values contains vector of pair of doubles (inputs and weights)
- * @return void
- * 
- */
-Neuron& Neuron::set_inputs(std::vector<std::pair<double, double>>& values)
-{
-    // inputs = values;
-    return *this;
-}
-
-
-//------------------------------------------------------------------------------
-
-
-/**
  * Setter function for activation lambda function
- *  
- * @param first
- * @param second
- * @param other new lambda function
- * 
+ * @param other new lambda function 
  * @return void
  * 
  */
-Neuron& Neuron::set_activation_function(std::function<void(int first, int second)> other)
+void Neuron::set_activation_function(FunctionPointer other)
 {
-    // this->activation_function = other;
-    return *this;
+    this->m_activation_function = other;
 }
 
 
@@ -135,28 +112,9 @@ double Neuron::calculate_sum(const std::vector<double>& inputs)
 //------------------------------------------------------------------------------
 
 
-void Neuron::activate(const std::vector<double>& inputs, double softmax_sum)
-{
-    double sum = calculate_sum(inputs);
-    m_output_val = m_activation_function(sum);
-}
-
-
-//------------------------------------------------------------------------------
-
-
 std::vector<double> Neuron::activation(std::vector<double>& unactivated_outputs)
 {
     return m_activation_function(unactivated_outputs);
-}
-
-
-//------------------------------------------------------------------------------
-
-
-void Neuron::derive(std::vector<double>& inputs)
-{
-    // m_derivative_function(inputs);
 }
 
 
