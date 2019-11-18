@@ -23,17 +23,20 @@
 Neuron::Neuron(unsigned size) 
 {
     // TODO: not sure about softmax implementation
-    m_activation_function = [=](double input) -> double
+    m_activation_function = [](std::vector<double> input) -> std::vector<double>
     {
-	return std::exp(input) / softmax_sum;
+        double sum=0.0; std::vector<double> activated_output;
+        for (double& i_input : input) sum += std::exp(i_input);
+        for (double& i_input : input) activated_output.push_back(std::exp(i_input)/sum);
+        return activated_output;
     };
 
     // TODO: check indices of input and weight in vector
-    m_derivative_function = [this](double input) -> double
+    m_derivative_function = [](std::vector<double> input) -> std::vector<double>
     {
-	// kronecker delta is one if indices are the same
-	unsigned delta_i_j = (input == this->m_weights[input]) ? 1 : 0;
-	return m_activation_function(input) * (delta_i_j - m_activation_function(input));
+	// // kronecker delta is one if indices are the same
+	// unsigned delta_i_j = (input == this->m_weights[input]) ? 1 : 0;
+	// return m_activation_function(input) * (delta_i_j - m_activation_function(input));
     };
 
     // instantiate all weights with random value
@@ -136,6 +139,15 @@ void Neuron::activate(const std::vector<double>& inputs, double softmax_sum)
 {
     double sum = calculate_sum(inputs);
     m_output_val = m_activation_function(sum);
+}
+
+
+//------------------------------------------------------------------------------
+
+
+std::vector<double> Neuron::activation(std::vector<double>& unactivated_outputs)
+{
+    return m_activation_function(unactivated_outputs);
 }
 
 

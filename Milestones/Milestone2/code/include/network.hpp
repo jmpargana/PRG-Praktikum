@@ -52,7 +52,7 @@ public:
     void train(std::string&);
     void train(std::vector<std::string>&);
 
-    std::vector<double> weights_inputs_product(std::vector<double>&, unsigned);
+    std::vector<double> weights_inputs_product(const std::vector<double>&, unsigned);
 
     // getter
     Layer& operator[](unsigned);

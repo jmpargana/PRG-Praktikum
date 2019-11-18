@@ -29,7 +29,7 @@
 
 
 // this alias will save a lot of ink
-using FunctionPointer = std::function<double(double)>;
+using FunctionPointer = std::function<std::vector<double>(std::vector<double>)>;
 
 
 /**
@@ -45,6 +45,8 @@ public:
     // constructors
     Neuron();			// default constructor
     Neuron(unsigned);		// size of next layer
+    Neuron(unsigned, FunctionPointer);
+    Neuron(unsigned, FunctionPointer, FunctionPointer);
     Neuron(FunctionPointer);	// if activation pointers derivative if also f(x) = f(1 - f(x))
     Neuron(FunctionPointer, FunctionPointer);
     
@@ -56,23 +58,22 @@ public:
     ~Neuron() = default;			// destructor
 
     // getters and setters
-    double& operator[](int);	// get and set weight value
-    std::vector<double>& get_weights();
-    
-    Neuron& set_inputs(std::vector<std::pair<double, double>>&);
-    Neuron& set_activation_function(std::function<void(int, int)>);
-    std::vector<std::pair<double, double>>& get_inputs();
-    const std::vector<std::pair<double, double>>& get_inputs() const;
-
+    double& operator[](int);	// get and set weight value    
     double get_output_val();
+    std::vector<double>& get_weights();
+
+    void set_weights(std::vector<double>&);
+    void set_activation_function(FunctionPointer);
+    void set_derivative_function(FunctionPointer);
+    void set_output(double);
+
 
     // methods
     double calculate_sum(const std::vector<double>&);
-    void activate(const std::vector<double>&, double);
-    void derive(std::vector<double>&);
+    std::vector<double> activation(std::vector<double>&);    
+    std::vector<double> derivative(std::vector<double>&);
+    
     void calculate_gradients();
-
-    double derivative(double input) { return m_derivative_function(input); }
     
     
 private:

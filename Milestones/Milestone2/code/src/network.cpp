@@ -35,6 +35,29 @@ Network::Network(std::vector<unsigned>& topology)
 //------------------------------------------------------------------------------
 
 
+void Network::new_feed_forward(const std::vector<double>& inputs)
+{
+    if (inputs.size() != m_layers[0].size()) // error control for layer size
+	throw std::runtime_error("Invalid input size");
+
+    std::vector<double> inputs_outputs = inputs;
+
+    for (unsigned i_layer=0; i_layer<m_layers.size(); ++i_layer) {
+	std::vector<double> unactivated_outputs = weights_inputs_product(inputs, i_layer);
+	std::vector<double> outputs = m_layers[i_layer][0].activation(unactivated_outputs);
+
+	for (unsigned i_neuron=0; i_neuron<m_layers[i_layer].size(); ++i_neuron) {
+	    m_layers[i_layer][i_neuron].set_output(outputs[i_neuron]);
+	}
+	inputs_outputs = outputs;
+    }
+    m_outputs = inputs_outputs;
+}
+
+
+//------------------------------------------------------------------------------
+
+
 /**
  * This method implments the feed forward function of the network class
  * It takes a vector of inputs, which gets processed by each of the neurons in a layer
@@ -176,7 +199,7 @@ void Network::train(std::vector<std::string>& batches)
  * @return unactivated_outputs a vector of double with the matrix results 
  *
  */
-std::vector<double> Network::weights_inputs_product(std::vector<double>& inputs,
+std::vector<double> Network::weights_inputs_product(const std::vector<double>& inputs,
 						    unsigned i_layer)
 {
     Matrix weights; std::vector<double> unactivated_outputs; // containers to hold values
