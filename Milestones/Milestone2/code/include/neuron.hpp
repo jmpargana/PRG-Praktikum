@@ -48,12 +48,12 @@ public:
     Neuron(FunctionPointer);	// if activation pointers derivative if also f(x) = f(1 - f(x))
     Neuron(FunctionPointer, FunctionPointer);
     
-    Neuron(Neuron&);		// copy constructor
-    Neuron(Neuron&&);		// move constructor
-    Neuron& operator=(const Neuron&); // assignment operator
-    Neuron& operator=(Neuron&&) noexcept;
+    Neuron(Neuron&) = default;		// copy constructor
+    Neuron(Neuron&&)= default;		// move constructor
+    Neuron& operator=(const Neuron&) = default; // assignment operator
+    Neuron& operator=(Neuron&&) noexcept = default;
 
-    ~Neuron();			// destructor
+    ~Neuron() = default;			// destructor
 
     // getters and setters
     double& operator[](int);	// get and set weight value

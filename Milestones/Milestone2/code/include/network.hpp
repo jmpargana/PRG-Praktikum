@@ -35,12 +35,12 @@ public:
     // constructors
     Network(std::vector<unsigned>&); // default constructor
     
-    Network(Network&);		// copy constructor
-    Network(Network&&);		// move constructor
-    Network& operator=(const Network&); // assignment operator
-    Network& operator=(Network&&) noexcept;
+    Network(Network&) = default;		// copy constructor
+    Network(Network&&) = default;		// move constructor
+    Network& operator=(const Network&) = default; // assignment operator
+    Network& operator=(Network&&) noexcept = default;
 
-    ~Network();			// destructor
+    ~Network() = default;			// destructor
 
     // member functions
     void feed_forward(const std::vector<double>&);
