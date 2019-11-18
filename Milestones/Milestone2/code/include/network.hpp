@@ -20,6 +20,7 @@
 
 
 using Layer = std::vector<Neuron>; // very useful alias for class definition
+using Matrix = std::vector<std::vector<double>>; // useful for multiplications
 
 
 /**
@@ -50,6 +51,8 @@ public:
     void read_output();
     void train(std::string&);
     void train(std::vector<std::string>&);
+
+    std::vector<double> weights_inputs_product(std::vector<double>&, unsigned);
 
     // getter
     Layer& operator[](unsigned);

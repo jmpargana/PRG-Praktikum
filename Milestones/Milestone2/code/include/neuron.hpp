@@ -57,7 +57,7 @@ public:
 
     // getters and setters
     double& operator[](int);	// get and set weight value
-    
+    std::vector<double>& get_weights();
     
     Neuron& set_inputs(std::vector<std::pair<double, double>>&);
     Neuron& set_activation_function(std::function<void(int, int)>);

@@ -167,6 +167,39 @@ void Network::train(std::vector<std::string>& batches)
 
 
 /**
+ * This method runs a matrix multiplication between all the weights in a layer
+ * times the inputs in a NxM * N = M format. The resulting vector will be 
+ * activated with the respective activation function in the given layer
+ * 
+ * @param inputs is a reference to the inputs in the layer
+ * @param i_layer is the index of the current layer to be calculated
+ * @return unactivated_outputs a vector of double with the matrix results 
+ *
+ */
+std::vector<double> Network::weights_inputs_product(std::vector<double>& inputs,
+						    unsigned i_layer)
+{
+    Matrix weights; std::vector<double> unactivated_outputs; // containers to hold values
+
+    // fill the weights matrix with the respenctive values
+    for (unsigned i_neuron=0; i_neuron<m_layers[i_layer].size(); ++i_neuron) {
+	weights.push_back(m_layers[i_layer][i_neuron].get_weights());
+    }
+
+    // run inner product for each row * input vector and save in the output one
+    for (unsigned i_neuron=0; i_neuron<weights.size(); ++i_neuron) {
+	unactivated_outputs.push_back(std::inner_product(weights[i_neuron].begin(),
+							 weights[i_neuron].end(),
+							 inputs.begin(), 0.0));
+    }
+    return unactivated_outputs;	// return to be saved in a new variable
+}
+
+
+//------------------------------------------------------------------------------
+
+
+/**
  * Operator[] overload for indexing each layer in network
  * @param i_layer contains the layer's index
  */
