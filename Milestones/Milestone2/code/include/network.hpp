@@ -45,6 +45,7 @@ public:
 
     // member functions
     void feed_forward(const std::vector<double>&);
+    void forward_propagation(const std::vector<double>&);
     void back_propagation(const std::vector<double>&);
     double sum_of_layer(unsigned, std::vector<double>&);
     

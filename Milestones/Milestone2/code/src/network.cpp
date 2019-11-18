@@ -35,12 +35,26 @@ Network::Network(std::vector<unsigned>& topology)
 //------------------------------------------------------------------------------
 
 
-void Network::new_feed_forward(const std::vector<double>& inputs)
+/**
+ * This method implements the feed forward function of the network class
+ * It takes a vector of inputs, which gets multiplied with a matrix of weights
+ * by calling the weights_inputs_product member function
+ * it then processes the whole vector via activation function, since the
+ * whole layer needs to share the same one
+ * each of the activated double is saved in the respective neuron's output member
+ * The result gets saved in the new input vector, and all iterations are 
+ * performed until less layer is reached.
+ * It finally gets stored in the network's m_outputs member
+ *
+ * @param inputs is a vector of inputs from the starting input layer
+ *
+ */
+void Network::forward_propagation(const std::vector<double>& inputs)
 {
     if (inputs.size() != m_layers[0].size()) // error control for layer size
 	throw std::runtime_error("Invalid input size");
 
-    std::vector<double> inputs_outputs = inputs;
+    std::vector<double> inputs_outputs = inputs; // variable to perform loop
 
     for (unsigned i_layer=0; i_layer<m_layers.size(); ++i_layer) {
 	std::vector<double> unactivated_outputs = weights_inputs_product(inputs, i_layer);
