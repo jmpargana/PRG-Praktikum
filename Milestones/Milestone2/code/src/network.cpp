@@ -157,7 +157,8 @@ void Network::train(std::vector<std::string>& batches)
 std::vector<double> Network::weights_inputs_product(const std::vector<double>& inputs,
 						    unsigned i_layer)
 {
-    Matrix weights; std::vector<double> unactivated_outputs; // containers to hold values
+    Matrix weights(m_layers[i_layer].size()); // containers to hold values
+    std::vector<double> unactivated_outputs(m_layers[i_layer].size()); 
 
     // fill the weights matrix with the respenctive values
     for (unsigned i_neuron=0; i_neuron<m_layers[i_layer].size(); ++i_neuron) {
