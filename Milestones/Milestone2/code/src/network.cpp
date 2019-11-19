@@ -21,7 +21,7 @@
  * @param topology list of int with size of each layer
  * 
  */
-Network::Network(std::vector<unsigned>& topology) 
+Network::Network(std::vector<unsigned>&& topology) // Network network() 
 {
     for (unsigned i_layer_size=0; i_layer_size<topology.size(); ++i_layer_size) {
     	unsigned input_layer_size =
@@ -57,7 +57,7 @@ void Network::forward_propagation(const std::vector<double>& inputs)
     std::vector<double> inputs_outputs = inputs; // variable to perform loop
 
     for (unsigned i_layer=0; i_layer<m_layers.size(); ++i_layer) {
-	std::vector<double> unactivated_outputs = weights_inputs_product(inputs, i_layer);
+	std::vector<double> unactivated_outputs(weights_inputs_product(inputs, i_layer));
 	std::vector<double> outputs = m_layers[i_layer][0].activation(unactivated_outputs);
 
 	for (unsigned i_neuron=0; i_neuron<m_layers[i_layer].size(); ++i_neuron) {
@@ -225,12 +225,14 @@ std::vector<double> Network::weights_inputs_product(const std::vector<double>& i
 
     // run inner product for each row * input vector and save in the output one
     for (unsigned i_neuron=0; i_neuron<weights.size(); ++i_neuron) {
-	unactivated_outputs.push_back(std::inner_product(weights[i_neuron].begin(),
-							 weights[i_neuron].end(),
+	unactivated_outputs.push_back(std::inner_product(weights[i_neuron]->begin(),
+							 weights[i_neuron]->end(),
 							 inputs.begin(), 0.0));
     }
     return unactivated_outputs;	// return to be saved in a new variable
 }
+
+// std::vector<double> o(weights_inputs_product());
 
 
 //------------------------------------------------------------------------------

@@ -133,6 +133,15 @@ void Neuron::calculate_gradients()
 //------------------------------------------------------------------------------
 
 
+std::vector<double>* Neuron::get_weights()
+{
+    return &m_weights;
+}
+
+
+//------------------------------------------------------------------------------
+
+
 /**
  * Output stream operator overload 
  * 

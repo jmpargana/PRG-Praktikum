@@ -20,7 +20,7 @@
 
 
 using Layer = std::vector<Neuron>; // very useful alias for class definition
-using Matrix = std::vector<std::vector<double>>; // useful for multiplications
+using Matrix = std::vector<std::vector<double>*>; // useful for multiplications
 
 
 /**
@@ -34,7 +34,7 @@ using Matrix = std::vector<std::vector<double>>; // useful for multiplications
 class Network {
 public:
     // constructors
-    Network(std::vector<unsigned>&); // default constructor
+    Network(std::vector<unsigned>&&); // default constructor
     
     Network(Network&) = default;		// copy constructor
     Network(Network&&) = default;		// move constructor

@@ -5,7 +5,7 @@ CC := g++ #-std=c++17 # This is the main compiler
 
 SRCDIR := src
 BUILDDIR := build
-TARGET := bin/FullyConnectedNeuronalNetwork
+TARGET := bin/fcnn
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))

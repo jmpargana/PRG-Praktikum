@@ -17,7 +17,19 @@
 //------------------------------------------------------------------------------
 
 
-std::string menu = "";
+std::string menu = "\
+Neural Network\n\
+Usage:\
+\tfcnn <command> [<args>]\n\
+Command:\
+\ttrain [<args>] <data>\
+\tpredict <data>\n\
+args:\
+\ttopology <sizes>\n\
+data: multiple file names\
+\texample1.dat example2.dat ...\n\
+size: layer size seperated by commas\
+\t7,6,5,6,7,2\n";
 
 
 //------------------------------------------------------------------------------
@@ -32,6 +44,13 @@ int main(int argc, const char** argv)
 
 try
 {
+    std::regex re_sizes{R"(\d|(\d,\d)*)"};
+    std::regex re_commands{R"(train|predict)"};
+
+    if (argc < 3 || std::regex_match(argv[2], re_commands))
+	throw std::runtime_error(menu);
+
+    
     
     return 0;
 }
