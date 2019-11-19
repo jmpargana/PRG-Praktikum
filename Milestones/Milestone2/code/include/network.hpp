@@ -48,8 +48,8 @@ public:
     ~Network() = default;			// destructor
 
     // member functions
-    void forward_propagation(const std::vector<double>&);
-    void back_propagation(const std::vector<double>&);
+    void forward_propagation(const std::vector<double>&, const std::vector<double>&);
+    void back_propagation();
     
     void read_output();
     void train(std::string&);

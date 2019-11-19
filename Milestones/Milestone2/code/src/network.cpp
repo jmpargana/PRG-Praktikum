@@ -48,7 +48,8 @@ Network::Network(std::vector<unsigned>&& topology) // Network network()
  * @param inputs is a vector of inputs from the starting input layer
  *
  */
-void Network::forward_propagation(const std::vector<double>& inputs)
+void Network::forward_propagation(const std::vector<double>& inputs,
+				  const std::vector<double>& target)
 {
     if (inputs.size() != m_layers[0].size()) // error control for layer size
 	throw std::runtime_error("Invalid input size");
@@ -72,11 +73,8 @@ void Network::forward_propagation(const std::vector<double>& inputs)
 //------------------------------------------------------------------------------
 
 
-void Network::back_propagation(const std::vector<double>& goal_values)
-{
-    if (goal_values.size() != m_outputs.size()) // error control
-	throw std::runtime_error("Output size doesn't match goal vector");
-    
+void Network::back_propagation()
+{    
     // calculate output layer gradients
     
 
@@ -163,14 +161,14 @@ std::vector<double> Network::weights_inputs_product(const std::vector<double>& i
 
     // fill the weights matrix with the respenctive values
     for (unsigned i_neuron=0; i_neuron<m_layers[i_layer].size(); ++i_neuron) {
-	weights.push_back(m_layers[i_layer][i_neuron].get_weights());
+	weights[i_neuron] = m_layers[i_layer][i_neuron].get_weights();
     }
 
     // run inner product for each row * input vector and save in the output one
     for (unsigned i_neuron=0; i_neuron<weights.size(); ++i_neuron) {
-	unactivated_outputs.push_back(std::inner_product(weights[i_neuron]->begin(),
+	unactivated_outputs[i_neuron] = std::inner_product(weights[i_neuron]->begin(),
 							 weights[i_neuron]->end(),
-							 inputs.begin(), 0.0));
+							 inputs.begin(), 0.0);
     }
     return unactivated_outputs;	// return to be saved in a new variable
 }
