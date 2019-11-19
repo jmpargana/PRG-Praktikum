@@ -78,6 +78,7 @@ void Network::back_propagation(const std::vector<double>& goal_values)
 	throw std::runtime_error("Output size doesn't match goal vector");
     
     // calculate output layer gradients
+    
 
     
     // Calculate gradients on hidden layers

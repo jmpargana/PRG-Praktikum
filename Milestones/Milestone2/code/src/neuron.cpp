@@ -113,21 +113,6 @@ double& Neuron::operator[](int index)
 
 
 /**
- * Setter function for activation lambda function
- * @param other new lambda function 
- * @return void
- * 
- */
-void Neuron::set_activation_function(FunctionPointer other)
-{
-    this->m_activation_function = other;
-}
-
-
-//------------------------------------------------------------------------------
-
-
-/**
  * Setter for output member.
  * this variable contains the output value after the activation function 
  * and is needed for next input and for to calculate the gradient
@@ -138,22 +123,6 @@ void Neuron::set_activation_function(FunctionPointer other)
 void Neuron::set_output(double output)
 {
     m_output_val = output;
-}
-
-
-//------------------------------------------------------------------------------
-
-
-/**
- * Sum function performs the same as accumulate function from the numeric
- * library it iterates over inputs and increments its value * weigth
- * @return result sum of inputs * weigths
- *
- */
-double Neuron::calculate_sum(const std::vector<double>& inputs)
-{
-    return std::inner_product(inputs.begin(), inputs.end(),
-			      m_weights.begin(), 0.0);
 }
 
 

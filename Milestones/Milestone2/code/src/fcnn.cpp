@@ -12,11 +12,13 @@
 
 #include "../include/network.hpp"
 #include <regex>
+#include <boost/filesystem.hpp>
 
 
 //------------------------------------------------------------------------------
 
 
+// only needed for script version of this program
 std::string menu = "\n\
 Neural Network\n\n\
 Usage:\n\
@@ -35,6 +37,20 @@ size: layer size seperated by commas\n\
 //------------------------------------------------------------------------------
 
 
+void parse_directory(const char* input_dir,
+		     std::vector<boost::filesystem::directory_entry>& other)
+{
+    unsigned i_file=0;
+    for (auto& file : boost::filesystem::directory_iterator(input_dir)) {
+	other[i_file] = file;
+	++i_file;
+    }
+}
+
+
+//------------------------------------------------------------------------------
+
+
 /**
  * This main function will execute a script with the users defined values
  * it can read batches from a given file or from multiple
@@ -44,12 +60,17 @@ int main(int argc, const char** argv)
 
 try
 {
-    std::regex re_sizes{R"(\d|(\d,\d)*)"};
-    std::regex re_commands{R"(train|predict)"};
+    // read all files from both folders in the dataset
+    std::vector<boost::filesystem::directory_entry> nqgp(5000);
+    std::vector<boost::filesystem::directory_entry> qgp(5000);
 
-    if (argc < 3 || std::regex_match(argv[2], re_commands))
-	throw std::runtime_error(menu);
+    // save all the data to two vectors (true and false)
+    parse_directory("../../materials/dataset_new/qgp", qgp);
+    parse_directory("../../materials/dataset_new/nqgp", nqgp);
 
+    // select 20 events randomly and perform the batches until
+    // there are no files left for the training
+    
     
     
     return 0;

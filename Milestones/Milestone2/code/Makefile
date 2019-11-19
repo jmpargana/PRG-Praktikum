@@ -11,12 +11,13 @@ SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 CFLAGS := -g # -Wall
+LIB := -L/usr/include/boost -lboost_filesystem 	# for arch linux system
 INC := -I include
 
 
 $(TARGET): $(OBJECTS)
 	@echo "Creating GameOfLife binary..."
-	$(CC) $^ -o $(TARGET)
+	$(CC) $^ -o $(TARGET) $(LIB)
 
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
