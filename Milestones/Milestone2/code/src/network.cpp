@@ -18,16 +18,15 @@
 /**
  * Default constructor for class 
  * Instantatiates Layers of Neurons given a certain topology
+ * first layer doesn't need to be instantiated since it contains only the inputs
  * @param topology list of int with size of each layer
  * 
  */
 Network::Network(std::vector<unsigned>&& topology) // Network network() 
 {
-    for (unsigned i_layer_size=0; i_layer_size<topology.size(); ++i_layer_size) {
-    	unsigned input_layer_size =
-    	    (i_layer_size == 0) ? 1 : topology[i_layer_size - 1];
+    for (unsigned i_layer_size=1; i_layer_size<topology.size(); ++i_layer_size) {
     	m_layers[i_layer_size] =
-    	    std::vector<Neuron>(topology[i_layer_size], Neuron(input_layer_size));
+    	    std::vector<Neuron>(topology[i_layer_size], Neuron(topology[i_layer_size - 1]));
     }
 }
 
@@ -57,8 +56,9 @@ void Network::forward_propagation(const std::vector<double>& inputs)
     std::vector<double> inputs_outputs = inputs; // variable to perform loop
 
     for (unsigned i_layer=0; i_layer<m_layers.size(); ++i_layer) {
-	std::vector<double> unactivated_outputs(weights_inputs_product(inputs, i_layer));
-	std::vector<double> outputs = m_layers[i_layer][0].activation(unactivated_outputs);
+	// vectors are moove from functions to save allocating space
+	std::vector<double> unactivated_outputs{weights_inputs_product(inputs, i_layer)};
+	std::vector<double> outputs{m_layers[i_layer][0].activation(unactivated_outputs)};
 
 	for (unsigned i_neuron=0; i_neuron<m_layers[i_layer].size(); ++i_neuron) {
 	    m_layers[i_layer][i_neuron].set_output(outputs[i_neuron]);
@@ -72,64 +72,14 @@ void Network::forward_propagation(const std::vector<double>& inputs)
 //------------------------------------------------------------------------------
 
 
-/**
- * This method implments the feed forward function of the network class
- * It takes a vector of inputs, which gets processed by each of the neurons in a layer
- * saves the result to an output vector and iterates all layers with the new input
- * the result gets saved in the m_output member vector of the network class
- * 
- * @param inputs is a vector of input values
- * 
- */
-void Network::feed_forward(const std::vector<double>& inputs)
-{
-    if (inputs.size() != m_layers[0].size()) // error control for layer size
-	throw std::runtime_error("Invalid input size");
-
-    // each layer takes a vector of inputs, processes the predict function
-    // in each neuron, and for each neuron, saves a double to the output vector
-    // which will be used in the next layer as input
-    std::vector<double> inputs_outputs = inputs, hidden_outputs;
-
-    for (unsigned i_layer=0; i_layer<m_layers.size(); ++i_layer) {
-	// calculate the sum of layer inputs and weights or Z_i to be applied in softmax
-	double softmax_sum = sum_of_layer(i_layer, inputs_outputs);
-	// initiate vector with next layers' size
-	std::vector<double> hidden_outputs(m_layers[i_layer].size());
-    	for (unsigned i_neuron=0; i_neuron<m_layers[i_layer].size(); ++i_neuron) {
-	    // first layer takes only one element per input
-	    if (i_layer == 0) 
-		m_layers[i_layer][i_neuron]
-		    .activate(std::vector<double>(1, inputs_outputs[i_neuron]), softmax_sum);
-	    else
-		// process the input vector and save the result in the output for next layer
-		m_layers[i_layer][i_neuron].activate(inputs_outputs, softmax_sum);
-	    hidden_outputs.push_back(m_layers[i_layer][i_neuron].get_output_val());
-    	}
-	// save current output vector as next layers' input
-	inputs_outputs = hidden_outputs;
-    }
-    m_outputs = inputs_outputs;	// save last output vector as result from neural network
-}
-
-
-//------------------------------------------------------------------------------
-
-
 void Network::back_propagation(const std::vector<double>& goal_values)
 {
     if (goal_values.size() != m_outputs.size()) // error control
 	throw std::runtime_error("Output size doesn't match goal vector");
     
     // calculate output layer gradients
-    std::vector<double> output_errors(goal_values.size());
-    for (unsigned i_output=0; i_output<m_outputs.size(); ++i_output) {
-	// error = (expected - output) * derivative(output) where derivative is defined in neuron
-	output_errors.push_back((goal_values[i_output] - goal_values[i_output]) *
-				m_layers[m_layers.size() - 1][i_output]
-				.derivative(m_outputs[i_output]));
-    }
 
+    
     // Calculate gradients on hidden layers
     
     
@@ -142,19 +92,10 @@ void Network::back_propagation(const std::vector<double>& goal_values)
 //------------------------------------------------------------------------------
 
 
-double Network::sum_of_layer(unsigned i_layer, std::vector<double>& inputs)
-{
-    double sum = 0.0;
-    for (unsigned i_neuron=0; i_neuron<m_layers[i_layer].size(); ++i_neuron) {
-	sum += std::exp(m_layers[i_layer][i_neuron].calculate_sum(inputs));
-    }
-    return sum;
-}
-
-
-//------------------------------------------------------------------------------
-
-
+/**
+ * Getter function for last layer
+ * used when prediction is performed
+ */
 void Network::read_output()
 {
     for (Neuron& i_neuron : m_layers[m_layers.size() - 1]) {
@@ -232,8 +173,6 @@ std::vector<double> Network::weights_inputs_product(const std::vector<double>& i
     return unactivated_outputs;	// return to be saved in a new variable
 }
 
-// std::vector<double> o(weights_inputs_product());
-
 
 //------------------------------------------------------------------------------
 
@@ -287,7 +226,7 @@ std::istream& operator>>(std::istream& is, Network& lhs)
     std::vector<double> inputs;
     // is >> inputs;
     
-    lhs.feed_forward(inputs);
+    // lhs.feed_forward(inputs);
     
     return is;
 }

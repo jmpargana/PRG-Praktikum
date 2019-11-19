@@ -17,18 +17,18 @@
 //------------------------------------------------------------------------------
 
 
-std::string menu = "\
-Neural Network\n\
-Usage:\
-\tfcnn <command> [<args>]\n\
-Command:\
-\ttrain [<args>] <data>\
-\tpredict <data>\n\
-args:\
-\ttopology <sizes>\n\
-data: multiple file names\
-\texample1.dat example2.dat ...\n\
-size: layer size seperated by commas\
+std::string menu = "\n\
+Neural Network\n\n\
+Usage:\n\
+\tfcnn <command> [<args>]\n\n\
+Command:\n\
+\ttrain [<args>] <data>\n\
+\tpredict <data>\n\n\
+args:\n\
+\ttopology <sizes>\n\n\
+data: multiple file names\n\
+\texample1.dat example2.dat ...\n\n\
+size: layer size seperated by commas\n\
 \t7,6,5,6,7,2\n";
 
 

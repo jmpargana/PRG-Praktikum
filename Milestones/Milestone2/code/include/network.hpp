@@ -24,11 +24,15 @@ using Matrix = std::vector<std::vector<double>*>; // useful for multiplications
 
 
 /**
- * This class contains a the definition of a Perceptron
- * @see perceptron
+ * This class contains a neural network
+ * It has a two dimenstional vector of neurons which transmits layer to layer
+ * the matrix multiplication with each neuron's weights and performs back
+ * propagation to correct its predictions
+ * It can also be used to predict, once the weights are properly defined
  * 
- * @param activation_function is a pointer to a function that can be changed
- * @param inputs contains a list of all inputs which can be variable with their weights
+ * @param layers contains a list of all neurons in each layer
+ * @param outputs contains the last layers activated vector 
+ * @param and errors contains the target value
  *
  */
 class Network {
@@ -36,7 +40,7 @@ public:
     // constructors
     Network(std::vector<unsigned>&&); // default constructor
     
-    Network(Network&) = default;		// copy constructor
+    Network(const Network&) = default;		// copy constructor
     Network(Network&&) = default;		// move constructor
     Network& operator=(const Network&) = default; // assignment operator
     Network& operator=(Network&&) noexcept = default;
@@ -44,10 +48,8 @@ public:
     ~Network() = default;			// destructor
 
     // member functions
-    void feed_forward(const std::vector<double>&);
     void forward_propagation(const std::vector<double>&);
     void back_propagation(const std::vector<double>&);
-    double sum_of_layer(unsigned, std::vector<double>&);
     
     void read_output();
     void train(std::string&);

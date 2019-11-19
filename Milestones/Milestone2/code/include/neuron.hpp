@@ -33,11 +33,17 @@ using FunctionPointer = std::function<std::vector<double>(std::vector<double>)>;
 
 
 /**
- * This class contains a the definition of a Perceptron
- * @see perceptron
+ * This class contains a the definition of a Perceptron 
+ * it creates a neuron expecting a given input size from the previous layer
+ * it has an function variable that activates the sum of weights and inputs
+ * according to how it is defined. Its derivative to calculate the gradient
+ * and a back propagation function to replace the weights with the new ones
  * 
+ * @param size defined the expected input size from previous layer
  * @param activation_function is a pointer to a function that can be changed
- * @param inputs contains a list of all inputs which can be variable with their weights
+ * @param derivative_function is a pointer to the activation function's derivative 
+ * @param output_val stores the activated value to be corrected via gradient
+ * @param weights contains a vector of the weights pointing to this neuron
  *
  */
 class Neuron {
@@ -47,8 +53,6 @@ public:
     Neuron(unsigned);		// size of next layer
     Neuron(unsigned, FunctionPointer);
     Neuron(unsigned, FunctionPointer, FunctionPointer);
-    Neuron(FunctionPointer);	// if activation pointers derivative if also f(x) = f(1 - f(x))
-    Neuron(FunctionPointer, FunctionPointer);
     
     Neuron(const Neuron&) = default;		// copy constructor
     Neuron(Neuron&&)= default;		// move constructor
@@ -63,25 +67,20 @@ public:
     std::vector<double>* get_weights();
 
     void set_weights(std::vector<double>&);
-    void set_activation_function(FunctionPointer);
-    void set_derivative_function(FunctionPointer);
     void set_output(double);
 
-
     // methods
-    double calculate_sum(const std::vector<double>&);
     std::vector<double> activation(std::vector<double>&);    
     std::vector<double> derivative(std::vector<double>&);
     
     void calculate_gradients();
+    void correct_weights();
     
     
 private:
     FunctionPointer m_activation_function, m_derivative_function;
     std::vector<double> m_weights;
-    double m_output_val;
-    unsigned m_i_layer;		// index of layer
-    
+    double m_output_val;    
 };
 
 
