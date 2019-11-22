@@ -38,13 +38,9 @@ using FunctionPointer = std::function<bnu::matrix<double>(const bnu::matrix<doub
  * @param and errors contains the target value
  *
  */
-class Layer {
-private:
-    bnu::matrix<double> m_weights, m_sum_z;
-
-public:
+struct Layer {
     FunctionPointer m_activation, m_derivative; // public attributes
-    bnu::matrix<double> m_output;
+    bnu::matrix<double> m_output, m_weights, m_sum_z;
 
     // constructors
     Layer(unsigned, unsigned); // default constructor
