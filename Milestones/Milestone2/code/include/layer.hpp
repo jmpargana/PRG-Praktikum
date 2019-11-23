@@ -55,7 +55,7 @@ struct Layer {
 
     // methods
     void feed_forward(const bnu::matrix<double>&);
-    void back_prop(const bnu::matrix<double>&);
+    void calculate_gradients(const bnu::matrix<double>&);
     
 };
 

@@ -107,8 +107,7 @@ void Layer::feed_forward(const bnu::matrix<double>& input)
 //------------------------------------------------------------------------------
 
 
-void Layer::back_prop(const bnu::matrix<double>& target)
+void Layer::calculate_gradients(const bnu::matrix<double>& target)
 {
-    m_output = bnu::prod(m_output - target, m_derivative(m_output));
-    m_weights -= (
+    m_output = bnu::prod(target, m_derivative(m_output));
 }

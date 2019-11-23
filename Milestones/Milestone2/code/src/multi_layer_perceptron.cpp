@@ -85,13 +85,16 @@ bnu::matrix<double> MultiLayerPerceptron::forward_propagation(bnu::matrix<double
  */
 void MultiLayerPerceptron::back_propagation(bnu::matrix<double>&& target)
 {
-    unsigned i_layer = m_layers.size() - 1;
 
-    m_layers[i_layer].back_prop(target);
-    // Layer* c_layer = &m_layers[i_layer]; // for easier reading of code
+    target -= m_layers.back().m_output; // for the output layer
 
-    // // calculate output layer's gradients
-    // c_layer->m_output = bnu::prod(c_layer->m_output - target,
-    // 				  c_layer->m_derivative(c_layer->m_output));
-    // m_layers[i_layer].m_weights -= ();
+    // calculate gradients for each layer and update the target matrix for next layer
+    for (unsigned i_layer=m_layers.size() - 1; i_layer>0; --i_layer) {
+	m_layers[i_layer].calculate_gradients(target);
+	target = bnu::prod(bnu::trans(m_layers[i_layer].m_weights), m_layers[i_layer].m_output);
+    }
+
+    // update weights in each layer using the newly stored gradients
+    
+    
 }
