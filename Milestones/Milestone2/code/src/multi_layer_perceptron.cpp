@@ -77,24 +77,27 @@ bnu::matrix<double> MultiLayerPerceptron::forward_propagation(bnu::matrix<double
 /**
  * Given a target output, the multi layer perceptron processes the 
  * error by comparing the output with the error times its derivative
- * and updates the weights by calling the back_prop function from 
- * each of the layers
+ * and updates the weights by calling the calculate_gradients function
+ * and update_weights from each of the layers
  * 
  * @param target is the expected value for the neural network's output
  * 
  */
-void MultiLayerPerceptron::back_propagation(bnu::matrix<double>&& target)
+void MultiLayerPerceptron::back_propagation(bnu::matrix<double>&& target,
+					    bnu::matrix<double>&& input)
 {
-
     target -= m_layers.back().m_output; // for the output layer
 
     // calculate gradients for each layer and update the target matrix for next layer
     for (unsigned i_layer=m_layers.size() - 1; i_layer>0; --i_layer) {
-	m_layers[i_layer].calculate_gradients(target);
-	target = bnu::prod(bnu::trans(m_layers[i_layer].m_weights), m_layers[i_layer].m_output);
+	m_layers[i_layer].calculate_gradients(target);	
+	target = bnu::prod(bnu::trans(m_layers[i_layer].m_weights), // get previous dims right
+			   m_layers[i_layer].m_output);		    // by transposing weights
     }
-
     // update weights in each layer using the newly stored gradients
-    
-    
+    for (unsigned i_layer=m_layers.size() - 1; i_layer>0; --i_layer)
+	m_layers[i_layer].update_weights(m_layers[i_layer - 1].m_output);
+
+    Layer* input_layer = &m_layers[0]; 	    // previous output in input layer is input
+    input_layer->m_weights -= bnu::prod(input_layer->m_output, bnu::trans(input)); 
 }

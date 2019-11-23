@@ -107,7 +107,26 @@ void Layer::feed_forward(const bnu::matrix<double>& input)
 //------------------------------------------------------------------------------
 
 
+/**
+ * multiply the target vector with this layer's sum's derivative
+ * and store the gradients in the output matrix, so it can be 
+ * used recursively and to update the weights
+ * target contains the delta for the output layer and a multiplication
+ * of the output layer with the weights matrix for the hidden layers
+ * 
+ * @param target is a one dimensional matrix
+ * 
+ */
 void Layer::calculate_gradients(const bnu::matrix<double>& target)
 {
     m_output = bnu::prod(target, m_derivative(m_output));
+}
+
+
+//------------------------------------------------------------------------------
+
+
+void Layer::update_weights(const bnu::matrix<double>& prev_output)
+{
+    m_weights -= bnu::prod(m_output, bnu::trans(prev_output));
 }

@@ -34,27 +34,21 @@
  */
 class MultiLayerPerceptron {
 public:
-    // constructors
     MultiLayerPerceptron(std::vector<unsigned>&&); // default constructor
     
-    MultiLayerPerceptron(const MultiLayerPerceptron&) = default; // copy constructor
-    MultiLayerPerceptron(MultiLayerPerceptron&&) = default; // move constructor
+    MultiLayerPerceptron(const MultiLayerPerceptron&) = default; 	    // copy constructor
+    MultiLayerPerceptron(MultiLayerPerceptron&&) = default; 	 	    // move constructor
     MultiLayerPerceptron& operator=(const MultiLayerPerceptron&) = default; // assignment operator
     MultiLayerPerceptron& operator=(MultiLayerPerceptron&&) noexcept = default;
 
-    ~MultiLayerPerceptron() = default;			// destructor
+    ~MultiLayerPerceptron() = default;					    // destructor
 
-    // member functions
-    bnu::matrix<double> forward_propagation(bnu::matrix<double>&&);
-    void back_propagation(bnu::matrix<double>&&);
-
-    // getter and setter functions
-    Layer& operator[](unsigned);
-        
-    
+    bnu::matrix<double> forward_propagation(bnu::matrix<double>&&); 	    // member functions
+    void back_propagation(bnu::matrix<double>&&, bnu::matrix<double>&&);
+    Layer& operator[](unsigned); 					    // getter and setter
+            
 private:
-    std::vector<Layer> m_layers;
-    
+    std::vector<Layer> m_layers;    
 };
 
 

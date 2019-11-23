@@ -42,21 +42,19 @@ struct Layer {
     FunctionPointer m_activation, m_derivative; // public attributes
     bnu::matrix<double> m_output, m_weights, m_sum_z;
 
-    // constructors
-    Layer(unsigned, unsigned); // default constructor
+    Layer(unsigned, unsigned); 			// default constructor
     Layer(unsigned, unsigned, FunctionPointer, FunctionPointer);
     
     Layer(const Layer&) = default;		// copy constructor
-    Layer(Layer&&) = default;		// move constructor
-    Layer& operator=(const Layer&) = default; // assignment operator
+    Layer(Layer&&) = default;			// move constructor
+    Layer& operator=(const Layer&) = default; 	// assignment operator
     Layer& operator=(Layer&&) noexcept = default;
 
-    ~Layer() = default;			// destructor
+    ~Layer() = default;				// destructor
 
-    // methods
-    void feed_forward(const bnu::matrix<double>&);
-    void calculate_gradients(const bnu::matrix<double>&);
-    
+    void feed_forward(const bnu::matrix<double>&); 	  // methods to be called from
+    void calculate_gradients(const bnu::matrix<double>&); // multi layer class
+    void update_weights(const bnu::matrix<double>&);    
 };
 
 
