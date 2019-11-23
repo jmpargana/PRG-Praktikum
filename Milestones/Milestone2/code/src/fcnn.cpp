@@ -10,36 +10,95 @@
  */
 
 
-#include "../include/network.hpp"
+#include "../include/multi_layer_perceptron.hpp"
 #include <regex>
 #include <boost/filesystem.hpp>
+#include <map>
 
 
 //------------------------------------------------------------------------------
 
 
-// only needed for script version of this program
-std::string menu = "\n\
-Neural Network\n\n\
-Usage:\n\
-\tfcnn <command> [<args>]\n\n\
-Command:\n\
-\ttrain [<args>] <data>\n\
-\tpredict <data>\n\n\
-args:\n\
-\ttopology <sizes>\n\n\
-data: multiple file names\n\
-\texample1.dat example2.dat ...\n\n\
-size: layer size seperated by commas\n\
-\t7,6,5,6,7,2\n";
+using fsd = boost::filesystem::directory_entry;
 
 
 //------------------------------------------------------------------------------
 
 
-// variable will be updated as soon as files are
-// read and topology is given
-Network neural_network({224000, 200, 100, 50, 1});
+/**
+ * Global Variables
+ */
+
+// Neural network for qgp identification
+MultiLayerPerceptron qgp_identifier({224000, 2, 1});
+
+// random boolean generator
+auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
+
+// two lists with all qgp events from dataset
+// saved with boolean corresponding to their output
+std::vector<std::vector<fsd>> complete_list(2, std::vector<fsd>(5000));
+
+
+//------------------------------------------------------------------------------
+
+
+/**
+ * This method imports a given file and initializes the network with 
+ * the given tipology 
+ * @param file_name 
+ * @param event contains the vector with 
+ */
+bnu::matrix<double> import_file(std::string file_name)
+{
+    std::ifstream ist {file_name};
+    if (!ist) throw std::runtime_error("Couldn't open file");
+
+    int temp;
+    bnu::matrix<double> event(224000, 1);
+    
+    for (unsigned i_row=0; i_row<event.size1(); ++i_row){
+	ist >> temp;
+	event(i_row, 1) = temp;
+    }
+
+    return event;
+}
+
+
+//------------------------------------------------------------------------------
+
+
+void batch_normalization(unsigned s_batch)
+{
+    std::map<double, bool> events;
+    
+    for (unsigned i=0; i<s_batch; ++i) {
+	unsigned temp = gen();
+	bnu::matrix<double> target(1, 1); target(1, 1) = temp;
+
+	fsd event = complete_list[temp][complete_list.size() - 1];
+	complete_list[temp].pop_back();
+
+	qgp_identifier.forward_propagation(import_file(event.path().string()));
+	events[qgp_identifier[qgp_identifier.size() - 1].m_output(1,1)] =
+	    (bool)temp;
+    }
+
+    // perform batch normalization and use result for back propagation
+    // qgp_indentifier.back_propagation(e);
+}
+
+
+//------------------------------------------------------------------------------
+
+
+void run_epoch(unsigned n_epochs, unsigned s_batch)
+{
+    for (unsigned i_epoch=0; i_epoch<n_epochs; ++i_epoch) {
+	batch_normalization(s_batch);
+    }
+}
 
 
 //------------------------------------------------------------------------------
@@ -51,38 +110,13 @@ Network neural_network({224000, 200, 100, 50, 1});
  * @param input_dir folder name
  * @param other vector where it should be saved
  */
-void parse_directory(const char* input_dir,
-		     std::vector<boost::filesystem::directory_entry>& other)
+void parse_directory(const char* input_dir, std::vector<fsd>& other)
 {
     unsigned i_file=0;
     for (auto& file : boost::filesystem::directory_iterator(input_dir)) {
 	other[i_file] = file;
 	++i_file;
     }
-}
-
-
-//------------------------------------------------------------------------------
-
-
-/**
- * This method imports a given file and initializes the network with 
- * the given tipology 
- * @param file_name 
- */
-void import_file(std::string file_name)
-{
-    
-}
-
-
-//------------------------------------------------------------------------------
-
-
-void run_batch(boost::filesystem::directory_entry event)
-{
-    import_file(event.path().string());
-    
 }
 
 
@@ -98,34 +132,14 @@ int main(int argc, const char** argv)
 
 try
 {
-    // random generator for nqgp or qgp file
-    auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
-
-    // read all files from both folders in the dataset
-    std::vector<std::vector<boost::filesystem::directory_entry>>
-	complete_list(2, std::vector<boost::filesystem::directory_entry>(5000));
-
     // save all the data to two vectors (true and false)
     parse_directory("../../materials/dataset_new/qgp", complete_list[0]);
     parse_directory("../../materials/dataset_new/nqgp", complete_list[1]);
 
-    // select 20 events randomly and perform the batches until
-    // there are no files left for the training
-    while (!complete_list[0].empty() && !complete_list[1].empty()) {
-	
-	for (unsigned i=0; i<20; ++i) {
-	    unsigned temp = gen();
-	    // train file
-	    boost::filesystem::directory_entry event = complete_list[temp][complete_list.size() - 1];
-	    complete_list[temp].pop_back();
-	    run_batch(event);
-	}
-	// after the whole batch is done perform back propagation
-	neural_network.back_propagation();
-    }
-    // after the traning
+    if (argc != 3)
+	throw std::runtime_error("Usage:\n\tfcnn <epochs> <batch_size>");
     
-    
+    run_epoch(atoi(argv[2]), atoi(argv[3])); // number of epochs & batch size
     return 0;
 }
 

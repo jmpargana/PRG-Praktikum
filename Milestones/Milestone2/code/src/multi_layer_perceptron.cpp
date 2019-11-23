@@ -101,3 +101,9 @@ void MultiLayerPerceptron::back_propagation(bnu::matrix<double>&& target,
     Layer* input_layer = &m_layers[0]; 	    // previous output in input layer is input
     input_layer->m_weights -= bnu::prod(input_layer->m_output, bnu::trans(input)); 
 }
+
+
+//------------------------------------------------------------------------------
+
+
+unsigned MultiLayerPerceptron::size() { return m_layers.size(); }

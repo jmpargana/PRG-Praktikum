@@ -46,6 +46,7 @@ public:
     bnu::matrix<double> forward_propagation(bnu::matrix<double>&&); 	    // member functions
     void back_propagation(bnu::matrix<double>&&, bnu::matrix<double>&&);
     Layer& operator[](unsigned); 					    // getter and setter
+    unsigned size();
             
 private:
     std::vector<Layer> m_layers;    
