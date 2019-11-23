@@ -22,6 +22,7 @@
  */
 MultiLayerPerceptron::MultiLayerPerceptron(std::vector<unsigned>&& topology)
 {
+    m_layers.reserve(topology.size());
     for (unsigned i_layer=1; i_layer<topology.size(); ++i_layer)
 	m_layers.push_back(Layer(topology[i_layer - 1], topology[i_layer]));
 }
@@ -61,7 +62,7 @@ Layer& MultiLayerPerceptron::operator[](unsigned index)
  */
 bnu::matrix<double> MultiLayerPerceptron::forward_propagation(bnu::matrix<double>&& input)
 {
-    bnu::matrix<double> inputs_outputs = input; // temporary variable that changes each iteration
+    bnu::matrix<double> inputs_outputs(input); // temporary variable that changes each iteration
     for (Layer& i_layer : m_layers) {
 	i_layer.feed_forward(std::move(inputs_outputs));
 	inputs_outputs = i_layer.m_output;
@@ -73,13 +74,24 @@ bnu::matrix<double> MultiLayerPerceptron::forward_propagation(bnu::matrix<double
 //------------------------------------------------------------------------------
 
 
+/**
+ * Given a target output, the multi layer perceptron processes the 
+ * error by comparing the output with the error times its derivative
+ * and updates the weights by calling the back_prop function from 
+ * each of the layers
+ * 
+ * @param target is the expected value for the neural network's output
+ * 
+ */
 void MultiLayerPerceptron::back_propagation(bnu::matrix<double>&& target)
 {
-    unsigned i_layer = m_layers.size() - 1; 
-    Layer* c_layer = &m_layers[i_layer]; // for easier reading of code
+    unsigned i_layer = m_layers.size() - 1;
 
-    // calculate output layer's gradients
-    c_layer->m_output = bnu::prod(c_layer->m_output - target,
-				  c_layer->m_derivative(c_layer->m_output));
-    m_layers[i_layer].m_weights -= ();
+    m_layers[i_layer].back_prop(target);
+    // Layer* c_layer = &m_layers[i_layer]; // for easier reading of code
+
+    // // calculate output layer's gradients
+    // c_layer->m_output = bnu::prod(c_layer->m_output - target,
+    // 				  c_layer->m_derivative(c_layer->m_output));
+    // m_layers[i_layer].m_weights -= ();
 }

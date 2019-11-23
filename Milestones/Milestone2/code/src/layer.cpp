@@ -102,3 +102,13 @@ void Layer::feed_forward(const bnu::matrix<double>& input)
     m_sum_z = bnu::prod(m_weights, input);
     m_output = m_activation(m_sum_z);
 }
+
+
+//------------------------------------------------------------------------------
+
+
+void Layer::back_prop(const bnu::matrix<double>& target)
+{
+    m_output = bnu::prod(m_output - target, m_derivative(m_output));
+    m_weights -= (
+}

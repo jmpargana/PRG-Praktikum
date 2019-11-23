@@ -55,9 +55,7 @@ struct Layer {
 
     // methods
     void feed_forward(const bnu::matrix<double>&);
-
-    // getter and setter functions
-    
+    void back_prop(const bnu::matrix<double>&);
     
 };
 
