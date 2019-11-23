@@ -126,6 +126,14 @@ void Layer::calculate_gradients(const bnu::matrix<double>& target)
 //------------------------------------------------------------------------------
 
 
+/**
+ * Update the weights matrix by substracting the "correct"
+ * weights which can be calculated by multiplying the
+ * output with the transposed input
+ *
+ * @param prev_output previous layer's output/gradients
+ * 
+ */
 void Layer::update_weights(const bnu::matrix<double>& prev_output)
 {
     m_weights -= bnu::prod(m_output, bnu::trans(prev_output));
