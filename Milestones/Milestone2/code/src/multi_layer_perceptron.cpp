@@ -83,16 +83,14 @@ bnu::matrix<double> MultiLayerPerceptron::forward_propagation(bnu::matrix<double
  * @param target is the expected value for the neural network's output
  * 
  */
-void MultiLayerPerceptron::back_propagation(bnu::matrix<double>&& target,
+void MultiLayerPerceptron::back_propagation(bnu::matrix<double>&& mean_cost,
 					    bnu::matrix<double>&& input)
 {
-    target -= m_layers.back().m_output; // for the output layer
-
     // calculate gradients for each layer and update the target matrix for next layer
     for (unsigned i_layer=m_layers.size() - 1; i_layer>0; --i_layer) {
-	m_layers[i_layer].calculate_gradients(target);	
-	target = bnu::prod(bnu::trans(m_layers[i_layer].m_weights), // get previous dims right
-			   m_layers[i_layer].m_output);		    // by transposing weights
+	m_layers[i_layer].calculate_gradients(mean_cost);	
+	mean_cost = bnu::prod(bnu::trans(m_layers[i_layer].m_weights), // get previous dims right
+			   m_layers[i_layer].m_output);		       // by transposing weights
     }
     // update weights in each layer using the newly stored gradients
     for (unsigned i_layer=m_layers.size() - 1; i_layer>0; --i_layer)

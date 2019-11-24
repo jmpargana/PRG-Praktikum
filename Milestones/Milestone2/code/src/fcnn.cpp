@@ -77,23 +77,39 @@ bnu::matrix<double> import_file(std::string file_name)
  * method with it to update the weights 
  * @param s_batch is the number of times it should iterate
  */
-void batch_normalization(unsigned s_batch)
+void batch_normalization(unsigned s_batch,
+			 std::vector<std::vector<fsd>>& copied_list)
 {
-    std::map<double, double> events;
+    std::map<double, double> events; bnu::matrix<double> mean_inputs(224000, 1);
     
     for (unsigned i=0; i<s_batch; ++i) {
 	unsigned temp = genn();
 	bnu::matrix<double> target(1, 1); target(1, 1) = temp;
 
-	fsd event = complete_list[temp][complete_list.size() - 1];
+	fsd event = copied_list[temp][copied_list.size() - 1];
 	complete_list[temp].pop_back();
 
-    	qgp_identifier.forward_propagation(import_file(event.path().string()));
+	bnu::matrix<double> input(import_file(event.path().string()));
+	mean_inputs += input;
+
+    	qgp_identifier.forward_propagation(std::move(input));
     	events[qgp_identifier[qgp_identifier.size() - 1].m_output(1,1)] = temp;
     }
 
+    std::for_each(mean_inputs.begin1(), mean_inputs.end1(),
+		  [&](double val) {
+		      val /= s_batch;
+		  });
+    
     // perform batch normalization and use result for back propagation
-    // qgp_indentifier.back_propagation(e);
+    double total_cost = 0.0; 
+    std::for_each(events.begin(), events.end(),
+		  [&total_cost](std::pair<double, double> p) {
+		      total_cost += std::abs(p.second - p.first);
+		  });
+    
+    bnu::matrix<double> target(1,1); target(1, 1) = total_cost;    
+    qgp_identifier.back_propagation(std::move(target), std::move(mean_inputs));
 }
 
 
@@ -111,8 +127,17 @@ void batch_normalization(unsigned s_batch)
  */
 void run_epoch(unsigned n_epochs, unsigned s_epoch, unsigned s_batch)
 {
+    if (s_epoch > 10000)
+	throw std::runtime_error("Only 10000 events available");
+    
     for (unsigned i_epoch=0; i_epoch<n_epochs; ++i_epoch) {
-	batch_normalization(s_batch);
+	std::vector<std::vector<fsd>> copied_list(2, std::vector<fsd>(s_epoch/2));
+	for (unsigned i=0; i<s_epoch; ++i) {
+	    copied_list[0][i] = complete_list[0][i];
+	    copied_list[1][i] = complete_list[1][i];
+	}
+	
+	batch_normalization(s_batch, copied_list);
     }
 }
 
