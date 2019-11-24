@@ -15,8 +15,7 @@
 //------------------------------------------------------------------------------
 
 
-std::uniform_real_distribution<double> ran(0.0,1.0);
-std::default_random_engine gen;
+auto rangen = std::bind(std::uniform_real_distribution<>(0.0, 1.0), std::default_random_engine());
 
 
 //------------------------------------------------------------------------------
@@ -30,31 +29,31 @@ std::default_random_engine gen;
  * 
  */
 Layer::Layer(unsigned s_current_layer, unsigned s_prev_layer)
+    : m_output{s_current_layer, 1},
+      m_weights{s_current_layer, s_prev_layer},
+      m_sum_z{s_current_layer, 1}
 {
-    m_activation = [](bnu::matrix<double> input) -> bnu::matrix<double>
-	{
-	 double sum=0.0; bnu::matrix<double> activated(input.size1(), input.size2());
-	 for (auto start=input.begin1(); start!=input.end1(); ++start)
-	     sum += std::exp(*start);
-	 for (unsigned i_row=0; i_row<input.size1(); ++i_row)
-	     activated(i_row, 1) = std::exp(input(i_row, 1)) / sum;
-	 return activated;
-	};
+    m_activation = [](const bnu::matrix<double>& input) -> bnu::matrix<double>
+    	{
+    	 double sum=0.0; bnu::matrix<double> activated(input.size1(), input.size2());
+    	 for (auto start=input.begin1(); start!=input.end1(); ++start)
+    	     sum += std::exp(*start);
+    	 for (unsigned i_row=0; i_row<input.size1(); ++i_row)
+    	     activated(i_row, 1) = std::exp(input(i_row, 1)) / sum;
+    	 return activated;
+    	};
 
-    m_derivative = [this](bnu::matrix<double> input) -> bnu::matrix<double>
-	{
-	 bnu::matrix<double> derivated(input.size1(), input.size2());
-	 for (unsigned i_row=0; i_row<input.size1(); ++i_row) 
-	     derivated(i_row, 1) = m_activation(input)(i_row, 1) * (1 - m_activation(input)(i_row, 1));
-	 return derivated;
-	};
-    
-    m_sum_z(s_current_layer, 1); m_output(s_current_layer, 1); // one dimensional matrices
-    m_weights(s_current_layer, s_prev_layer);		   // matrix of weights NxN-1
+    m_derivative = [this](const bnu::matrix<double>& input) -> bnu::matrix<double>
+    	{
+    	 bnu::matrix<double> derivated(input.size1(), input.size2());
+    	 for (unsigned i_row=0; i_row<input.size1(); ++i_row) 
+    	     derivated(i_row, 1) = m_activation(input)(i_row, 1) * (1 - m_activation(input)(i_row, 1));
+    	 return derivated;
+    	};
 
     for (unsigned i_row=0; i_row<s_current_layer; ++i_row) // initialize matrix
-	for (unsigned i_col=0; i_col<s_prev_layer; ++i_col) // with random weights
-	    m_weights(i_row, i_col) = ran(gen);		  // from 0 to 1
+    	for (unsigned i_col=0; i_col<s_prev_layer; ++i_col) // with random weights
+    	    m_weights(i_row, i_col) = rangen();		  // from 0 to 1
 }
 
 
@@ -73,16 +72,16 @@ Layer::Layer(unsigned s_current_layer,
 	     unsigned s_prev_layer,
 	     FunctionPointer activation,
 	     FunctionPointer derivative)
-    : m_activation{activation},
-      m_derivative{derivative}
-{
-    m_output(s_current_layer, 1); 			   // one dimensional matrices
-    m_sum_z(s_current_layer, 1);
-    m_weights(s_current_layer, s_prev_layer);		   // matrix of weights NxN-1
 
+    : m_activation{activation},
+      m_derivative{derivative},
+      m_output{s_current_layer, 1},
+      m_weights{s_current_layer, s_prev_layer},
+      m_sum_z{s_current_layer, 1}
+{
     for (unsigned i_row=0; i_row<s_current_layer; ++i_row) // initialize matrix
 	for (unsigned i_col=0; i_col<s_prev_layer; ++i_col)// with random weights
-	    m_weights(i_row, i_col) = ran(gen);		   // from 0 to 1    
+	    m_weights(i_row, i_col) = rangen();		   // from 0 to 1    
 }
 
 

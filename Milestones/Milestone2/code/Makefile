@@ -16,7 +16,7 @@ INC := -I include
 
 
 $(TARGET): $(OBJECTS)
-	@echo "Creating GameOfLife binary..."
+	@echo "Creating fully connected neural network binary..."
 	$(CC) $^ -o $(TARGET) $(LIB)
 
 
