@@ -11,7 +11,7 @@ SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 CFLAGS := -g # -Wall
-LIB := -L/usr/include/boost -lboost_filesystem 	# for arch linux system
+LIB := -L/usr/include/boost -L/home/klezm/boost_1_72_0/stage/lib -L/home/klezm/boost_1_72_0/boost/ -L/home/klezm/boost_1_72_0/libs/ -lboost_filesystem 	# for arch linux system
 INC := -I include
 
 
