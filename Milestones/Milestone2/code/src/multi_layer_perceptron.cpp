@@ -89,15 +89,15 @@ void MultiLayerPerceptron::back_propagation(bnu::matrix<double>&& mean_cost,
     // calculate gradients for each layer and update the target matrix for next layer
     for (unsigned i_layer=m_layers.size() - 1; i_layer>0; --i_layer) {
 	m_layers[i_layer].calculate_gradients(mean_cost);	
-	mean_cost = bnu::prod(bnu::trans(m_layers[i_layer].m_weights), // get previous dims right
-			   m_layers[i_layer].m_output);		       // by transposing weights
+	mean_cost = bnu::prod(m_layers[i_layer].m_weights,
+			   m_layers[i_layer].m_output);
     }
     // update weights in each layer using the newly stored gradients
     for (unsigned i_layer=m_layers.size() - 1; i_layer>0; --i_layer)
 	m_layers[i_layer].update_weights(m_layers[i_layer - 1].m_output);
 
     Layer* input_layer = &m_layers[0]; 	    // previous output in input layer is input
-    input_layer->m_weights -= bnu::prod(input_layer->m_output, bnu::trans(input)); 
+    input_layer->m_weights -= bnu::trans(bnu::prod(input_layer->m_output, bnu::trans(input))); 
 }
 
 

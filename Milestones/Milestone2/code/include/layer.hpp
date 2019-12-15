@@ -22,8 +22,9 @@
 //------------------------------------------------------------------------------
 
 
+class Layer;
 namespace bnu = boost::numeric::ublas;
-using FunctionPointer = std::function<bnu::matrix<double>(const bnu::matrix<double>&)>;
+using FunctionPointer = std::function<bnu::matrix<double>(Layer* layer,const bnu::matrix<double>&)>;
 
 
 /**
@@ -48,7 +49,7 @@ struct Layer {
     Layer(const Layer&) = default;		// copy constructor
     Layer(Layer&&) = default;			// move constructor
     Layer& operator=(const Layer&) = default; 	// assignment operator
-    Layer& operator=(Layer&&) noexcept = default;
+    Layer& operator=(Layer&&) = default;
 
     ~Layer() = default;				// destructor
 

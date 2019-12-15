@@ -14,6 +14,7 @@
 #include <boost/filesystem.hpp>
 #include <regex>
 #include <map>
+#include <algorithm>
 
 
 //------------------------------------------------------------------------------
@@ -59,7 +60,7 @@ bnu::matrix<double> import_file(std::string file_name)
      
     for (unsigned i_row=0; i_row<event.size1(); ++i_row){
 	ist >> temp;
-	event(i_row, 1) = temp;
+	event(i_row, 0) = temp;
     }
 
     return event;
@@ -84,7 +85,7 @@ void batch_normalization(unsigned s_batch,
     
     for (unsigned i=0; i<s_batch; ++i) {
 	unsigned temp = genn();
-	bnu::matrix<double> target(1, 1); target(1, 1) = temp;
+	bnu::matrix<double> target(1, 1); target(0, 0) = temp;
 
 	fsd event = copied_list[temp][copied_list.size() - 1];
 	complete_list[temp].pop_back();
@@ -93,12 +94,12 @@ void batch_normalization(unsigned s_batch,
 	mean_inputs += input;
 
     	qgp_identifier.forward_propagation(std::move(input));
-    	events[qgp_identifier[qgp_identifier.size() - 1].m_output(1,1)] = temp;
+    	events[qgp_identifier[qgp_identifier.size() - 1].m_output(0,0)] = temp;
     }
 
-    std::for_each(mean_inputs.begin1(), mean_inputs.end1(),
+    std::transform(mean_inputs.begin1(), mean_inputs.end1(), mean_inputs.begin1(),
 		  [&](double val) {
-		      val /= s_batch;
+		      return val / s_batch;
 		  });
     
     // perform batch normalization and use result for back propagation
@@ -108,7 +109,7 @@ void batch_normalization(unsigned s_batch,
 		      total_cost += std::abs(p.second - p.first);
 		  });
     
-    bnu::matrix<double> target(1,1); target(1, 1) = total_cost;    
+    bnu::matrix<double> target(1,1); target(0, 0) = total_cost;    
     qgp_identifier.back_propagation(std::move(target), std::move(mean_inputs));
 }
 
@@ -132,7 +133,7 @@ void run_epoch(unsigned n_epochs, unsigned s_epoch, unsigned s_batch)
     
     for (unsigned i_epoch=0; i_epoch<n_epochs; ++i_epoch) {
 	std::vector<std::vector<fsd>> copied_list(2, std::vector<fsd>(s_epoch/2));
-	for (unsigned i=0; i<s_epoch; ++i) {
+	for (unsigned i=0; i<s_epoch/2; ++i) {
 	    copied_list[0][i] = complete_list[0][i];
 	    copied_list[1][i] = complete_list[1][i];
 	}

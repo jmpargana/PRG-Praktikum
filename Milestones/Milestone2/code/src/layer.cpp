@@ -33,21 +33,33 @@ Layer::Layer(unsigned s_current_layer, unsigned s_prev_layer)
       m_weights{s_current_layer, s_prev_layer},
       m_sum_z{s_current_layer, 1}
 {
-    m_activation = [](const bnu::matrix<double>& input) -> bnu::matrix<double>
+    m_activation = [](Layer*, const bnu::matrix<double>& input) -> bnu::matrix<double>
     	{
+		 // https://stackoverflow.com/a/49212689
+		 // fix overflow with e^input in softmax
+		 double max = *std::max_element(input.begin1(), input.end1());
+		 bnu::matrix<double> isoft(input.size1(), input.size2());
+		 for (int i = 0; i < input.size1(); ++i) {
+			 for (int j = 0; j < input.size2(); ++j) {
+				 isoft(i, j) = input(i, j) - max;
+			 }
+		 }
+
     	 double sum=0.0; bnu::matrix<double> activated(input.size1(), input.size2());
-    	 for (auto start=input.begin1(); start!=input.end1(); ++start)
+    	 for (auto start=isoft.begin1(); start!=isoft.end1(); ++start)
     	     sum += std::exp(*start);
-    	 for (unsigned i_row=0; i_row<input.size1(); ++i_row)
-    	     activated(i_row, 1) = std::exp(input(i_row, 1)) / sum;
+    	 for (unsigned i_row=0; i_row<isoft.size1(); ++i_row)
+    	     activated(i_row, 0) = std::exp(isoft(i_row, 0)) / sum;
     	 return activated;
     	};
 
-    m_derivative = [this](const bnu::matrix<double>& input) -> bnu::matrix<double>
+    m_derivative = [](Layer* l, const bnu::matrix<double>& input) -> bnu::matrix<double>
     	{
     	 bnu::matrix<double> derivated(input.size1(), input.size2());
-    	 for (unsigned i_row=0; i_row<input.size1(); ++i_row) 
-    	     derivated(i_row, 1) = m_activation(input)(i_row, 1) * (1 - m_activation(input)(i_row, 1));
+    	 for (unsigned i_row=0; i_row<input.size1(); ++i_row) {
+			 auto activated = l->m_activation(l, input);
+    	     derivated(i_row, 0) = activated(i_row, 0) * (1 - activated(i_row, 0));
+		 }
     	 return derivated;
     	};
 
@@ -98,8 +110,8 @@ Layer::Layer(unsigned s_current_layer,
  */
 void Layer::feed_forward(const bnu::matrix<double>& input)
 {
-    m_sum_z = bnu::prod(m_weights, input);
-    m_output = m_activation(m_sum_z);
+    m_sum_z = bnu::prod(bnu::trans(m_weights), input);
+    m_output = m_activation(this, m_sum_z);
 }
 
 
@@ -118,7 +130,7 @@ void Layer::feed_forward(const bnu::matrix<double>& input)
  */
 void Layer::calculate_gradients(const bnu::matrix<double>& target)
 {
-    m_output = bnu::prod(target, m_derivative(m_output));
+    m_output = bnu::prod(target, m_derivative(this, m_output));
 }
 
 
@@ -135,5 +147,5 @@ void Layer::calculate_gradients(const bnu::matrix<double>& target)
  */
 void Layer::update_weights(const bnu::matrix<double>& prev_output)
 {
-    m_weights -= bnu::prod(m_output, bnu::trans(prev_output));
+    m_weights -= bnu::prod(prev_output, m_output);
 }
