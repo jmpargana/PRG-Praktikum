@@ -84,14 +84,14 @@ void batch_normalization(unsigned s_batch,
     std::map<double, double> events; bnu::matrix<double> mean_inputs(224000, 1);
     
     for (unsigned i=0; i<s_batch; ++i) {
-	unsigned temp = genn();
-	bnu::matrix<double> target(1, 1); target(0, 0) = temp;
+        unsigned temp = genn();
+        bnu::matrix<double> target(1, 1); target(0, 0) = temp;
 
-	fsd event = copied_list[temp][copied_list.size() - 1];
-	complete_list[temp].pop_back();
+        fsd event = copied_list[temp][copied_list[temp].size() - 1];
+        complete_list[temp].pop_back();
 
-	bnu::matrix<double> input(import_file(event.path().string()));
-	mean_inputs += input;
+        bnu::matrix<double> input(import_file(event.path().string()));
+        mean_inputs += input;
 
     	qgp_identifier.forward_propagation(std::move(input));
     	events[qgp_identifier[qgp_identifier.size() - 1].m_output(0,0)] = temp;
@@ -129,16 +129,17 @@ void batch_normalization(unsigned s_batch,
 void run_epoch(unsigned n_epochs, unsigned s_epoch, unsigned s_batch)
 {
     if (s_epoch > 10000)
-	throw std::runtime_error("Only 10000 events available");
-    
+	    throw std::runtime_error("Only 10000 events available");
+
     for (unsigned i_epoch=0; i_epoch<n_epochs; ++i_epoch) {
-	std::vector<std::vector<fsd>> copied_list(2, std::vector<fsd>(s_epoch/2));
-	for (unsigned i=0; i<s_epoch/2; ++i) {
-	    copied_list[0][i] = complete_list[0][i];
-	    copied_list[1][i] = complete_list[1][i];
-	}
+	    std::vector<std::vector<fsd>> copied_list(2, std::vector<fsd>(s_epoch/2));
+
+	    for (unsigned i=0; i<s_epoch/2; ++i) {
+            copied_list[0][i] = complete_list[0][i];
+            copied_list[1][i] = complete_list[1][i];
+        }
 	
-	batch_normalization(s_batch, copied_list);
+        batch_normalization(s_batch, copied_list);
     }
 }
 
@@ -175,8 +176,8 @@ int main(int argc, const char** argv)
 try
 {
     // save all the data to two vectors (true and false)
-    parse_directory("../../materials/dataset_new/qgp", complete_list[0]);
-    parse_directory("../../materials/dataset_new/nqgp", complete_list[1]);
+    parse_directory("../materials/dataset_new/qgp", complete_list[0]);
+    parse_directory("../materials/dataset_new/nqgp", complete_list[1]);
 
     if (argc != 4)
     	throw std::runtime_error("Usage:\n\tfcnn <epochs> <epoch_size> <batch_size>");
