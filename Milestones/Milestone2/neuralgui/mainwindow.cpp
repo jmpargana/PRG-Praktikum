@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 #include <QDebug>
+#include <QComboBox>
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -12,12 +13,23 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton_import, &QPushButton::clicked,
             this, &MainWindow::importdata);
+    connect(ui->comboBox_draw, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &MainWindow::draw);
+    // TODO connections
 
+//    m_controller->moveToThread(&m_networkThread);
+    m_networkThread.start();
 
+    // we are going to modify this one later :)
+    ui->mainGraph->addGraph();
+
+    draw(); // make sure we paint what the GUI has selected
 }
 
 MainWindow::~MainWindow()
 {
+    m_networkThread.quit();
+    m_networkThread.wait();
     delete ui;
 }
 
@@ -62,7 +74,33 @@ void MainWindow::neural_net_mode()
 
 void MainWindow::draw()
 {
-
+    // needs to match combo box item position
+    const int xSquareOption = 0;
+    const int xPowerOfThreeOption = 1;
+    ui->mainGraph->xAxis->setLabel("x");
+    ui->mainGraph->yAxis->setLabel("y");
+    ui->mainGraph->xAxis->setRange(-5, 5);
+    if (ui->comboBox_draw->currentIndex() == xSquareOption) {
+        QVector<double> xs, ys;
+        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
+            xs.append(x);
+            ys.append(x * x);
+        }
+        ui->mainGraph->graph(0)->setData(xs, ys);
+        ui->mainGraph->yAxis->setRange(0, 5*5);
+    } else if (ui->comboBox_draw->currentIndex() == xPowerOfThreeOption) {
+        QVector<double> xs, ys;
+        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
+            xs.append(x);
+            ys.append(x * x * x);
+        }
+        ui->mainGraph->graph(0)->setData(xs, ys);
+        ui->mainGraph->yAxis->setRange(-5*5*5, 5*5*5);
+    }
+    ui->mainGraph->replot();
 }
 
+void MainWindow::progress()
+{
 
+}

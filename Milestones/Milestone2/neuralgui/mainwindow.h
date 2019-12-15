@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QThread>
+
+//#include "controller.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,8 +18,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private:
-    Ui::MainWindow *ui;
+public slots:
     void importdata();
     void events_for_training();
     void events_for_test();
@@ -25,5 +27,11 @@ private:
     void neural_net_mode();
     void draw();
     void progress();
+
+private:
+    Ui::MainWindow *ui;
+
+    QThread m_networkThread;
+//    Controller m_controller;
 };
 #endif // MAINWINDOW_H
