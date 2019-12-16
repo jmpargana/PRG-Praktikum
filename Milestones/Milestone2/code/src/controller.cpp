@@ -1,6 +1,11 @@
 #include "../include/controller.h"
 
-Controller::Controller() {}
+auto gennn = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
+
+Controller::Controller()
+    : qgp_identifier({224000, 2, 1}),
+    complete_list(2, std::vector<boost::filesystem::directory_entry>(5000))
+{}
 
 boost::numeric::ublas::matrix<double> Controller::import_file(std::string file_name)
 {
@@ -23,7 +28,7 @@ void Controller::batch_normalization(unsigned s_batch, std::vector<std::vector<b
     std::map<double, double> events; boost::numeric::ublas::matrix<double> mean_inputs(224000, 1);
 
     for (unsigned i=0; i<s_batch; ++i) {
-        unsigned temp = genn();
+        unsigned temp = gennn();
         boost::numeric::ublas::matrix<double> target(1, 1); target(0, 0) = temp;
 
         boost::filesystem::directory_entry event = copied_list[temp][copied_list[temp].size() - 1];
@@ -78,30 +83,31 @@ void Controller::parse_directory(const char* input_dir, std::vector<boost::files
     }
 }
 
-Controller::setTypology(unsigned x, unsigned y, unsigned z) {
-    qgp_identifier = MultiLayerPerceptron qgp_identifier({x, y, z});
+void Controller::setTypology(unsigned x, unsigned y, unsigned z) {
+    qgp_identifier = MultiLayerPerceptron({x, y, z});
 }
 
-Controller::setSplit(unsigned train, unsigned test, std::string qgp_path, std::string nqgp_path) {
+void Controller::setSplit(unsigned train, unsigned test, std::string qgp_path, std::string nqgp_path) {
 //    TODO loop until x and write to train; from x to end write to test
 //    [[qgp train], [nqgp train], [qgp test], [nqgp test]]
-    parse_directory(qgp_path, complete_list[0])
-    parse_directory(nqgp_path, complete_list[1])
-    parse_directory(qgp_path, complete_list[2])
-    parse_directory(nqgp_path, complete_list[3])
+//    parse_directory(qgp_path, complete_list[0])
+//    parse_directory(nqgp_path, complete_list[1])
+//    parse_directory(qgp_path, complete_list[2])
+//    parse_directory(nqgp_path, complete_list[3])
+    std::cout << "test" << std::endl;
 }
 
-Controller::startTraining() {
+int Controller::startTraining() {
     try
     {
         // save all the data to two vectors (true and false)
 //        parse_directory("../../materials/dataset_new/qgp", complete_list[0]);
 //        parse_directory("../../materials/dataset_new/nqgp", complete_list[1]);
 
-        if (argc != 4)
-            throw std::runtime_error("Usage:\n\tfcnn <epochs> <epoch_size> <batch_size>");
+//        if (argc != 4)
+//            throw std::runtime_error("Usage:\n\tfcnn <epochs> <epoch_size> <batch_size>");
 
-        run_epoch();
+        run_epoch(100, 100, 10);
         return 0;
     }
 
