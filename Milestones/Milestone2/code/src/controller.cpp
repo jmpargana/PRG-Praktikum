@@ -1,11 +1,18 @@
 #include "../include/controller.h"
 
+#include <QDebug>
+
 auto gennn = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
 
 Controller::Controller()
     : qgp_identifier({224000, 2, 1}),
-    complete_list(2, std::vector<boost::filesystem::directory_entry>(5000))
+      complete_list(2, std::vector<boost::filesystem::directory_entry>(5000))
 {}
+
+Controller::~Controller()
+{
+
+}
 
 boost::numeric::ublas::matrix<double> Controller::import_file(std::string file_name)
 {
@@ -98,6 +105,7 @@ void Controller::setSplit(unsigned train, unsigned test, std::string qgp_path, s
 }
 
 int Controller::startTraining() {
+    qDebug() << "starting training";
     try
     {
         // save all the data to two vectors (true and false)

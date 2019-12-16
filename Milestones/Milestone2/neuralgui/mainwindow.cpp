@@ -15,9 +15,11 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::importdata);
     connect(ui->comboBox_draw, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &MainWindow::draw);
+    connect(ui->pushButton_startTraining, &QPushButton::clicked,
+            this, &MainWindow::startTraining);
     // TODO connections
 
-//    m_controller->moveToThread(&m_networkThread);
+    m_controller.moveToThread(&m_networkThread);
     m_networkThread.start();
 
     // we are going to modify this one later :)
@@ -103,4 +105,10 @@ void MainWindow::draw()
 void MainWindow::progress()
 {
 
+}
+
+void MainWindow::startTraining()
+{
+    // thread safety :)
+    QMetaObject::invokeMethod(&m_controller, "startTraining");
 }

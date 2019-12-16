@@ -27,7 +27,7 @@
      <string>Load Data</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_analyze">
+   <widget class="QPushButton" name="pushButton_startTraining">
     <property name="geometry">
      <rect>
       <x>610</x>
@@ -37,7 +37,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Analyze</string>
+     <string>Start Training</string>
     </property>
    </widget>
    <widget class="QSpinBox" name="spinBox_events_for_Training">

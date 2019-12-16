@@ -7,16 +7,19 @@
 #include <regex>
 #include <map>
 #include <algorithm>
+#include <QObject>
 
 //using fsd = boost::filesystem::directory_entry;
 //namespace bnu = boost::numeric::ublas;
 
-class Controller {
+class Controller : public QObject {
+    Q_OBJECT
 
 public:
     Controller();
     ~Controller();
 
+public slots:
     boost::numeric::ublas::matrix<double> import_file(std::string);
     void batch_normalization(unsigned, std::vector<std::vector<boost::filesystem::directory_entry>>&);
     void parse_directory(const char*, std::vector<boost::filesystem::directory_entry>&);

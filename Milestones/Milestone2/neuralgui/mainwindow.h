@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QThread>
 
-//#include "controller.h"
+#include "../code/include/controller.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,11 +27,12 @@ public slots:
     void neural_net_mode();
     void draw();
     void progress();
+    void startTraining();
 
 private:
     Ui::MainWindow *ui;
 
     QThread m_networkThread;
-//    Controller m_controller;
+    Controller m_controller;
 };
 #endif // MAINWINDOW_H
