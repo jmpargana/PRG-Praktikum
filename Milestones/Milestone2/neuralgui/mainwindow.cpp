@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::draw);
     connect(ui->pushButton_startTraining, &QPushButton::clicked,
             this, &MainWindow::startTraining);
+    connect(ui->comboBox_Neural_Net_Mode, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &MainWindow::neural_net_mode);
     // TODO connections
 
     m_controller.moveToThread(&m_networkThread);
@@ -25,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     // we are going to modify this one later :)
     ui->mainGraph->addGraph();
 
+    neural_net_mode();
     draw(); // make sure we paint what the GUI has selected
 }
 
@@ -71,6 +74,26 @@ void MainWindow::batch_size()
 
 void MainWindow::neural_net_mode()
 {
+    const int oneHiddenLayer = 0;
+    const int twoHiddenLayers = 1;
+    const int threeHiddenLayers = 2;
+
+    QVector<unsigned> networkConfiguration;
+    switch (ui->comboBox_Neural_Net_Mode->currentIndex()) {
+    case oneHiddenLayer:
+        networkConfiguration = {224000, 2, 1};
+        break;
+    case twoHiddenLayers:
+        networkConfiguration = {224000, 64, 2, 1};
+        break;
+    case threeHiddenLayers:
+        networkConfiguration = {224000, 64, 64, 2, 1};
+    }
+
+    // m_controller.setTypology(networkConfiguration)
+    // we do it this way for thread safety
+    QMetaObject::invokeMethod(&m_controller, "setTypology", Q_ARG(const QVector<unsigned>&, networkConfiguration));
+
 
 }
 

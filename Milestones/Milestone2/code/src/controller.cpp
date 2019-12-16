@@ -90,8 +90,9 @@ void Controller::parse_directory(const char* input_dir, std::vector<boost::files
     }
 }
 
-void Controller::setTypology(unsigned x, unsigned y, unsigned z) {
-    qgp_identifier = MultiLayerPerceptron({x, y, z});
+void Controller::setTypology(const QVector<unsigned>& topology) {
+    qDebug() << "new topology" << topology;
+    qgp_identifier = MultiLayerPerceptron(topology.toStdVector());
 }
 
 void Controller::setSplit(unsigned train, unsigned test, std::string qgp_path, std::string nqgp_path) {

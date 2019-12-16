@@ -25,7 +25,7 @@ public slots:
     void parse_directory(const char*, std::vector<boost::filesystem::directory_entry>&);
     void run_epoch(unsigned, unsigned, unsigned);
 
-    void setTypology(unsigned, unsigned, unsigned);
+    void setTypology(const QVector<unsigned> &topology);
     void setSplit(unsigned, unsigned, std::string, std::string);
     int startTraining();
 
