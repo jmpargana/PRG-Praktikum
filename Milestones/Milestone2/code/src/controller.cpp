@@ -88,6 +88,8 @@ void Controller::run_epoch(unsigned n_epochs, unsigned s_epoch, unsigned s_batch
 
         batch_normalization(s_batch, copied_list);
 
+        // tell the GUI about which epoch we just finished
+        // see mainwindow.cpp about line 29
         emit epochTrained(i_epoch+1);
     }
 }
