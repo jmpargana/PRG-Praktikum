@@ -40,7 +40,7 @@
      <string>Start Training</string>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spinBox_events_for_Training">
+   <widget class="QSpinBox" name="spinBox_testDataPercentage">
     <property name="geometry">
      <rect>
       <x>510</x>
@@ -60,10 +60,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>Events for Training</string>
+     <string>% Test Data</string>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spinBox_events_for_Test">
+   <widget class="QSpinBox" name="spinBox_noEpochs">
     <property name="geometry">
      <rect>
       <x>510</x>
@@ -71,6 +71,15 @@
       <width>42</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>1000</number>
+    </property>
+    <property name="value">
+     <number>100</number>
     </property>
    </widget>
    <widget class="QSpinBox" name="spinBox_Quantitz_of_Epochs">
@@ -103,7 +112,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Events for Test</string>
+     <string>No Epochs</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
@@ -208,12 +217,12 @@
      <rect>
       <x>648</x>
       <y>320</y>
-      <width>71</width>
+      <width>111</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Progress </string>
+     <string>% epochs trained</string>
     </property>
    </widget>
    <widget class="QCustomPlot" name="mainGraph" native="true">

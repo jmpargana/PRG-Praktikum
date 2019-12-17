@@ -28,6 +28,7 @@ public slots:
     void draw();
     void progress();
     void startTraining();
+    void setNoEpoch(int epochs);
 
 private:
     Ui::MainWindow *ui;

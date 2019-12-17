@@ -19,14 +19,20 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::startTraining);
     connect(ui->comboBox_Neural_Net_Mode, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &MainWindow::neural_net_mode);
+    connect(ui->spinBox_noEpochs, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &MainWindow::setNoEpoch);
     // TODO connections
 
     m_controller.moveToThread(&m_networkThread);
     m_networkThread.start();
 
+    connect(&m_controller, &Controller::epochTrained,
+            ui->progressBar, &QProgressBar::setValue);
+
     // we are going to modify this one later :)
     ui->mainGraph->addGraph();
 
+    setNoEpoch(ui->spinBox_noEpochs->value());
     neural_net_mode();
     draw(); // make sure we paint what the GUI has selected
 }
@@ -45,8 +51,7 @@ void MainWindow::importdata()
     QString fileName = QFileDialog::getExistingDirectory(this, "Choose a data Directory");
     if (fileName.isNull())
         return;
-    std::string fileNameStd = fileName.toStdString();
-    // TODO
+    QMetaObject::invokeMethod(&m_controller, "setTrainingDataDirectory", Q_ARG(QString, fileName));
 }
 
 void MainWindow::events_for_training()
@@ -134,4 +139,11 @@ void MainWindow::startTraining()
 {
     // thread safety :)
     QMetaObject::invokeMethod(&m_controller, "startTraining");
+}
+
+void MainWindow::setNoEpoch(int epochs)
+{
+    ui->progressBar->setMaximum(epochs);
+    ui->progressBar->setMinimum(0);
+    QMetaObject::invokeMethod(&m_controller, "setEpochNo", Q_ARG(int, epochs));
 }

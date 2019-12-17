@@ -5,8 +5,10 @@
 auto gennn = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
 
 Controller::Controller()
-    : qgp_identifier({224000, 2, 1}),
-      complete_list(2, std::vector<boost::filesystem::directory_entry>(5000))
+    : qgp_identifier({224000, 2, 1})
+    , m_percentageTest(0)
+    , m_epochNo(100)
+    , complete_list(2, std::vector<boost::filesystem::directory_entry>(5000))
 {}
 
 Controller::~Controller()
@@ -72,13 +74,27 @@ void Controller::run_epoch(unsigned n_epochs, unsigned s_epoch, unsigned s_batch
     for (unsigned i_epoch=0; i_epoch<n_epochs; ++i_epoch) {
         std::vector<std::vector<boost::filesystem::directory_entry>> copied_list(2, std::vector<boost::filesystem::directory_entry>(s_epoch/2));
 
-        for (unsigned i=0; i<s_epoch/2; ++i) {
+        // very simple way of selecting test data:
+        // we ignore the first m_percentageTest/100 percent of files
+        // so we just start selecting training files at a later position :)
+        // hacky, not very good from machine learning point of view, but
+        // according to task :)
+        const int numberOfEventsPerLabel = 5000;
+        int firstTrainingFileIndex = m_percentageTest/100*numberOfEventsPerLabel;
+        for (unsigned i=firstTrainingFileIndex; i<s_epoch/2; ++i) {
             copied_list[0][i] = complete_list[0][i];
             copied_list[1][i] = complete_list[1][i];
         }
 
         batch_normalization(s_batch, copied_list);
+
+        emit epochTrained(i_epoch+1);
     }
+}
+
+void Controller::setTrainingDataDirectory(const QString &path)
+{
+    m_trainingDataPath = path;
 }
 
 void Controller::parse_directory(const char* input_dir, std::vector<boost::filesystem::directory_entry>& other)
@@ -95,14 +111,22 @@ void Controller::setTypology(const QVector<unsigned>& topology) {
     qgp_identifier = MultiLayerPerceptron(topology.toStdVector());
 }
 
-void Controller::setSplit(unsigned train, unsigned test, std::string qgp_path, std::string nqgp_path) {
+void Controller::setSplit(unsigned percentageTest) {
 //    TODO loop until x and write to train; from x to end write to test
 //    [[qgp train], [nqgp train], [qgp test], [nqgp test]]
 //    parse_directory(qgp_path, complete_list[0])
 //    parse_directory(nqgp_path, complete_list[1])
 //    parse_directory(qgp_path, complete_list[2])
 //    parse_directory(nqgp_path, complete_list[3])
-    std::cout << "test" << std::endl;
+
+    // we use this variable later when selecting files for batch computations
+    // so just save the value here
+    m_percentageTest = percentageTest;
+}
+
+void Controller::setEpochNo(int epochNo)
+{
+    m_epochNo = epochNo;
 }
 
 int Controller::startTraining() {
@@ -110,13 +134,14 @@ int Controller::startTraining() {
     try
     {
         // save all the data to two vectors (true and false)
-//        parse_directory("../../materials/dataset_new/qgp", complete_list[0]);
-//        parse_directory("../../materials/dataset_new/nqgp", complete_list[1]);
+        ;
+        parse_directory((m_trainingDataPath + "/qgp").toLocal8Bit(), complete_list[0]);
+        parse_directory((m_trainingDataPath + "/nqgp").toLocal8Bit(), complete_list[1]);
 
 //        if (argc != 4)
 //            throw std::runtime_error("Usage:\n\tfcnn <epochs> <epoch_size> <batch_size>");
 
-        run_epoch(100, 100, 10);
+        run_epoch(m_epochNo, 100, 10);
         return 0;
     }
 
