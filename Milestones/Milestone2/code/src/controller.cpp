@@ -34,7 +34,7 @@ boost::numeric::ublas::matrix<double> Controller::import_file(std::string file_n
 
 double Controller::batch_normalization(unsigned s_batch, std::vector<std::vector<boost::filesystem::directory_entry>>& copied_list)
 {
-    std::map<double, double> events; boost::numeric::ublas::matrix<double> mean_inputs(224000, 1);
+    std::vector<std::pair<double, double>> events{100}; boost::numeric::ublas::matrix<double> mean_inputs(224000, 1);
 
     for (auto it = mean_inputs.begin1(); it != mean_inputs.end1(); ++it)
         *it = 0;
@@ -50,7 +50,7 @@ double Controller::batch_normalization(unsigned s_batch, std::vector<std::vector
         mean_inputs += input;
 
         qgp_identifier.forward_propagation(std::move(input));
-        events[qgp_identifier[qgp_identifier.size() - 1].m_output(0,0)] = temp;
+        events.push_back({qgp_identifier[qgp_identifier.size() - 1].m_output(0,0), temp});
     }
 
     std::transform(mean_inputs.begin1(), mean_inputs.end1(), mean_inputs.begin1(),
