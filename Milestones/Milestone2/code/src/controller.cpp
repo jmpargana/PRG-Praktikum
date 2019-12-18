@@ -32,7 +32,7 @@ boost::numeric::ublas::matrix<double> Controller::import_file(std::string file_n
     return event;
 }
 
-void Controller::batch_normalization(unsigned s_batch, std::vector<std::vector<boost::filesystem::directory_entry>>& copied_list)
+double Controller::batch_normalization(unsigned s_batch, std::vector<std::vector<boost::filesystem::directory_entry>>& copied_list)
 {
     std::map<double, double> events; boost::numeric::ublas::matrix<double> mean_inputs(224000, 1);
 
@@ -64,6 +64,8 @@ void Controller::batch_normalization(unsigned s_batch, std::vector<std::vector<b
 
     boost::numeric::ublas::matrix<double> target(1,1); target(0, 0) = total_cost;
     qgp_identifier.back_propagation(std::move(target), std::move(mean_inputs));
+
+    return total_cost;
 }
 
 void Controller::run_epoch(unsigned n_epochs, unsigned s_epoch, unsigned s_batch)
@@ -72,6 +74,7 @@ void Controller::run_epoch(unsigned n_epochs, unsigned s_epoch, unsigned s_batch
         throw std::runtime_error("Only 10000 events available");
 
     time_t prevT, nowT = time(0);
+    double loss;
 
     for (unsigned i_epoch=0; i_epoch<n_epochs; ++i_epoch) {
         std::vector<std::vector<boost::filesystem::directory_entry>> copied_list(2, std::vector<boost::filesystem::directory_entry>(s_epoch/2));
@@ -88,7 +91,7 @@ void Controller::run_epoch(unsigned n_epochs, unsigned s_epoch, unsigned s_batch
             copied_list[1][i] = complete_list[1][i];
         }
 
-        batch_normalization(s_batch, copied_list);
+        loss = batch_normalization(s_batch, copied_list);
 
         // tell the GUI about which epoch we just finished
         // see mainwindow.cpp about line 29
@@ -96,6 +99,7 @@ void Controller::run_epoch(unsigned n_epochs, unsigned s_epoch, unsigned s_batch
         nowT = time(0);
         // write time / epoch to data storage
         emit newDataPoint("time", i_epoch+1, difftime(nowT, prevT));
+        emit newDataPoint("loss", i_epoch+1, loss);
         prevT = nowT;
         std::cout << nowT << " " << time(0) << " " << i_epoch << std::endl;
     }

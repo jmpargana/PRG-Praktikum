@@ -115,12 +115,12 @@ void MainWindow::draw()
     ui->mainGraph->xAxis->setLabel("x");
     ui->mainGraph->yAxis->setLabel("y");
     ui->mainGraph->xAxis->setRange(-5, 5);
+    double y_max = 1;
+    double x_max = 5;
+    QVector<double> xs, ys;
     if (ui->comboBox_draw->currentIndex() == xSquareOption) {
-        double y_max = 2;
-        double x_max = 5;
         ui->mainGraph->xAxis->setLabel("epoch");
         ui->mainGraph->yAxis->setLabel("time [s]");
-        QVector<double> xs, ys;
         for (int x = 0; x <= m_storage.data["time"].first.size(); x++) {
 //        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
 //            xs.append(x);
@@ -128,25 +128,29 @@ void MainWindow::draw()
             xs.append(m_storage.data["time"].first);
             ys.append(m_storage.data["time"].second);
         }
-        if (!xs.isEmpty()) {
-            // update graph dimensions
-            double max_x = std::ceil(xs.last());
-            double max_y = std::ceil(*std::max_element(ys.constBegin(), ys.constEnd()));
-            if (x_max <= max_x) x_max = max_x + 1;
-            if (y_max < max_y) y_max = max_y + 1;
-        }
-        ui->mainGraph->xAxis->setRange(0, x_max);
-        ui->mainGraph->yAxis->setRange(0, y_max);
-        ui->mainGraph->graph(0)->setData(xs, ys);
     } else if (ui->comboBox_draw->currentIndex() == xPowerOfThreeOption) {
-        QVector<double> xs, ys;
-        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
-            xs.append(x);
-            ys.append(x * x * x);
+        ui->mainGraph->xAxis->setLabel("epoch");
+        ui->mainGraph->yAxis->setLabel("loss");
+//        QVector<double> xs, ys;
+        for (int x = 0; x <= m_storage.data["loss"].first.size(); x++) {
+//        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
+//            xs.append(x);
+//            ys.append(x * x * x);
+            xs.append(m_storage.data["loss"].first);
+            ys.append(m_storage.data["loss"].second);
         }
-        ui->mainGraph->graph(0)->setData(xs, ys);
         ui->mainGraph->yAxis->setRange(-5*5*5, 5*5*5);
     }
+    if (!xs.isEmpty() && !ys.isEmpty()) {
+        // update graph dimensions
+        double max_x = std::ceil(xs.last());
+        double max_y = std::ceil(*std::max_element(ys.constBegin(), ys.constEnd()));
+        if (x_max <= max_x) x_max = max_x + 1;
+        if (y_max < max_y) y_max = max_y + 1;
+    }
+    ui->mainGraph->graph(0)->setData(xs, ys);
+    ui->mainGraph->xAxis->setRange(0, x_max);
+    ui->mainGraph->yAxis->setRange(0, y_max);
     ui->mainGraph->replot();
 //    double testy = m_storage.data["time"].first[0];
 //    std::cout << testy << std::endl;

@@ -24,7 +24,7 @@ public:
 
 public slots:
     boost::numeric::ublas::matrix<double> import_file(std::string);
-    void batch_normalization(unsigned, std::vector<std::vector<boost::filesystem::directory_entry>>&);
+    double batch_normalization(unsigned, std::vector<std::vector<boost::filesystem::directory_entry>>&);
     void parse_directory(const char*, std::vector<boost::filesystem::directory_entry>&);
     void run_epoch(unsigned, unsigned, unsigned);
 
@@ -37,7 +37,6 @@ public slots:
 signals:
     // used for listening to events and passing the information to other objects
     void epochTrained(int epochNumber);
-
     void newDataPoint(QString plotName, double xvalue, double yvalue);
 
 private:
