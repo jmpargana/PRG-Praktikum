@@ -36,12 +36,14 @@ SOURCES += \
     ../code/src/layer.cpp \
     ../code/src/multi_layer_perceptron.cpp \
     ../code/src/controller.cpp \
+    datastorage.cpp
 
 HEADERS += \
     mainwindow.h \
     ../code/include/layer.hpp \
     ../code/include/multi_layer_perceptron.hpp \
     ../code/include/controller.h \
+    datastorage.h
 
 FORMS += \
     mainwindow.ui

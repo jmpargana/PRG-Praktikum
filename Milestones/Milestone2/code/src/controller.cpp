@@ -71,6 +71,8 @@ void Controller::run_epoch(unsigned n_epochs, unsigned s_epoch, unsigned s_batch
     if (s_epoch > 10000)
         throw std::runtime_error("Only 10000 events available");
 
+    time_t prevT, nowT = time(0);
+
     for (unsigned i_epoch=0; i_epoch<n_epochs; ++i_epoch) {
         std::vector<std::vector<boost::filesystem::directory_entry>> copied_list(2, std::vector<boost::filesystem::directory_entry>(s_epoch/2));
 
@@ -91,6 +93,10 @@ void Controller::run_epoch(unsigned n_epochs, unsigned s_epoch, unsigned s_batch
         // tell the GUI about which epoch we just finished
         // see mainwindow.cpp about line 29
         emit epochTrained(i_epoch+1);
+        nowT = time(0);
+        emit newDataPoint("time", i_epoch+1, difftime(nowT, prevT));
+        prevT = nowT;
+        std::cout << nowT << " " << time(0) << " " << i_epoch << std::endl;
     }
 }
 

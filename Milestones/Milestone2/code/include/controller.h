@@ -9,6 +9,9 @@
 #include <algorithm>
 #include <QObject>
 
+#include <iostream>
+#include <ctime>
+
 //using fsd = boost::filesystem::directory_entry;
 //namespace bnu = boost::numeric::ublas;
 
@@ -33,6 +36,8 @@ public slots:
 
 signals:
     void epochTrained(int epochNumber);
+
+    void newDataPoint(QString plotName, double xvalue, double yvalue);
 
 private:
     MultiLayerPerceptron qgp_identifier;

@@ -5,6 +5,7 @@
 #include <QThread>
 
 #include "../code/include/controller.h"
+#include "datastorage.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,5 +36,6 @@ private:
 
     QThread m_networkThread;
     Controller m_controller;
+    DataStorage m_storage;
 };
 #endif // MAINWINDOW_H

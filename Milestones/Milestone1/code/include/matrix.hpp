@@ -1,7 +1,7 @@
-/** 
+/**
  * PRG-Praktikum
  * Author: Joao Pargana 6807391
- * 
+ *
  */
 
 #ifndef MATRIX_HPP
@@ -31,7 +31,7 @@
 // template <typename T>
 class Matrix {
 
-public:    
+public:
     // all constructors
     Matrix();
     Matrix(unsigned);		// square matrix
@@ -44,12 +44,12 @@ public:
     // copy and assignment constructors
     Matrix(Matrix&);		      // copy constructor
     Matrix(Matrix&&);
-    
+
     Matrix& operator=(const Matrix&); // assignment operator
 
     // move constructor and move operator
     Matrix& operator=(Matrix&&) noexcept;
-    
+
     // destruction constructors
     ~Matrix();
 
@@ -67,7 +67,7 @@ public:
 
     // extras
     Matrix power(double);
-    
+
 
     // getter for vector
     std::vector<bool>& operator[](unsigned);
@@ -79,10 +79,10 @@ public:
 
     bool square();		// square checker
 
-    
+
 private:
     std::vector<std::vector<bool> > matrix;
-    
+
 };
 
 

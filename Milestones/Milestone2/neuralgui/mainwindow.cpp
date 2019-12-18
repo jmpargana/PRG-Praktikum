@@ -29,6 +29,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&m_controller, &Controller::epochTrained,
             ui->progressBar, &QProgressBar::setValue);
 
+//    connect(&m_storage, &Controller::newDataPoint,
+//            , &QProgressBar::setValue);
+
     // we are going to modify this one later :)
     ui->mainGraph->addGraph();
 
@@ -112,9 +115,12 @@ void MainWindow::draw()
     ui->mainGraph->xAxis->setRange(-5, 5);
     if (ui->comboBox_draw->currentIndex() == xSquareOption) {
         QVector<double> xs, ys;
-        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
-            xs.append(x);
-            ys.append(x * x);
+        for (int x = 0; x <= m_storage.data["time"].first.size(); x++) {
+//        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
+//            xs.append(x);
+//            ys.append(x * x);
+            xs.append(m_storage.data["time"].first);
+            ys.append(m_storage.data["time"].second);
         }
         ui->mainGraph->graph(0)->setData(xs, ys);
         ui->mainGraph->yAxis->setRange(0, 5*5);
@@ -128,6 +134,8 @@ void MainWindow::draw()
         ui->mainGraph->yAxis->setRange(-5*5*5, 5*5*5);
     }
     ui->mainGraph->replot();
+//    double testy = m_storage.data["time"].first[0];
+//    std::cout << testy << std::endl;
 }
 
 void MainWindow::progress()
