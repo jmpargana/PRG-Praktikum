@@ -148,34 +148,31 @@ void MainWindow::drawOnGraph(QCustomPlot *widget, int plotId)
         widget->xAxis->setLabel("epoch");
         widget->yAxis->setLabel("time [s]");
         for (int x = 0; x <= m_storage.data["time"].first.size(); x++) {
-//        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
-//            xs.append(x);
-//            ys.append(x * x);
 //            if (!m_storage.data["time"].first.isEmpty() && !m_storage.data["time"].second.isEmpty()) {
             xs.append(m_storage.data["time"].first); //.last());
             ys.append(m_storage.data["time"].second); //.last());
 //            }
         }
-    } else if (plotId == xLossAcc) {
+    } else if (plotId == xLoss) {
         widget->xAxis->setLabel("epoch");
         widget->yAxis->setLabel("loss");
         for (int x = 0; x <= m_storage.data["loss"].first.size(); x++) {
-//        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
-//            xs.append(x);
-//            ys.append(x * x * x);
             xs.append(m_storage.data["loss"].first);
             ys.append(m_storage.data["loss"].second);
         }
-//        widget->yAxis->setRange(-5*5*5, 5*5*5);
-    } else if (plotId == xLoss) {
+    } else if (plotId == xLossAcc) {
         widget->xAxis->setLabel("epoch");
         widget->yAxis->setLabel("accumulated loss");
         for (int x = 0; x <= m_storage.data["loss"].first.size(); x++) {
-//        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
-//            xs.append(x);
-//            ys.append(x * x * x);
-            xs.append(std::accumulate(m_storage.data["loss"].first.begin(), m_storage.data["loss"].first.end(), 0));
-            ys.append(std::accumulate(m_storage.data["loss"].second.begin(), m_storage.data["loss"].second.end(), 0));
+
+            if (!m_storage.data["loss"].first.isEmpty() && !m_storage.data["loss"].second.isEmpty()) {
+                xs.append(m_storage.data["loss"].first.last());
+                ys.append(std::accumulate(m_storage.data["loss"].second.begin(), m_storage.data["loss"].second.end(), 0));
+//                            for (int x = 0; x < m_storage.data["loss"].second.length(); x++) {
+//                                    std::accumulate(m_storage.data["loss"].second.begin(), m_storage.data["loss"].second.value(x), 0);
+//                                );
+//                            }
+            }
         }
     }
 
@@ -190,7 +187,5 @@ void MainWindow::drawOnGraph(QCustomPlot *widget, int plotId)
     widget->xAxis->setRange(0, x_max);
     widget->yAxis->setRange(0, y_max);
     widget->replot();
-//    double testy = m_storage.data["time"].first[0];
-//    std::cout << testy << std::endl;
 
 }
