@@ -22,7 +22,7 @@
 //------------------------------------------------------------------------------
 
 
-class Layer;
+struct Layer;
 namespace bnu = boost::numeric::ublas;
 using FunctionPointer = std::function<bnu::matrix<double>(Layer* layer,const bnu::matrix<double>&)>;
 

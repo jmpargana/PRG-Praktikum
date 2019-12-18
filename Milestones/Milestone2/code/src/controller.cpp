@@ -36,6 +36,9 @@ double Controller::batch_normalization(unsigned s_batch, std::vector<std::vector
 {
     std::map<double, double> events; boost::numeric::ublas::matrix<double> mean_inputs(224000, 1);
 
+    for (auto it = mean_inputs.begin1(); it != mean_inputs.end1(); ++it)
+        *it = 0;
+
     for (unsigned i=0; i<s_batch; ++i) {
         unsigned temp = gennn();
         boost::numeric::ublas::matrix<double> target(1, 1); target(0, 0) = temp;
