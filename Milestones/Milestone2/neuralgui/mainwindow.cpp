@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // we are going to modify this one later :)
     ui->mainGraph->addGraph();
+    ui->lossGraph->addGraph();
 
     setNoEpoch(ui->spinBox_noEpochs->value());
     neural_net_mode();
@@ -110,6 +111,7 @@ void MainWindow::neural_net_mode()
 void MainWindow::draw()
 {
     this->drawOnGraph(ui->mainGraph, ui->comboBox_draw->currentIndex());
+    this->drawOnGraph(ui->lossGraph, 1 /* loss option */);
 }
 
 void MainWindow::progress()
