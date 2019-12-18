@@ -135,16 +135,16 @@ void MainWindow::setNoEpoch(int epochs)
 void MainWindow::drawOnGraph(QCustomPlot *widget, int plotId)
 {
     // needs to match combo box item position
-    const int xSquareOption = 0;
-    const int xPowerOfThreeOption = 1;
-    const int xLossAcc = 0;
+    const int xTime = 0;
+    const int xLoss = 1;
+    const int xLossAcc = 2;
     widget->xAxis->setLabel("x");
     widget->yAxis->setLabel("y");
     widget->xAxis->setRange(-5, 5);
     double y_max = 2;
     double x_max = 5;
     QVector<double> xs, ys;
-    if (plotId == xSquareOption) {
+    if (plotId == xTime) {
         widget->xAxis->setLabel("epoch");
         widget->yAxis->setLabel("time [s]");
         for (int x = 0; x <= m_storage.data["time"].first.size(); x++) {
@@ -167,7 +167,7 @@ void MainWindow::drawOnGraph(QCustomPlot *widget, int plotId)
             ys.append(m_storage.data["loss"].second);
         }
 //        widget->yAxis->setRange(-5*5*5, 5*5*5);
-    } else if (plotId == xPowerOfThreeOption) {
+    } else if (plotId == xLoss) {
         widget->xAxis->setLabel("epoch");
         widget->yAxis->setLabel("accumulated loss");
         for (int x = 0; x <= m_storage.data["loss"].first.size(); x++) {

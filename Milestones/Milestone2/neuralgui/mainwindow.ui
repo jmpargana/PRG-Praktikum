@@ -169,35 +169,27 @@
    <widget class="QComboBox" name="comboBox_draw">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>550</x>
       <y>270</y>
-      <width>91</width>
+      <width>231</width>
       <height>32</height>
      </rect>
     </property>
     <item>
      <property name="text">
-      <string>x^2</string>
+      <string>time per epoch</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>x^3</string>
+      <string>loss per epoch</string>
      </property>
     </item>
-   </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>600</x>
-      <y>280</y>
-      <width>59</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Draw</string>
-    </property>
+    <item>
+     <property name="text">
+      <string>accumulated loss</string>
+     </property>
+    </item>
    </widget>
    <widget class="QProgressBar" name="progressBar">
     <property name="geometry">
@@ -243,6 +235,19 @@
       <width>271</width>
       <height>171</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>275</y>
+      <width>59</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Graph:</string>
     </property>
    </widget>
   </widget>
