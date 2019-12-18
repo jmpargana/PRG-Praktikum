@@ -94,6 +94,7 @@ void Controller::run_epoch(unsigned n_epochs, unsigned s_epoch, unsigned s_batch
         // see mainwindow.cpp about line 29
         emit epochTrained(i_epoch+1);
         nowT = time(0);
+        // write time / epoch to data storage
         emit newDataPoint("time", i_epoch+1, difftime(nowT, prevT));
         prevT = nowT;
         std::cout << nowT << " " << time(0) << " " << i_epoch << std::endl;

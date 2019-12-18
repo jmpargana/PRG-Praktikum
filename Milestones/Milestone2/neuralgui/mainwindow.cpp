@@ -105,7 +105,6 @@ void MainWindow::neural_net_mode()
     // we do it this way for thread safety
     QMetaObject::invokeMethod(&m_controller, "setTypology", Q_ARG(const QVector<unsigned>&, networkConfiguration));
 
-
 }
 
 void MainWindow::draw()
@@ -130,6 +129,7 @@ void MainWindow::draw()
             ys.append(m_storage.data["time"].second);
         }
         if (!xs.isEmpty()) {
+            // update graph dimensions
             double max_x = std::ceil(xs.last());
             double max_y = std::ceil(*std::max_element(ys.constBegin(), ys.constEnd()));
             if (x_max <= max_x) x_max = max_x + 1;

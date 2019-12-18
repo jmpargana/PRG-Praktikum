@@ -35,6 +35,7 @@ public slots:
     int startTraining();
 
 signals:
+    // used for listening to events and passing the information to other objects
     void epochTrained(int epochNumber);
 
     void newDataPoint(QString plotName, double xvalue, double yvalue);
