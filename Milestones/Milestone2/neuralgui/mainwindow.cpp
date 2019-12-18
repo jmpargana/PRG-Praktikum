@@ -163,15 +163,15 @@ void MainWindow::drawOnGraph(QCustomPlot *widget, int plotId)
     } else if (plotId == xLossAcc) {
         widget->xAxis->setLabel("epoch");
         widget->yAxis->setLabel("accumulated loss");
-        for (int x = 0; x <= m_storage.data["loss"].first.size(); x++) {
+        for (int x = 0; x < m_storage.data["loss"].first.size(); x++) {
 
             if (!m_storage.data["loss"].first.isEmpty() && !m_storage.data["loss"].second.isEmpty()) {
-                xs.append(m_storage.data["loss"].first.last());
-                ys.append(std::accumulate(m_storage.data["loss"].second.begin(), m_storage.data["loss"].second.end(), 0));
-//                            for (int x = 0; x < m_storage.data["loss"].second.length(); x++) {
-//                                    std::accumulate(m_storage.data["loss"].second.begin(), m_storage.data["loss"].second.value(x), 0);
-//                                );
-//                            }
+                xs.append(m_storage.data["loss"].first[x]);
+                double y = 0;
+                for (int i = 0; i < x; i++) {
+                    y += m_storage.data["loss"].second[i];
+                }
+                ys.append(y);
             }
         }
     }
