@@ -29,8 +29,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&m_controller, &Controller::epochTrained,
             ui->progressBar, &QProgressBar::setValue);
 
-//    connect(&m_storage, &Controller::newDataPoint,
-//            , &QProgressBar::setValue);
+//    connect(source, signal, receiver, slot)
+    connect(&m_controller, &Controller::newDataPoint,
+            &m_storage, &DataStorage::acceptNewDatapoint);
 
     // we are going to modify this one later :)
     ui->mainGraph->addGraph();
