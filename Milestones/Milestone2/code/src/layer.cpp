@@ -130,7 +130,8 @@ void Layer::feed_forward(const bnu::matrix<double>& input)
  */
 void Layer::calculate_gradients(const bnu::matrix<double>& target)
 {
-    m_output = bnu::prod(target, m_derivative(this, m_output));
+    auto derivative = m_derivative(this, m_output);
+    m_output = bnu::element_prod(target, derivative);
 }
 
 
@@ -147,5 +148,5 @@ void Layer::calculate_gradients(const bnu::matrix<double>& target)
  */
 void Layer::update_weights(const bnu::matrix<double>& prev_output)
 {
-    m_weights -= bnu::prod(prev_output, m_output);
+    m_weights -= bnu::prod(prev_output, bnu::trans(m_output));
 }
