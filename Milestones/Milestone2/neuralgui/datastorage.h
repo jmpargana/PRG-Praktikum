@@ -14,6 +14,7 @@ public:
     explicit DataStorage(QObject *parent = nullptr);
 
 signals:
+    void dataChanged();
 
 public slots:
     void acceptNewDatapoint(QString plotName, double xvalue, double yvalue);

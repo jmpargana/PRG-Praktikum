@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
 //    connect(source, signal, receiver, slot)
     connect(&m_controller, &Controller::newDataPoint,
             &m_storage, &DataStorage::acceptNewDatapoint);
+    connect(&m_storage, &DataStorage::dataChanged,
+            this, &MainWindow::draw);
 
     // we are going to modify this one later :)
     ui->mainGraph->addGraph();
@@ -115,6 +117,9 @@ void MainWindow::draw()
     ui->mainGraph->yAxis->setLabel("y");
     ui->mainGraph->xAxis->setRange(-5, 5);
     if (ui->comboBox_draw->currentIndex() == xSquareOption) {
+        ui->mainGraph->xAxis->setRange(0, 200);
+        ui->mainGraph->xAxis->setLabel("epoch");
+        ui->mainGraph->yAxis->setLabel("time");
         QVector<double> xs, ys;
         for (int x = 0; x <= m_storage.data["time"].first.size(); x++) {
 //        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
@@ -124,7 +129,7 @@ void MainWindow::draw()
             ys.append(m_storage.data["time"].second);
         }
         ui->mainGraph->graph(0)->setData(xs, ys);
-        ui->mainGraph->yAxis->setRange(0, 5*5);
+        ui->mainGraph->yAxis->setRange(0, 5.0);
     } else if (ui->comboBox_draw->currentIndex() == xPowerOfThreeOption) {
         QVector<double> xs, ys;
         for (double x = -5; x <= 5; x += 10.0 / 100.0) {
