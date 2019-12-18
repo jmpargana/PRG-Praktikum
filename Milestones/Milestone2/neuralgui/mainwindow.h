@@ -11,6 +11,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+class QCustomPlot;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -30,6 +32,8 @@ public slots:
     void progress();
     void startTraining();
     void setNoEpoch(int epochs);
+
+    void drawOnGraph(QCustomPlot *widget, int plotId);
 
 private:
     Ui::MainWindow *ui;

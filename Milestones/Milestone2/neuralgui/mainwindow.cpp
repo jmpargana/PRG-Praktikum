@@ -109,64 +109,7 @@ void MainWindow::neural_net_mode()
 
 void MainWindow::draw()
 {
-    // needs to match combo box item position
-    const int xSquareOption = 0;
-    const int xPowerOfThreeOption = 1;
-    const int xLossAcc = 0;
-    ui->mainGraph->xAxis->setLabel("x");
-    ui->mainGraph->yAxis->setLabel("y");
-    ui->mainGraph->xAxis->setRange(-5, 5);
-    double y_max = 2;
-    double x_max = 5;
-    QVector<double> xs, ys;
-    if (ui->comboBox_draw->currentIndex() == xSquareOption) {
-        ui->mainGraph->xAxis->setLabel("epoch");
-        ui->mainGraph->yAxis->setLabel("time [s]");
-        for (int x = 0; x <= m_storage.data["time"].first.size(); x++) {
-//        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
-//            xs.append(x);
-//            ys.append(x * x);
-//            if (!m_storage.data["time"].first.isEmpty() && !m_storage.data["time"].second.isEmpty()) {
-            xs.append(m_storage.data["time"].first); //.last());
-            ys.append(m_storage.data["time"].second); //.last());
-//            }
-        }
-    } else if (ui->comboBox_draw->currentIndex() == xLossAcc) {
-        ui->mainGraph->xAxis->setLabel("epoch");
-        ui->mainGraph->yAxis->setLabel("loss");
-        for (int x = 0; x <= m_storage.data["loss"].first.size(); x++) {
-//        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
-//            xs.append(x);
-//            ys.append(x * x * x);
-            xs.append(m_storage.data["loss"].first);
-            ys.append(m_storage.data["loss"].second);
-        }
-//        ui->mainGraph->yAxis->setRange(-5*5*5, 5*5*5);
-    } else if (ui->comboBox_draw->currentIndex() == xPowerOfThreeOption) {
-        ui->mainGraph->xAxis->setLabel("epoch");
-        ui->mainGraph->yAxis->setLabel("accumulated loss");
-        for (int x = 0; x <= m_storage.data["loss"].first.size(); x++) {
-//        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
-//            xs.append(x);
-//            ys.append(x * x * x);
-            xs.append(std::accumulate(m_storage.data["loss"].first.begin(), m_storage.data["loss"].first.end(), 0));
-            ys.append(std::accumulate(m_storage.data["loss"].second.begin(), m_storage.data["loss"].second.end(), 0));
-        }
-    }
-
-    if (!xs.isEmpty() && !ys.isEmpty()) {
-        // update graph dimensions
-        double max_x = std::ceil(xs.last());
-        double max_y = std::ceil(*std::max_element(ys.constBegin(), ys.constEnd()));
-        if (x_max <= max_x) x_max = max_x + 1;
-        if (y_max < max_y) y_max = max_y + 1;
-    }
-    ui->mainGraph->graph(0)->setData(xs, ys);
-    ui->mainGraph->xAxis->setRange(0, x_max);
-    ui->mainGraph->yAxis->setRange(0, y_max);
-    ui->mainGraph->replot();
-//    double testy = m_storage.data["time"].first[0];
-//    std::cout << testy << std::endl;
+    this->drawOnGraph(ui->mainGraph, ui->comboBox_draw->currentIndex());
 }
 
 void MainWindow::progress()
@@ -185,4 +128,67 @@ void MainWindow::setNoEpoch(int epochs)
     ui->progressBar->setMaximum(epochs);
     ui->progressBar->setMinimum(0);
     QMetaObject::invokeMethod(&m_controller, "setEpochNo", Q_ARG(int, epochs));
+}
+
+void MainWindow::drawOnGraph(QCustomPlot *widget, int plotId)
+{
+    // needs to match combo box item position
+    const int xSquareOption = 0;
+    const int xPowerOfThreeOption = 1;
+    const int xLossAcc = 0;
+    widget->xAxis->setLabel("x");
+    widget->yAxis->setLabel("y");
+    widget->xAxis->setRange(-5, 5);
+    double y_max = 2;
+    double x_max = 5;
+    QVector<double> xs, ys;
+    if (plotId == xSquareOption) {
+        widget->xAxis->setLabel("epoch");
+        widget->yAxis->setLabel("time [s]");
+        for (int x = 0; x <= m_storage.data["time"].first.size(); x++) {
+//        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
+//            xs.append(x);
+//            ys.append(x * x);
+//            if (!m_storage.data["time"].first.isEmpty() && !m_storage.data["time"].second.isEmpty()) {
+            xs.append(m_storage.data["time"].first); //.last());
+            ys.append(m_storage.data["time"].second); //.last());
+//            }
+        }
+    } else if (plotId == xLossAcc) {
+        widget->xAxis->setLabel("epoch");
+        widget->yAxis->setLabel("loss");
+        for (int x = 0; x <= m_storage.data["loss"].first.size(); x++) {
+//        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
+//            xs.append(x);
+//            ys.append(x * x * x);
+            xs.append(m_storage.data["loss"].first);
+            ys.append(m_storage.data["loss"].second);
+        }
+//        widget->yAxis->setRange(-5*5*5, 5*5*5);
+    } else if (plotId == xPowerOfThreeOption) {
+        widget->xAxis->setLabel("epoch");
+        widget->yAxis->setLabel("accumulated loss");
+        for (int x = 0; x <= m_storage.data["loss"].first.size(); x++) {
+//        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
+//            xs.append(x);
+//            ys.append(x * x * x);
+            xs.append(std::accumulate(m_storage.data["loss"].first.begin(), m_storage.data["loss"].first.end(), 0));
+            ys.append(std::accumulate(m_storage.data["loss"].second.begin(), m_storage.data["loss"].second.end(), 0));
+        }
+    }
+
+    if (!xs.isEmpty() && !ys.isEmpty()) {
+        // update graph dimensions
+        double max_x = std::ceil(xs.last());
+        double max_y = std::ceil(*std::max_element(ys.constBegin(), ys.constEnd()));
+        if (x_max <= max_x) x_max = max_x + 1;
+        if (y_max < max_y) y_max = max_y + 1;
+    }
+    widget->graph(0)->setData(xs, ys);
+    widget->xAxis->setRange(0, x_max);
+    widget->yAxis->setRange(0, y_max);
+    widget->replot();
+//    double testy = m_storage.data["time"].first[0];
+//    std::cout << testy << std::endl;
+
 }
