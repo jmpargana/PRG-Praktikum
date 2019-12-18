@@ -112,10 +112,11 @@ void MainWindow::draw()
     // needs to match combo box item position
     const int xSquareOption = 0;
     const int xPowerOfThreeOption = 1;
+    const int xLossAcc = 0;
     ui->mainGraph->xAxis->setLabel("x");
     ui->mainGraph->yAxis->setLabel("y");
     ui->mainGraph->xAxis->setRange(-5, 5);
-    double y_max = 1;
+    double y_max = 2;
     double x_max = 5;
     QVector<double> xs, ys;
     if (ui->comboBox_draw->currentIndex() == xSquareOption) {
@@ -125,13 +126,14 @@ void MainWindow::draw()
 //        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
 //            xs.append(x);
 //            ys.append(x * x);
-            xs.append(m_storage.data["time"].first);
-            ys.append(m_storage.data["time"].second);
+//            if (!m_storage.data["time"].first.isEmpty() && !m_storage.data["time"].second.isEmpty()) {
+            xs.append(m_storage.data["time"].first); //.last());
+            ys.append(m_storage.data["time"].second); //.last());
+//            }
         }
-    } else if (ui->comboBox_draw->currentIndex() == xPowerOfThreeOption) {
+    } else if (ui->comboBox_draw->currentIndex() == xLossAcc) {
         ui->mainGraph->xAxis->setLabel("epoch");
         ui->mainGraph->yAxis->setLabel("loss");
-//        QVector<double> xs, ys;
         for (int x = 0; x <= m_storage.data["loss"].first.size(); x++) {
 //        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
 //            xs.append(x);
@@ -139,8 +141,19 @@ void MainWindow::draw()
             xs.append(m_storage.data["loss"].first);
             ys.append(m_storage.data["loss"].second);
         }
-        ui->mainGraph->yAxis->setRange(-5*5*5, 5*5*5);
+//        ui->mainGraph->yAxis->setRange(-5*5*5, 5*5*5);
+    } else if (ui->comboBox_draw->currentIndex() == xPowerOfThreeOption) {
+        ui->mainGraph->xAxis->setLabel("epoch");
+        ui->mainGraph->yAxis->setLabel("accumulated loss");
+        for (int x = 0; x <= m_storage.data["loss"].first.size(); x++) {
+//        for (double x = -5; x <= 5; x += 10.0 / 100.0) {
+//            xs.append(x);
+//            ys.append(x * x * x);
+            xs.append(std::accumulate(m_storage.data["loss"].first.begin(), m_storage.data["loss"].first.end(), 0));
+            ys.append(std::accumulate(m_storage.data["loss"].second.begin(), m_storage.data["loss"].second.end(), 0));
+        }
     }
+
     if (!xs.isEmpty() && !ys.isEmpty()) {
         // update graph dimensions
         double max_x = std::ceil(xs.last());
