@@ -37,8 +37,7 @@ namespace bnu = boost::numeric::ublas;
  * @param and errors contains the target value
  *
  */
-class Channel {
-public:
+struct Channel {
     Channel(std::vector<unsigned>&&); // default constructor
     
     Channel(const Channel&) = default; 	    // copy constructor
@@ -48,7 +47,6 @@ public:
 
     ~Channel() = default;					    // destructor
 
-private:
     bnu::tensor<double> tensor;
 
 };

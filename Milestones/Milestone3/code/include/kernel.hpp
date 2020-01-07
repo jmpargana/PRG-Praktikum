@@ -37,8 +37,7 @@ namespace bnu = boost::numeric::ublas;
  * @param and errors contains the target value
  *
  */
-class Kernel {
-public:
+struct Kernel {
     Kernel(std::vector<unsigned>&&); // default constructor
     
     Kernel(const Kernel&) = default; 	    // copy constructor
@@ -48,7 +47,6 @@ public:
 
     ~Kernel() = default;					    // destructor
 
-private:
     bnu::tensor<double> tensor;
 
 };
