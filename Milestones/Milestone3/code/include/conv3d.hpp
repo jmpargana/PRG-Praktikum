@@ -17,6 +17,13 @@
 #include <vector>
 #include "./channel.hpp"
 #include "./kernel.hpp"
+#include <functional>
+
+
+//------------------------------------------------------------------------------
+
+
+using FunctionPointer = std::function<double(double)>;
 
 
 //------------------------------------------------------------------------------
@@ -50,6 +57,7 @@ public:
 
 private:
     std::vector<Kernel> kernels;
+    FunctionPointer activation_function;
 
 };
 
