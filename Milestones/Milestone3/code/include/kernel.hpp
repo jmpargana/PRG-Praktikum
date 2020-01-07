@@ -38,7 +38,7 @@ namespace bnu = boost::numeric::ublas;
  *
  */
 struct Kernel {
-    Kernel(std::vector<unsigned>&&); // default constructor
+    Kernel(int, int, int, int); // default constructor
     
     Kernel(const Kernel&) = default; 	    // copy constructor
     Kernel(Kernel&&) = default; 	 	    // move constructor

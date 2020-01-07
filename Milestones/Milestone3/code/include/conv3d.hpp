@@ -36,7 +36,7 @@
  */
 class Conv3D {
 public:
-    Conv3D(); // default constructor
+    Conv3D(int); // default constructor
     
     Conv3D(const Conv3D&) = default; 	    // copy constructor
     Conv3D(Conv3D&&) = default; 	 	    // move constructor
@@ -45,8 +45,8 @@ public:
 
     ~Conv3D() = default;					    // destructor
 
-    Channel feed_forward(Channel&);
-    double calculate_inner_product(bnut::tensor<double>&, bnu::tensor<double>&);
+    std::vector<Channel>& feed_forward(std::vector<Channel>&);
+    double calculate_inner_product(bnu::tensor<double>&, bnu::tensor<double>&);
 
 private:
     std::vector<Kernel> kernels;

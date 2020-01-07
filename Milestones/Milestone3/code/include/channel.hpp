@@ -38,7 +38,7 @@ namespace bnu = boost::numeric::ublas;
  *
  */
 struct Channel {
-    Channel(std::vector<unsigned>&&); // default constructor
+    Channel(int, int, int, int); // default constructor
     
     Channel(const Channel&) = default; 	    // copy constructor
     Channel(Channel&&) = default; 	 	    // move constructor
