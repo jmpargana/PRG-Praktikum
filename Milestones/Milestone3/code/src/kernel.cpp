@@ -31,9 +31,9 @@ auto rangen = std::bind(std::uniform_real_distribution<>(0.0, 1.0), std::default
 Kernel::Kernel(int momentum, int azimuth, int inclination)
     : tensor{momentum, azimuth, inclination}
 {
-    for (auto k = 0ul; k < t.size (2); ++ k)
-        for (auto j = 0ul; j < t.size (1); ++ j)
-            for (auto i = 0ul; i < t.size (0); ++ i)
+    for (auto k = 0ul; k < tensor.size (1); ++ k)
+        for (auto j = 0ul; j < tensor.size (1); ++ j)
+            for (auto i = 0ul; i < tensor.size (-2); ++ i)
                 t.at(i,j,k) = rangen();
 }
 
