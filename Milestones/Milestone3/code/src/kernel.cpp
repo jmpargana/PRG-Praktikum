@@ -4,7 +4,7 @@
  * Author: Joao Pargana - 6807391
  * Gruppe: 3
  *
- * layer.cpp source file with all declarations for Layer class
+ * kernel.cpp source file with all declarations for Layer struct
  *
  */
 
@@ -15,6 +15,7 @@
 //------------------------------------------------------------------------------
 
 
+// generator function for random float between 0 and 1
 auto rangen = std::bind(std::uniform_real_distribution<>(0.0, 1.0), std::default_random_engine());
 
 
@@ -22,18 +23,18 @@ auto rangen = std::bind(std::uniform_real_distribution<>(0.0, 1.0), std::default
 
 
 /**
- * Default constructor for class 
- * Instantatiates Layers of Neurons given a certain topology
- * first layer doesn't need to be instantiated since it contains only the inputs
- * @param topology list of int with size of each layer
+ * Default constructor for struct 
+ * instantiate square 3 dimensional tensor with random values
+ *
+ * @param size
  * 
  */
-Kernel::Kernel(int momentum, int azimuth, int inclination)
-    : tensor{momentum, azimuth, inclination}
+Kernel::Kernel(unsigned size)
+    : tensor{size, size, size}
 {
     for (auto k = 0ul; k < tensor.size (1); ++ k)
         for (auto j = 0ul; j < tensor.size (1); ++ j)
             for (auto i = 0ul; i < tensor.size (-2); ++ i)
-                t.at(i,j,k) = rangen();
+                tensor.at(i,j,k) = rangen();
 }
 

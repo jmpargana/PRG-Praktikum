@@ -5,13 +5,13 @@
  * author: Joao Pargana
  * Gruppe: 3
  * 
- * muli_layer_perceptron.hpp header file with declaration of Conv3D class
+ * conv3d.hpp header file with declaration of Conv3D class
  * 
  */
 
 
-#ifndef MULTI_LAYER_PERCEPTRON_HPP
-#define MULTI_LAYER_PERCEPTRON_HPP
+#ifndef CONV3D_HPP
+#define CONV3D_HPP
 
 
 #include <vector>
@@ -30,15 +30,13 @@ using FunctionPointer = std::function<double(double)>;
 
 
 /**
- * This class contains a neural network
- * It has a two dimenstional vector of neurons which transmits layer to layer
- * the matrix multiplication with each neuron's weights and performs back
- * propagation to correct its predictions
- * It can also be used to predict, once the weights are properly defined
+ * This class contains the declaration of the Conv3D class
+ * which represents a convolutional layer where a vector of tensor (channels)
+ * is received as input from the previous layer and fed forward after all the calculations
+ * with a vector of Kernels or filters
  * 
- * @param layers contains a list of all neurons in each layer
- * @param outputs contains the last layers activated vector 
- * @param and errors contains the target value
+ * @param kernels is a vector of 4 dimensional tensors (or list of 3 dimensional tensors)
+ * @param activation_function is set to LReLu as default
  *
  */
 class Conv3D {
@@ -53,7 +51,8 @@ public:
     ~Conv3D() = default;					    // destructor
 
     std::vector<Channel>& feed_forward(std::vector<Channel>&);
-    double calculate_inner_product(bnu::tensor<double>&, bnu::tensor<double>&);
+    double calculate_inner_product(bnu::tensor<double>&, 
+                                   bnu::tensor<double>&);
 
 private:
     std::vector<Kernel> kernels;

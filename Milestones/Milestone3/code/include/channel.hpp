@@ -4,16 +4,18 @@
  * author: Joao Pargana
  * Gruppe: 3
  * 
- * muli_layer_perceptron.hpp header file with declaration of Channel class
+ * channel.hpp header file with declaration of Channel struct
  * 
  */
 
 
-#ifndef MULTI_LAYER_PERCEPTRON_HPP
-#define MULTI_LAYER_PERCEPTRON_HPP
+#ifndef CHANNEL_HPP
+#define CHANNEL_HPP
 
 
 #include <boost/numeric/ublas/tensor.hpp>
+#include <random>
+#include <cmath>
 
 
 //------------------------------------------------------------------------------
@@ -26,19 +28,17 @@ namespace bnu = boost::numeric::ublas;
 
 
 /**
- * This class contains a neural network
- * It has a two dimenstional vector of neurons which transmits layer to layer
- * the matrix multiplication with each neuron's weights and performs back
- * propagation to correct its predictions
- * It can also be used to predict, once the weights are properly defined
+ * This struct implements the concept of Channel which holds the value
+ * of a 3 dimensional square tensor with the representation of the particles 
+ * as explained in the Plenartermine4
+ * its a struct, since it only contains an attribute which should be easily
+ * manipulated (get, set, clear, etc.)
  * 
- * @param layers contains a list of all neurons in each layer
- * @param outputs contains the last layers activated vector 
- * @param and errors contains the target value
+ * @param tensor holds the three
  *
  */
 struct Channel {
-    Channel(int, int, int, int); // default constructor
+    Channel(unsigned); // default constructor
     
     Channel(const Channel&) = default; 	    // copy constructor
     Channel(Channel&&) = default; 	 	    // move constructor

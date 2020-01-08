@@ -5,7 +5,7 @@
  * Author: Joao Pargana - 6807391
  * Gruppe: 3
  *
- * layer.cpp source file with all declarations for Layer class
+ * conv3d.cpp source file with all declarations for Conv3D class
  *
  */
 
@@ -18,7 +18,7 @@
 
 /**
  * Default constructor for class 
- * Instantatiates Layers of Neurons given a certain topology
+ * Instantatiates 
  * first layer doesn't need to be instantiated since it contains only the inputs
  * @param topology list of int with size of each layer
  * 
