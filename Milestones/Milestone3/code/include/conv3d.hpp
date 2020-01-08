@@ -41,7 +41,8 @@ using FunctionPointer = std::function<double(double)>;
  */
 class Conv3D {
 public:
-    Conv3D(int); // default constructor
+    Conv3D(unsigned, unsigned, unsigned); // default constructor
+    Conv3D(unsigned, unsigned, unsigned, FunctionPointer);  // constructor with given act function
     
     Conv3D(const Conv3D&) = default; 	    // copy constructor
     Conv3D(Conv3D&&) = default; 	 	    // move constructor
@@ -55,7 +56,7 @@ public:
                                    bnu::tensor<double>&);
 
 private:
-    std::vector<Kernel> kernels;
+    std::vector<std::vector<Kernel>> kernels;
     FunctionPointer activation_function;
 
 };
