@@ -51,7 +51,7 @@ public:
 
     ~Conv3D() = default;					    // destructor
 
-    std::vector<Channel>& feed_forward(std::vector<Channel>&);
+    std::vector<Channel> feed_forward(std::vector<Channel>&);
     double calculate_inner_product(bnu::tensor<double>&, 
                                    bnu::tensor<double>&);
 

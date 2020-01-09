@@ -104,9 +104,32 @@ double Conv3D::calculate_inner_product(bnu::tensor<double>& channel,
  * @return the resulting tensors for the next convolutional layer
  *
  */
-std::vector<Channel>& Conv3D::feed_forward(std::vector<Channel>& channels)
+std::vector<Channel> Conv3D::feed_forward(std::vector<Channel>& channels)
 {
-     
+    std::vector<Channel> results(kernels.size(), Channel(kernels[0][0].tensor.size(2)));
+    
+    for (unsigned i_filter=0; i_filter<kernels.size(); ++i_filter) {
+        for (unsigned i_tensor=0; i_tensor<kernels[i_filter].size(); ++i_tensor) {
+            
+            unsigned padding;
+            bnu::tensor<double>* current = &kernels[i_filter][i_tensor].tensor;
+            
+            // create bigger tensor to contian the tensor inside a padding
+            Channel result(current->size(0));
+            
+            for (auto i_momentum=0ul; i_momentum<current->size(0); ++i_momentum) {
+                for (auto i_azimuth=0ul; i_azimuth<current->size(1); ++i_azimuth) {
+                    for (auto i_inclination=0ul; i_inclination<current->size(2); ++i_inclination) {
+                        // run calculations with tensor surrounding current point
+                        /* value = calculate_inner_product(current_tensor, &current); */
+                        /* result.at(i_momentum,i_azimuth,i_inclination) = value; */
+                    }
+                }
+            }
+        }
+    }
+
+    return results;
 }
 
 
