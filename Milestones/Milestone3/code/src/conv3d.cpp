@@ -52,9 +52,10 @@ Conv3D::Conv3D(unsigned tensor_size,
                unsigned particles,
                unsigned size,
                FunctionPointer activation_function)
-    : kernels{size, std::vector<Kernel>(particles, Kernel(tensor_size))}
+    : kernels{size, std::vector<Kernel>(particles, Kernel(tensor_size))},
+      activation_function{activation_function}
 {
-    this->activation_function = activation_function;
+    
 }
 
 
@@ -112,7 +113,7 @@ std::vector<Channel> Conv3D::feed_forward(std::vector<Channel>& channels)
         for (unsigned i_tensor=0; i_tensor<kernels[i_filter].size(); ++i_tensor) {
             
             unsigned padding;
-            bnu::tensor<double>* current = &kernels[i_filter][i_tensor].tensor;
+            bnu::tensor<double>* current = &channels[i_tensor].tensor;
             
             // create bigger tensor to contian the tensor inside a padding
             Channel result(current->size(0));
@@ -126,9 +127,9 @@ std::vector<Channel> Conv3D::feed_forward(std::vector<Channel>& channels)
                     }
                 }
             }
+	    results.push_back(result);
         }
     }
-
     return results;
 }
 
