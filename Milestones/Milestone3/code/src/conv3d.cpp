@@ -106,7 +106,7 @@ double Conv3D::calculate_inner_product(bnu::tensor<double>& channel,
  */
 std::vector<Channel>& Conv3D::feed_forward(std::vector<Channel>& channels)
 {
-    
+     
 }
 
 

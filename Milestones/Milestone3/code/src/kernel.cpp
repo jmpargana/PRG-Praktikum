@@ -16,7 +16,7 @@
 
 
 // generator function for random float between 0 and 1
-auto rangen = std::bind(std::uniform_real_distribution<>(0.0, 1.0), std::default_random_engine());
+auto rangenker = std::bind(std::uniform_real_distribution<>(0.0, 1.0), std::default_random_engine());
 
 
 //------------------------------------------------------------------------------
@@ -35,6 +35,6 @@ Kernel::Kernel(unsigned size)
     for (auto k = 0ul; k < tensor.size (1); ++ k)
         for (auto j = 0ul; j < tensor.size (1); ++ j)
             for (auto i = 0ul; i < tensor.size (-2); ++ i)
-                tensor.at(i,j,k) = rangen();
+                tensor.at(i,j,k) = rangenker();
 }
 

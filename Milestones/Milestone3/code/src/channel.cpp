@@ -16,7 +16,7 @@
 //------------------------------------------------------------------------------
 
 
-auto rangen = std::bind(std::uniform_real_distribution<>(0.0, 1.0), std::default_random_engine());
+auto rangencha = std::bind(std::uniform_real_distribution<>(0.0, 1.0), std::default_random_engine());
 
 
 //------------------------------------------------------------------------------
@@ -35,6 +35,6 @@ Channel::Channel(unsigned size)
     for (auto k = 0ul; k < tensor.size (2); ++ k)
         for (auto j = 0ul; j < tensor.size (1); ++ j)
             for (auto i = 0ul; i < tensor.size (0); ++ i)
-                tensor.at(i,j,k) = rangen();
+                tensor.at(i,j,k) = rangencha();
 }
 
