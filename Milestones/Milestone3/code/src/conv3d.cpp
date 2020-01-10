@@ -85,7 +85,29 @@ double Conv3D::calculate_inner_product(bnu::tensor<double>& channel,
             for (auto i = 0ul; i < channel.size (0); ++ i)
                 acc += channel.at(i,j,k) * kernel.at(i,j,k);
 
-    return activation_function(acc);
+    return activation_function(acc/ (channel.size(0)*channel.size(0)*channel.size(0)));
+}
+
+
+//------------------------------------------------------------------------------
+
+
+bnu::tensor<double> Conv3D::pad_channel(bnu::tensor<double>& tensor, 
+                                        unsigned new_size, 
+                                        unsigned padding)
+{
+    bnu::tensor<double> result{new_size, new_size, new_size};
+    for (auto i=0ul; i<result.size(0); ++i)
+        for (auto j=0ul; j<result.size(1); ++j)
+            for (auto k=0ul; k<result.size(2); ++k)
+                result.at(i,j,k) = 0.0;
+
+    for (auto i=0ul; i<tensor.size(0); ++i)
+        for (auto j=0ul; j<tensor.size(1); ++j)
+            for (auto k=0ul; k<tensor.size(2); ++k)
+                result.at(i+padding,j+padding,k+padding) = tensor.at(i,j,k);
+
+    return result;
 }
 
 
@@ -108,27 +130,32 @@ double Conv3D::calculate_inner_product(bnu::tensor<double>& channel,
 std::vector<Channel> Conv3D::feed_forward(std::vector<Channel>& channels)
 {
     std::vector<Channel> results(kernels.size(), Channel(kernels[0][0].tensor.size(2)));
+    unsigned padding = kernels[0][0].tensor.size(0) / 2;   // amount of zeros to append for full tensor
+    unsigned new_size = channels[0].tensor.size(0)+2*padding;
     
     for (unsigned i_filter=0; i_filter<kernels.size(); ++i_filter) {
+        Channel result(channels[0].tensor.size(0));
+
         for (unsigned i_tensor=0; i_tensor<kernels[i_filter].size(); ++i_tensor) {
-            
-            unsigned padding;
-            bnu::tensor<double>* current = &channels[i_tensor].tensor;
-            
-            // create bigger tensor to contian the tensor inside a padding
-            Channel result(current->size(0));
-            
-            for (auto i_momentum=0ul; i_momentum<current->size(0); ++i_momentum) {
-                for (auto i_azimuth=0ul; i_azimuth<current->size(1); ++i_azimuth) {
-                    for (auto i_inclination=0ul; i_inclination<current->size(2); ++i_inclination) {
-                        // run calculations with tensor surrounding current point
-                        /* value = calculate_inner_product(current_tensor, &current); */
-                        /* result.at(i_momentum,i_azimuth,i_inclination) = value; */
+            bnu::tensor<double> padded_current = pad_channel(channels[i_tensor].tensor, 
+                                                             new_size, 
+                                                             padding);
+            for (unsigned i_momentum=0+padding; 
+                    i_momentum<padded_current.size(0)-padding; ++i_momentum) {
+                for (unsigned i_azimuth=0+padding; 
+                        i_azimuth<padded_current.size(1)-padding; ++i_azimuth) {
+                    for (unsigned i_inclination=0+padding; 
+                            i_inclination<padded_current.size(2)-padding; ++i_inclination) {
+
+                        bnu::tensor<double> sub_channel{1,1,1}; // = copy_sub_channel();
+                        double value = calculate_inner_product(sub_channel, 
+                                                               kernels[i_filter][i_tensor].tensor);
+                        result.tensor.at(i_momentum,i_azimuth,i_inclination) += value;
                     }
                 }
             }
-	    results.push_back(result);
         }
+        results.push_back(result);   	    
     }
     return results;
 }

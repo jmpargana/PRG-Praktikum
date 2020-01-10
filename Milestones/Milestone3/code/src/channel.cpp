@@ -16,7 +16,7 @@
 //------------------------------------------------------------------------------
 
 
-auto rangencha = std::bind(std::uniform_real_distribution<>(0.0, 1.0), std::default_random_engine());
+auto rangencha = std::bind(std::uniform_real_distribution<>(-1.0, 1.0), std::default_random_engine());
 
 
 //------------------------------------------------------------------------------

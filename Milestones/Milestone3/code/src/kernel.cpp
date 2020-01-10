@@ -16,7 +16,7 @@
 
 
 // generator function for random float between 0 and 1
-auto rangenker = std::bind(std::uniform_real_distribution<>(0.0, 1.0), std::default_random_engine());
+auto rangenker = std::bind(std::uniform_real_distribution<>(-1.0, 1.0), std::default_random_engine());
 
 
 //------------------------------------------------------------------------------
