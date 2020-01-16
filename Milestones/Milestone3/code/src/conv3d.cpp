@@ -179,7 +179,8 @@ bnu::tensor<double> Conv3D::create_sub_channel(bnu::tensor<double>& channel,
  */
 std::vector<Channel> Conv3D::feed_forward(std::vector<Channel>& channels)
 {
-    std::vector<Channel> results(kernels.size(), Channel(kernels[0][0].tensor.size(2)));
+    std::vector<Channel> results(kernels.size(), Channel(channels[0].tensor.size(2)));
+
     unsigned padding = kernels[0][0].tensor.size(0) / 2;   // amount of zeros to append for full tensor
     unsigned new_size = channels[0].tensor.size(0)+2*padding;
     unsigned s_fil = kernels[0][0].tensor.size(0);      // filter size
@@ -188,24 +189,14 @@ std::vector<Channel> Conv3D::feed_forward(std::vector<Channel>& channels)
         Channel result(channels[0].tensor.size(0));
 
         for (unsigned i_tensor=0; i_tensor<kernels[i_filter].size(); ++i_tensor) {
-            bnu::tensor<double> padded_current = pad_channel(channels[i_tensor].tensor, 
-                                                             new_size, 
-                                                             padding);
+            bnu::tensor<double> padded_current = pad_channel(channels[i_tensor].tensor, new_size, padding);
 
-            for (unsigned i_momentum=0+padding; 
-                    i_momentum<padded_current.size(0)-padding; ++i_momentum) {
-                for (unsigned i_azimuth=0+padding; 
-                        i_azimuth<padded_current.size(1)-padding; ++i_azimuth) {
-                    for (unsigned i_inclination=0+padding; 
-                            i_inclination<padded_current.size(2)-padding; ++i_inclination) {
-                        
-                        bnu::tensor<double> sub_channel = 
-                            create_sub_channel(channels[i_tensor].tensor, i_momentum, i_azimuth, 
-                                               i_inclination, s_fil, padding);
+            for (unsigned i_momentum=0+padding; i_momentum<padded_current.size(0)-padding; ++i_momentum) {
+                for (unsigned i_azimuth=0+padding; i_azimuth<padded_current.size(1)-padding; ++i_azimuth) {
+                    for (unsigned i_inclination=0+padding; i_inclination<padded_current.size(2)-padding; ++i_inclination) {
 
-                        double value = calculate_inner_product(sub_channel, 
-                                                               kernels[i_filter][i_tensor].tensor);
-
+                        bnu::tensor<double> sub_channel =  create_sub_channel(channels[i_tensor].tensor, i_momentum, i_azimuth, i_inclination, s_fil, padding);
+                        double value = calculate_inner_product(sub_channel, kernels[i_filter][i_tensor].tensor);
                         result.tensor.at(i_momentum,i_azimuth,i_inclination) += value;
                     }
                 }

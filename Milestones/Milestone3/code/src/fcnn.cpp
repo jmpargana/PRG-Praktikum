@@ -11,7 +11,7 @@
 
 
 #include "../include/multi_layer_perceptron.hpp"
-#include "../lib/filesystem.hpp"
+#include <boost/filesystem.hpp>
 #include <regex>
 #include <map>
 #include <algorithm>
