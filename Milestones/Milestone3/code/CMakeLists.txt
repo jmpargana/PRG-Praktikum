@@ -14,6 +14,8 @@ file(GLOB_RECURSE SOURCE
     "src/*.cpp"
     "include/*.hpp"
 )
+list(REMOVE_ITEM SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/controller.cpp")
+list(REMOVE_ITEM SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/include/controller.h")
 
 # add boost for numeric ublas tensor
 set(Boost_USE_STATIC_LIBS OFF)
