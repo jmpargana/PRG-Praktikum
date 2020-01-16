@@ -51,7 +51,7 @@ Conv3D::Conv3D(unsigned tensor_size,
 Conv3D::Conv3D(unsigned tensor_size,
                unsigned particles,
                unsigned size,
-               FunctionPointer activation_function)
+               FunctionPointerDouble activation_function)
     : kernels{size, std::vector<Kernel>(particles, Kernel(tensor_size))},
       activation_function{activation_function}
 {

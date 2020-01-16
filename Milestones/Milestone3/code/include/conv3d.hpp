@@ -23,7 +23,7 @@
 //------------------------------------------------------------------------------
 
 
-using FunctionPointer = std::function<double(double)>;
+using FunctionPointerDouble = std::function<double(double)>;
 
 
 //------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ using FunctionPointer = std::function<double(double)>;
 class Conv3D {
 public:
     Conv3D(unsigned, unsigned, unsigned); // default constructor
-    Conv3D(unsigned, unsigned, unsigned, FunctionPointer);  // constructor with given act function
+    Conv3D(unsigned, unsigned, unsigned, FunctionPointerDouble);  // constructor with given act function
     
     Conv3D(const Conv3D&) = default; 	    // copy constructor
     Conv3D(Conv3D&&) = default; 	 	    // move constructor
@@ -60,7 +60,7 @@ public:
 
 private:
     std::vector<std::vector<Kernel>> kernels;
-    FunctionPointer activation_function;
+    FunctionPointerDouble activation_function;
 
 };
 

@@ -11,6 +11,8 @@
 
 
 #include "../include/multi_layer_perceptron.hpp"
+#include "../include/maxpool3d.hpp"
+#include "../include/conv3d.hpp"
 #include <boost/filesystem.hpp>
 #include <regex>
 #include <map>
@@ -50,19 +52,26 @@ std::vector<std::vector<fsd>> complete_list(2, std::vector<fsd>(5000));
  * @param file_name 
  * @param event contains the vector with 
  */
-bnu::matrix<double> import_file(std::string file_name)
+std::vector<Channel> import_file(std::string file_name)
 {
     std::ifstream ist {file_name};
     if (!ist) throw std::runtime_error("Couldn't open file");
 
-    int temp;
-    bnu::matrix<double> event(224000, 1);
-     
-    for (unsigned i_row=0; i_row<event.size1(); ++i_row){
-	ist >> temp;
-	event(i_row, 0) = temp;
-    }
+    double temp; 
+    std::vector<Channel> event(28, Channel(20));
 
+    for (unsigned i_particle=0; i_particle<28; ++i_particle) {
+        Channel channel(20);
+
+        for (unsigned i_momentum=0; i_momentum<20; ++i_momentum) {
+            for (unsigned i_azimuth=0; i_azimuth<20; ++i_azimuth) {
+                for (unsigned i_inclination=0; i_inclination<20; ++i_inclination) {
+                    ist >> temp;
+                    event[i_particle].tensor.at(i_momentum, i_azimuth, i_inclination) = temp;
+                }
+            }
+        }
+    }
     return event;
 }
 
@@ -90,11 +99,11 @@ void batch_normalization(unsigned s_batch,
         fsd event = copied_list[temp][copied_list[temp].size() - 1];
         complete_list[temp].pop_back();
 
-        bnu::matrix<double> input(import_file(event.path().string()));
-        mean_inputs += input;
+        /* bnu::matrix<double> input(import_file(event.path().string())); */
+        /* mean_inputs += input; */
 
-    	qgp_identifier.forward_propagation(std::move(input));
-    	events[qgp_identifier[qgp_identifier.size() - 1].m_output(0,0)] = temp;
+    	/* qgp_identifier.forward_propagation(std::move(input)); */
+    	/* events[qgp_identifier[qgp_identifier.size() - 1].m_output(0,0)] = temp; */
     }
 
     std::transform(mean_inputs.begin1(), mean_inputs.end1(), mean_inputs.begin1(),
