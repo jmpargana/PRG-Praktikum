@@ -13,7 +13,7 @@
 #define CHANNEL_HPP
 
 
-#include <boost/numeric/ublas/tensor.hpp>
+#include "../lib/ublas/tensor.hpp"
 #include <random>
 #include <cmath>
 
