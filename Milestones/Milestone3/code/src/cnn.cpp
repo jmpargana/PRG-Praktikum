@@ -33,7 +33,11 @@ using fsd = boost::filesystem::directory_entry;
  */
 
 // Neural network for qgp identification
-MultiLayerPerceptron qgp_identifier({224000, 2, 1});
+MultiLayerPerceptron qgp_identifier({8000, 2, 1});
+
+// Convolutional part
+Conv3D layer28_32(32, 28, 3), layer32_64(64, 32, 3);
+MaxPool3D layer20_10(), layer10_5();
 
 // random boolean generator
 auto genn = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
@@ -41,6 +45,38 @@ auto genn = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_e
 // two lists with all qgp events from dataset
 // saved with boolean corresponding to their output
 std::vector<std::vector<fsd>> complete_list(2, std::vector<fsd>(5000));
+
+
+//------------------------------------------------------------------------------
+
+
+/**
+ * This function converts a vector of tensors of any given size
+ * (but with 5x5x5x64 expected)
+ * to a vector of size 8000 to be processed as input for the neural network
+ *
+ * @param channels an array of tensors of size 5x5x5
+ * @return the flatten vector of size 8000
+ *
+ */
+bnu::matrix<double> conv_tensor_to_fcnn_matrix(std::vector<Channel>& channels)
+{
+    bnu::matrix<double> input(8000, 1); 
+    unsigned counter=0;
+
+    for (unsigned i_particle=0; i_particle<channels.size(); ++i_particle) {
+        bnu::tensor<double>* curr = &channels[i_particle].tensor;
+        for (unsigned i_momentum=0; i_momentum<curr->size(0); ++i_momentum) {
+            for (unsigned i_azimuth=0; i_azimuth<curr->size(1); ++i_azimuth) {
+                for (unsigned i_inclination=0; i_inclination<curr->size(2); ++i_inclination) {
+                    input(counter, 0) = curr->at(i_momentum, i_azimuth, i_inclination);
+                    counter++;
+                }
+            } 
+        }
+    }
+    return input;
+}
 
 
 //------------------------------------------------------------------------------
@@ -90,7 +126,7 @@ std::vector<Channel> import_file(std::string file_name)
 void batch_normalization(unsigned s_batch,
 			 std::vector<std::vector<fsd>>& copied_list)
 {
-    std::map<double, double> events; bnu::matrix<double> mean_inputs(224000, 1);
+    std::map<double, double> events; 
     
     for (unsigned i=0; i<s_batch; ++i) {
         unsigned temp = genn();
@@ -99,27 +135,26 @@ void batch_normalization(unsigned s_batch,
         fsd event = copied_list[temp][copied_list[temp].size() - 1];
         complete_list[temp].pop_back();
 
-        /* bnu::matrix<double> input(import_file(event.path().string())); */
-        /* mean_inputs += input; */
+        std::vector<Channel> input(import_file(event.path().string()));
 
     	/* qgp_identifier.forward_propagation(std::move(input)); */
     	/* events[qgp_identifier[qgp_identifier.size() - 1].m_output(0,0)] = temp; */
     }
 
-    std::transform(mean_inputs.begin1(), mean_inputs.end1(), mean_inputs.begin1(),
-		  [&](double val) {
-		      return val / s_batch;
-		  });
+    /* std::transform(mean_inputs.begin1(), mean_inputs.end1(), mean_inputs.begin1(), */
+		  /* [&](double val) { */
+		      /* return val / s_batch; */
+		  /* }); */
     
     // perform batch normalization and use result for back propagation
-    double total_cost = 0.0; 
-    std::for_each(events.begin(), events.end(),
-		  [&total_cost](std::pair<double, double> p) {
-		      total_cost += std::abs(p.second - p.first);
-		  });
+    /* double total_cost = 0.0; */ 
+    /* std::for_each(events.begin(), events.end(), */
+		  /* [&total_cost](std::pair<double, double> p) { */
+		      /* total_cost += std::abs(p.second - p.first); */
+		  /* }); */
     
-    bnu::matrix<double> target(1,1); target(0, 0) = total_cost;    
-    qgp_identifier.back_propagation(std::move(target), std::move(mean_inputs));
+    /* bnu::matrix<double> target(1,1); target(0, 0) = total_cost; */    
+    /* qgp_identifier.back_propagation(std::move(target), std::move(mean_inputs)); */
 }
 
 
