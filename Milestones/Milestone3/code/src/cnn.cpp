@@ -37,7 +37,7 @@ MultiLayerPerceptron qgp_identifier({8000, 2, 1});
 
 // Convolutional part
 Conv3D layer28_32(32, 28, 3), layer32_64(64, 32, 3);
-MaxPool3D layer20_10(), layer10_5();
+MaxPool3D layer20_10, layer10_5;
 
 // random boolean generator
 auto genn = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
@@ -137,6 +137,18 @@ void batch_normalization(unsigned s_batch,
 
         std::vector<Channel> input(import_file(event.path().string()));
 
+        qgp_identifier.forward_propagation(
+            conv_tensor_to_fcnn_matrix(
+                layer10_5.feed_forward(
+                    layer32_64.feed_forward(
+                        layer20_10.feed_forward(
+                            layer28_32.feed_forward(input)
+                        )     
+                    )
+                )
+            )
+        );
+
     	/* qgp_identifier.forward_propagation(std::move(input)); */
     	/* events[qgp_identifier[qgp_identifier.size() - 1].m_output(0,0)] = temp; */
     }
@@ -201,8 +213,8 @@ void parse_directory(const char* input_dir, std::vector<fsd>& other)
 {
     unsigned i_file=0;
     for (auto& file : boost::filesystem::directory_iterator(input_dir)) {
-	other[i_file] = file;
-	++i_file;
+        other[i_file] = file;
+        ++i_file;
     }
 }
 
@@ -223,10 +235,11 @@ try
     parse_directory("../materials/dataset_new/qgp", complete_list[0]);
     parse_directory("../materials/dataset_new/nqgp", complete_list[1]);
 
-    if (argc != 4)
-    	throw std::runtime_error("Usage:\n\tfcnn <epochs> <epoch_size> <batch_size>");
+    /* if (argc != 4) */
+    /* 	throw std::runtime_error("Usage:\n\tfcnn <epochs> <epoch_size> <batch_size>"); */
 
-    run_epoch(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+    /* run_epoch(atoi(argv[1]), atoi(argv[2]), atoi(argv[3])); */
+    run_epoch(3, 3, 3);
     return 0;
 }
 
