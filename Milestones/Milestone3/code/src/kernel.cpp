@@ -31,10 +31,10 @@ auto rangenker = std::bind(std::uniform_real_distribution<>(-1.0, 1.0), std::def
  */
 Kernel::Kernel(unsigned size)
     : tensor{size, size, size}
-{
-    for (auto k = 0ul; k < tensor.size (1); ++ k)
+{    
+    for (auto k = 0ul; k < tensor.size (0); ++ k)
         for (auto j = 0ul; j < tensor.size (1); ++ j)
-            for (auto i = 0ul; i < tensor.size (-2); ++ i)
+            for (auto i = 0ul; i < tensor.size (2); ++ i)
                 tensor.at(i,j,k) = rangenker();
 }
 
