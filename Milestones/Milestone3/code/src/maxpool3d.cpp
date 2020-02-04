@@ -27,7 +27,7 @@
  * @return max value found
  *
  */
-double MaxPool3D::find_max(bnu::tensor<double>* channel, 
+double MaxPool3D::find_max(const bnu::tensor<double>* channel, 
                            unsigned i_momentum,
                            unsigned i_azimuth,
                            unsigned i_inclination)
@@ -57,12 +57,12 @@ double MaxPool3D::find_max(bnu::tensor<double>* channel,
  * @return list of smaller tensors
  *
  */
-std::vector<Channel> MaxPool3D::feed_forward(std::vector<Channel>& channels)
+std::vector<Channel> MaxPool3D::feed_forward(const std::vector<Channel>& channels)
 {
     std::vector<Channel> results(channels.size(), Channel(channels[0].tensor.size(2) / 2));
 
     for (unsigned i_channel=0; i_channel<channels.size(); ++i_channel) {
-        bnu::tensor<double>* curr = &channels[i_channel].tensor;
+        const bnu::tensor<double>* curr = &channels[i_channel].tensor;
         
         for (unsigned i_momentum=0; i_momentum<curr->size(0)-2; i_momentum+=2) {
             for (unsigned i_azimuth=0; i_azimuth<curr->size(1)-2; i_azimuth+=2) {

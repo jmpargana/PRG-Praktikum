@@ -39,8 +39,8 @@ struct MaxPool3D {
 
     ~MaxPool3D() = default;					    // destructor
 
-    std::vector<Channel> feed_forward(std::vector<Channel>&);
-    double find_max(bnu::tensor<double>*, unsigned, unsigned, unsigned);
+    std::vector<Channel> feed_forward(const std::vector<Channel>&);
+    double find_max(const bnu::tensor<double>*, unsigned, unsigned, unsigned);
 };
 
 

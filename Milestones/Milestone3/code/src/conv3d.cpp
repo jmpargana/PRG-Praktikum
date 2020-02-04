@@ -106,7 +106,7 @@ double Conv3D::calculate_inner_product(bnu::tensor<double>& channel,
  * @return tensor with surrounding zeros
  *
  */
-bnu::tensor<double> Conv3D::pad_channel(bnu::tensor<double>& tensor, 
+bnu::tensor<double> Conv3D::pad_channel(const bnu::tensor<double>& tensor, 
                                         unsigned new_size, 
                                         unsigned padding)
 {
@@ -142,7 +142,7 @@ bnu::tensor<double> Conv3D::pad_channel(bnu::tensor<double>& tensor,
  * @return a tensor with the right size for the filtering calculations
  *
  */
-bnu::tensor<double> Conv3D::create_sub_channel(bnu::tensor<double>& channel,
+bnu::tensor<double> Conv3D::create_sub_channel(const bnu::tensor<double>& channel,
                                                unsigned i_momentum,
                                                unsigned i_azimuth, 
                                                unsigned i_inclination,
@@ -152,11 +152,11 @@ bnu::tensor<double> Conv3D::create_sub_channel(bnu::tensor<double>& channel,
 
     bnu::tensor<double> sub_channel{s_fil, s_fil, s_fil};
 
-    for (unsigned i=i_momentum-padding; i<i_momentum+s_fil; ++i)
-        for (unsigned j=i_azimuth-padding; j<i_azimuth+s_fil; ++j)
-            for (unsigned k=i_inclination-padding; k<i_inclination+s_fil; ++k)
-                sub_channel.at(i-i_momentum,j-i_azimuth,k-i_inclination) = 
-                    channel.at(i_momentum, i_azimuth, i_inclination);
+    for (unsigned i=i_momentum-padding; i<i_momentum-padding+s_fil; ++i)
+        for (unsigned j=i_azimuth-padding; j<i_azimuth-padding+s_fil; ++j)
+            for (unsigned k=i_inclination-padding; k<i_inclination-padding+s_fil; ++k)
+                sub_channel.at(i-i_momentum+padding,j-i_azimuth+padding,k-i_inclination+padding) = 
+                    channel.at(i, j, k);
 
     return sub_channel;
 }
@@ -177,7 +177,7 @@ bnu::tensor<double> Conv3D::create_sub_channel(bnu::tensor<double>& channel,
  * @return the resulting tensors for the next convolutional layer
  *
  */
-std::vector<Channel> Conv3D::feed_forward(std::vector<Channel>& channels)
+std::vector<Channel> Conv3D::feed_forward(const std::vector<Channel>& channels)
 {
     std::vector<Channel> results(kernels.size(), Channel(channels[0].tensor.size(2)));
 
@@ -195,7 +195,7 @@ std::vector<Channel> Conv3D::feed_forward(std::vector<Channel>& channels)
                 for (unsigned i_azimuth=0+padding; i_azimuth<padded_current.size(1)-padding; ++i_azimuth) {
                     for (unsigned i_inclination=0+padding; i_inclination<padded_current.size(2)-padding; ++i_inclination) {
 
-                        bnu::tensor<double> sub_channel =  create_sub_channel(channels[i_tensor].tensor, i_momentum, i_azimuth, i_inclination, s_fil, padding);
+                        bnu::tensor<double> sub_channel =  create_sub_channel(padded_current, i_momentum, i_azimuth, i_inclination, s_fil, padding);
                         double value = calculate_inner_product(sub_channel, kernels[i_filter][i_tensor].tensor);
                         result.tensor.at(i_momentum,i_azimuth,i_inclination) += value;
                     }

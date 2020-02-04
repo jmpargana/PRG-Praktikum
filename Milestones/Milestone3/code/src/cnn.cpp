@@ -59,13 +59,13 @@ std::vector<std::vector<fsd>> complete_list(2, std::vector<fsd>(5000));
  * @return the flatten vector of size 8000
  *
  */
-bnu::matrix<double> conv_tensor_to_fcnn_matrix(std::vector<Channel>& channels)
+bnu::matrix<double> conv_tensor_to_fcnn_matrix(const std::vector<Channel>& channels)
 {
     bnu::matrix<double> input(8000, 1); 
     unsigned counter=0;
 
     for (unsigned i_particle=0; i_particle<channels.size(); ++i_particle) {
-        bnu::tensor<double>* curr = &channels[i_particle].tensor;
+        const bnu::tensor<double>* curr = &channels[i_particle].tensor;
         for (unsigned i_momentum=0; i_momentum<curr->size(0); ++i_momentum) {
             for (unsigned i_azimuth=0; i_azimuth<curr->size(1); ++i_azimuth) {
                 for (unsigned i_inclination=0; i_inclination<curr->size(2); ++i_inclination) {
